@@ -57,11 +57,15 @@ extension Request : CustomStringConvertible {
 extension NSString {
     static func fromData(data: [UInt8]) -> NSString? {
         let cString = UnsafePointer<Int8>(data)
+#if os(Linux)
+        return String(CString: cString, encoding: NSUTF8StringEncoding) as NSString
+#else
         if let str = String(CString: cString, encoding: NSUTF8StringEncoding) {
             return str as NSString
         } else {
             return nil
         }
+#endif
     }
 }
 
