@@ -15,5 +15,5 @@ func GetHTTP(rawRequest: NSData) -> HTTPVersion {
 protocol HTTPVersion {
     init(rawRequest: NSData)
     func request() -> Request?
-    func response(statusCode: StatusCode, headers: Headers, data: NSData?) -> NSData
+    func response(statusCode: StatusCode, headers: Headers, data: [UInt8]?) -> NSData
 }

@@ -54,27 +54,25 @@ extension Request : CustomStringConvertible {
     }
 }
 
+extension NSString {
+    static func fromData(data: [UInt8]) -> NSString? {
+        return String(data) as NSString
+    }
+}
+
 class ResponseData : NSObject {
-    let data: NSData?
+    let dataString: String
     
     init(string: String) {
-        if let data = string.dataUsingEncoding(NSUTF8StringEncoding) {
-            self.data = data
-        } else {
-            self.data = nil
-        }
+        dataString = string
     }
     
     override var description: String {
-        if let data = self.data, string = NSString(data: data, encoding: NSUTF8StringEncoding) {
-            let maxChars = 20
-            if string.length > maxChars {
-                return "<Data: \"\(string.substringToIndex(maxChars))...\">"
-            } else {
-                return "<Data: \"\(string)\">"
-            }
+        let maxChars = 20
+        if dataString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > maxChars {
+            return "<Data: \"\((dataString as NSString).substringToIndex(maxChars))...\">"
         } else {
-            return super.description
+            return "<Data: \"\(dataString)\">"
         }
     }
     

@@ -64,13 +64,19 @@ class TCPServer {
     }
     
     private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: UnsafePointer<uv_buf_t>) {
-        if let string = String(CString: buf.memory.base, encoding: NSUTF8StringEncoding), data = string.dataUsingEncoding(NSUTF8StringEncoding) {
-            if let response = processRequest(data), string = NSString(data: response, encoding: NSUTF8StringEncoding) {
-                let cString = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+        if let string = String(CString: buf.memory.base, encoding: NSUTF8StringEncoding) {
+            
+            let cString = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+            let bytes = UnsafePointer<Int8>(cString)
+            let data = NSData(bytes: bytes, length: string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+            
+            if let response = processRequest(data),
+                responseStr = NSString(bytes: response.bytes, length: response.length, encoding: NSUTF8StringEncoding) as? String,
+                repsonseCString = responseStr.cStringUsingEncoding(NSUTF8StringEncoding) {
                 
                 let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
-                let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(cString)
-                outBuf.memory = uv_buf_init(memory, UInt32(response.length))
+                let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(repsonseCString)
+                outBuf.memory = uv_buf_init(memory, UInt32(responseStr.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
                 
                 let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
                 uv_write(write, stream, outBuf, 1, nil)

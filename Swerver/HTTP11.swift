@@ -12,7 +12,8 @@ class HTTP11 : HTTPVersion {
     let dataString: String?
     
     required init(rawRequest: NSData) {
-        dataString = NSString(data: rawRequest, encoding: NSUTF8StringEncoding) as? String
+        dataString = NSString(bytes: rawRequest.bytes, length: rawRequest.length, encoding: NSUTF8StringEncoding) as? String
+        print(dataString)
     }
     
     func request() -> Request? {
@@ -51,7 +52,7 @@ class HTTP11 : HTTPVersion {
                 }
             } else {
                 let trimmed = line.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).stringByAppendingString("\n")
-                let chunk = NSData(bytes: unsafeBitCast(trimmed.swerver_cStringUsingEncoding(NSUTF8StringEncoding), UnsafePointer<Void>.self), length: trimmed.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))    // trimmed.dataUsingEncoding(NSUTF8StringEncoding) {
+                let chunk = NSData(bytes: unsafeBitCast(trimmed.swerver_cStringUsingEncoding(NSUTF8StringEncoding), UnsafePointer<Void>.self), length: trimmed.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
                     
                 data?.appendData(chunk)
             }
@@ -64,7 +65,7 @@ class HTTP11 : HTTPVersion {
         return (headers, data)
     }
     
-    func response(statusCode: StatusCode, headers: Headers, data: NSData?) -> NSData {
+    func response(statusCode: StatusCode, headers: Headers, data: [UInt8]?) -> NSData {
     
         var output = ""
         output += "HTTP/1.1 \(statusCodeStringFromStatusCode(statusCode))\n"
@@ -85,22 +86,20 @@ class HTTP11 : HTTPVersion {
             }
         }
         
-        if let data = data, s = NSString(data: data, encoding: NSUTF8StringEncoding) {
-            output += "Content-Length: \(s.length)\n"
+        if let d = data, str = NSString(CString: UnsafePointer(d), encoding: NSUTF8StringEncoding) {
+            output += "Content-Length: \(str.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))\n"
             addHeaders()
             output += "\r\n"
-            output += (s as String)
+            output += (str as String)
         } else {
             output += "Content-Length: 0\n"
             addHeaders()
             output += "\r\n"
         }
         
-        if let data = output.dataUsingEncoding(NSUTF8StringEncoding) {
-            return data
-        } else {
-            return NSData()
-        }
+        let cString = output.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+        let bytes = UnsafePointer<Int8>(cString)
+        return NSData(bytes: bytes, length: output.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
     }
     
     private func statusCodeStringFromStatusCode(statusCode: StatusCode) -> String {

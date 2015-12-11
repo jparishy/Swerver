@@ -50,6 +50,10 @@ class HTTPServer<HTTP: HTTPVersion> : TCPServer {
     }
     
     private func responseDataFromResponse(response: Response, HTTP: HTTPVersion) -> NSData {
-        return HTTP.response(response.statusCode, headers: response.headers, data: response.responseData?.data)
+        if let str = response.responseData?.dataString {
+            return HTTP.response(response.statusCode, headers: response.headers, data: [UInt8](str.utf8))
+        } else {
+            return NSData()
+        }
     }
 }
