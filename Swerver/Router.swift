@@ -68,12 +68,7 @@ class ResponseData : NSObject {
     }
     
     override var description: String {
-        let maxChars = 20
-        if dataString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > maxChars {
-            return "<Data: \"\((dataString as NSString).substringToIndex(maxChars))...\">"
-        } else {
-            return "<Data: \"\(dataString)\">"
-        }
+        return "<Data: \"\(dataString)\">"
     }
     
     static func Str(string: String) -> ResponseData {
