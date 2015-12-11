@@ -42,6 +42,7 @@
 		E849E86C1C1A7A8100656C4C /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		E849E86E1C1A7B2800656C4C /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		E84FF9411C1AB0180009B89B /* SwiftNonsense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftNonsense.swift; sourceTree = "<group>"; };
+		E88673001C1B753E00D3157E /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +90,7 @@
 		E849E86A1C1A7A6B00656C4C /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
+				E88673001C1B753E00D3157E /* build.sh */,
 				E849E8691C1A7A5F00656C4C /* PrefixHeader.pch */,
 				E849E86B1C1A7A8100656C4C /* Bridge.c */,
 				E849E86C1C1A7A8100656C4C /* Bridge.h */,
