@@ -6,7 +6,7 @@
 //  Copyright © 2015 Julius Parishy. All rights reserved.
 //
 
-#include "bridge.h"
+#include "Bridge.h"
 
 struct sockaddr_in * cast_sockaddr(struct sockaddr *s)
 {

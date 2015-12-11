@@ -27,6 +27,7 @@ class HTTPServer<HTTP: HTTPVersion> : TCPServer {
             print(request)
             if let route = router.route(request.path) {
                 do {
+		    print("Proceeding with route: \(route)")
                     return try route.routeProvider.apply(request)
                 } catch {
                     return BuiltInResponse(.InternalServerError)
@@ -36,6 +37,7 @@ class HTTPServer<HTTP: HTTPVersion> : TCPServer {
             }
         }
 
+	print("No Request")
         return BuiltInResponse(.InternalServerError)
     }
     
@@ -43,6 +45,7 @@ class HTTPServer<HTTP: HTTPVersion> : TCPServer {
         if let data = request {
             let HTTP = GetHTTP(data)
             let response = handle(data, HTTP: HTTP)
+	    print(response)
             return responseDataFromResponse(response, HTTP: HTTP)
         }
         
@@ -50,10 +53,8 @@ class HTTPServer<HTTP: HTTPVersion> : TCPServer {
     }
     
     private func responseDataFromResponse(response: Response, HTTP: HTTPVersion) -> NSData {
-        if let str = response.responseData?.dataString {
-            return HTTP.response(response.statusCode, headers: response.headers, data: [UInt8](str.utf8))
-        } else {
-            return NSData()
-        }
+	let dataString = response.responseData?.dataString
+	let data: [UInt8]? = (dataString != nil) ? [UInt8](dataString!.utf8) : nil
+        return HTTP.response(response.statusCode, headers: response.headers, data: data) 
     }
 }

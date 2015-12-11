@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import Glibc
 
 class TCPServer {
     private var loop: UnsafeMutablePointer<uv_loop_t>
     private var tcp: UnsafeMutablePointer<uv_tcp_t>
-    private var addr: UnsafeMutablePointer<sockaddr>
+    private var addr: UnsafeMutablePointer<sockaddr_in>
     
     let backlogSize = 128
     
@@ -24,17 +25,16 @@ class TCPServer {
             print("uv_tcp_init failed.")
         }
         
-        addr = UnsafeMutablePointer<sockaddr>.alloc(1)
-        let addr_in = unsafeBitCast(addr, UnsafeMutablePointer<sockaddr_in>.self)
-        result = uv_ip4_addr(bindAddress, Int32(port), addr_in)
+        addr = UnsafeMutablePointer<sockaddr_in>.alloc(1)
+        addr.memory = uv_ip4_addr(bindAddress, Int32(port))
         if result != 0 {
             print("uv_ip4_addr failed.")
         }
-        
-        result = uv_tcp_bind(tcp, addr, 0)
+       	
+        result = uv_tcp_bind(tcp, addr.memory)
         if result != 0 {
             print("uv_tcp_bind failed.")
-        }
+        } 
     }
     
     func processRequest(request: NSData?) -> NSData? {
@@ -53,43 +53,45 @@ class TCPServer {
         loop.memory.data = unsafeBitCast(self, UnsafeMutablePointer<Void>.self)
         tcp.memory.data  = unsafeBitCast(self, UnsafeMutablePointer<Void>.self)
         
+	print("Server is running.")
         uv_run(loop, UV_RUN_DEFAULT)
     }
     
     // pragma mark - Internal Callbacks
     
-    private func handleAlloc(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t, buf: UnsafeMutablePointer<uv_buf_t>) {
+    private func handleAlloc(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t) -> uv_buf_t {
         let memory: UnsafeMutablePointer<Int8> = unsafeBitCast(malloc(size), UnsafeMutablePointer<Int8>.self)
-        buf.memory = uv_buf_init(memory, UInt32(size))
+        return uv_buf_init(memory, UInt32(size))
     }
     
-    private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: UnsafePointer<uv_buf_t>) {
-        if let string = String(CString: buf.memory.base, encoding: NSUTF8StringEncoding) {
+    private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: uv_buf_t) {
+	    let inBytes: [Int8] = Array(UnsafeBufferPointer(start: buf.base, count: buf.len))
+	    let string = String(inBytes.map { b in Character(UnicodeScalar(UInt8(b))) } )
             
             let cString = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
             let bytes = UnsafePointer<Int8>(cString)
-            let data = NSData(bytes: bytes, length: string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+            let data = NSData(bytes: bytes, length: string.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
             
-            if let response = processRequest(data),
-                responseStr = NSString(bytes: response.bytes, length: response.length, encoding: NSUTF8StringEncoding) as? String,
-                repsonseCString = responseStr.cStringUsingEncoding(NSUTF8StringEncoding) {
+            let response = processRequest(data)
+            if let response = response, responseStr = NSString(bytes: response.bytes, length: response.length, encoding: NSUTF8StringEncoding)?.bridge() {
+                let repsonseCString = responseStr.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding)
                 
                 let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
                 let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(repsonseCString)
-                outBuf.memory = uv_buf_init(memory, UInt32(responseStr.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+                outBuf.memory = uv_buf_init(memory, UInt32(responseStr.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
                 
                 let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
                 uv_write(write, stream, outBuf, 1, nil)
-            }
-        }
+	    }
         
         uv_read_stop(stream)
         uv_close(cast_stream_to_handle(stream), nil)
         
-        free(buf.memory.base)
+        free(buf.base)
     }
     
     private func handleConnection(server: UnsafeMutablePointer<uv_stream_t>, status: Int32) {
+	print("handleConnection")
         if status < 0 {
             print("Error receiving data")
             return
@@ -111,12 +113,12 @@ class TCPServer {
     }
 }
 
-private func _alloc_cb(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t, buf: UnsafeMutablePointer<uv_buf_t>) {
+private func _alloc_cb(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t) -> uv_buf_t {
     let tcpServer = unsafeBitCast(handle.memory.loop.memory.data, TCPServer.self)
-    tcpServer.handleAlloc(handle, size: size, buf: buf)
+    return tcpServer.handleAlloc(handle, size: size)
 }
 
-private func _read_cb(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: UnsafePointer<uv_buf_t>) {
+private func _read_cb(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: uv_buf_t) {
     let tcpServer = unsafeBitCast(stream.memory.loop.memory.data, TCPServer.self)
     tcpServer.handleRead(stream, size: size, buf: buf)
 }

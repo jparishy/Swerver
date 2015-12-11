@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import Glibc
 
 class HelloProvider : RouteProvider {
     func apply(request: Request) throws -> Response {
+	print("In HelloProvider")
         return  (.Ok, ["Content-Type":"text/html"], ResponseData.Str("<html><body><h1>Hello World! This server is running Swift!</h1></body></html>"))
     }
 }

@@ -58,7 +58,9 @@ extension NSString {
     static func fromData(data: [UInt8]) -> NSString? {
         let cString = UnsafePointer<Int8>(data)
 #if os(Linux)
-        return NSString(CString: cString, encoding: NSUTF8StringEncoding)
+        let r = NSString(CString: cString, encoding: NSUTF8StringEncoding)
+	print("r: \(r)")
+	return r
 #else
         if let str = String(CString: cString, encoding: NSUTF8StringEncoding) {
             return str as NSString
@@ -69,14 +71,14 @@ extension NSString {
     }
 }
 
-class ResponseData : NSObject {
+class ResponseData {
     let dataString: String
     
     init(string: String) {
         dataString = string
     }
     
-    override var description: String {
+    var description: String {
         return "<Data: \"\(dataString)\">"
     }
     
@@ -105,6 +107,7 @@ private class RedirectRouteProvider : RouteProvider {
     }
     
     func apply(request: Request) throws -> Response {
+	print("In RedirectRouteProvider")
         return (.MovedPermanently(to: to), [:], nil)
     }
 }
