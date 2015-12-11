@@ -81,7 +81,7 @@ class TCPServer {
         return uv_buf_init(memory, UInt32(size))
     }
     
-    private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: UnafeBuffer<uv_buf_t>) {
+    private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: uv_buf_t) {
 	    let inBytes: [Int8] = Array(UnsafeBufferPointer(start: buf.base, count: buf.len))
 	    let string = String(inBytes.map { b in Character(UnicodeScalar(UInt8(b))) } )
             
