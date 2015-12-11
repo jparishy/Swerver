@@ -58,7 +58,7 @@ extension NSString {
     static func fromData(data: [UInt8]) -> NSString? {
         let cString = UnsafePointer<Int8>(data)
 #if os(Linux)
-        return String(CString: cString, encoding: NSUTF8StringEncoding) as NSString
+        return NSString(CString: cString, encoding: NSUTF8StringEncoding)
 #else
         if let str = String(CString: cString, encoding: NSUTF8StringEncoding) {
             return str as NSString
