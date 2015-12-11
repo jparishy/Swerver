@@ -1,0 +1,191 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "TCPServer"
+provides-nominal:
+- "C7swerver9TCPServer"
+provides-member:
+- ["C7swerver9TCPServer", ""]
+depends-top-level:
+- !private "ssize_t"
+- !private "UnsafePointer"
+- "StringLiteralType"
+- !private "uv_default_loop"
+- !private "Int8"
+- !private "uv_strerror"
+- !private "uv_tcp_bind"
+- !private "malloc"
+- !private "uv_read_start"
+- "FloatLiteralType"
+- "uv_tcp_t"
+- !private "_alloc_cb"
+- !private "uv_read_stop"
+- "IntegerLiteralType"
+- !private "=="
+- "sockaddr"
+- !private "unsafeBitCast"
+- !private "uv_accept"
+- !private "NSString"
+- !private "_connection_cb"
+- !private "Void"
+- !private "uv_buf_t"
+- !private "uv_tcp_init"
+- !private "size_t"
+- !private "free"
+- !private "uv_buf_init"
+- !private "uv_listen"
+- !private "uv_handle_t"
+- !private "cast_stream_to_handle"
+- !private "UInt32"
+- "String"
+- !private "sockaddr_in"
+- !private "<"
+- !private "uv_close"
+- "Int"
+- "NSData"
+- "TCPServer"
+- !private "exit"
+- !private "_read_cb"
+- !private "!="
+- !private "cast_tcp_to_stream"
+- !private "uv_write"
+- !private "print"
+- !private "NSUTF8StringEncoding"
+- !private "UV_RUN_DEFAULT"
+- !private "uv_write_t"
+- !private "uv_ip4_addr"
+- !private "uv_run"
+- !private "Int32"
+- "uv_loop_t"
+- "UnsafeMutablePointer"
+- !private "uv_stream_t"
+depends-member:
+- !private ["Ps9AnyObject", "Int32"]
+- !private ["Ps9AnyObject", "NSData"]
+- !private ["Ps9AnyObject", "NSString"]
+- !private ["Ps9AnyObject", "NSUTF8StringEncoding"]
+- !private ["Ps9AnyObject", "String"]
+- !private ["Ps9AnyObject", "UInt32"]
+- !private ["Ps9AnyObject", "UV_RUN_DEFAULT"]
+- !private ["Ps9AnyObject", "UnsafeMutablePointer"]
+- !private ["Ps9AnyObject", "UnsafePointer"]
+- !private ["Ps9AnyObject", "_alloc_cb"]
+- !private ["Ps9AnyObject", "_connection_cb"]
+- !private ["Ps9AnyObject", "_read_cb"]
+- !private ["Ps9AnyObject", "addr"]
+- !private ["Ps9AnyObject", "backlogSize"]
+- !private ["Ps9AnyObject", "cast_stream_to_handle"]
+- !private ["Ps9AnyObject", "cast_tcp_to_stream"]
+- !private ["Ps9AnyObject", "exit"]
+- !private ["Ps9AnyObject", "free"]
+- !private ["Ps9AnyObject", "loop"]
+- !private ["Ps9AnyObject", "malloc"]
+- !private ["Ps9AnyObject", "print"]
+- !private ["Ps9AnyObject", "processRequest"]
+- !private ["Ps9AnyObject", "tcp"]
+- !private ["Ps9AnyObject", "unsafeBitCast"]
+- !private ["Ps9AnyObject", "uv_accept"]
+- !private ["Ps9AnyObject", "uv_buf_init"]
+- !private ["Ps9AnyObject", "uv_close"]
+- !private ["Ps9AnyObject", "uv_default_loop"]
+- !private ["Ps9AnyObject", "uv_ip4_addr"]
+- !private ["Ps9AnyObject", "uv_listen"]
+- !private ["Ps9AnyObject", "uv_read_start"]
+- !private ["Ps9AnyObject", "uv_read_stop"]
+- !private ["Ps9AnyObject", "uv_run"]
+- !private ["Ps9AnyObject", "uv_strerror"]
+- !private ["Ps9AnyObject", "uv_tcp_bind"]
+- !private ["Ps9AnyObject", "uv_tcp_init"]
+- !private ["Ps9AnyObject", "uv_write"]
+- ["Ps9AnyObject", ""]
+- !private ["Sb", "_getBuiltinLogicValue"]
+- !private ["Ps25BooleanLiteralConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps11BooleanType", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps9Equatable", "_getBuiltinLogicValue"]
+- !private ["Ps8Hashable", "_getBuiltinLogicValue"]
+- ["C7swerver9TCPServer", "Int"]
+- !private ["C7swerver9TCPServer", "Int32"]
+- !private ["C7swerver9TCPServer", "Int8"]
+- ["C7swerver9TCPServer", "NSData"]
+- !private ["C7swerver9TCPServer", "NSString"]
+- !private ["C7swerver9TCPServer", "NSUTF8StringEncoding"]
+- ["C7swerver9TCPServer", "String"]
+- !private ["C7swerver9TCPServer", "UInt32"]
+- !private ["C7swerver9TCPServer", "UV_RUN_DEFAULT"]
+- ["C7swerver9TCPServer", "UnsafeMutablePointer"]
+- !private ["C7swerver9TCPServer", "UnsafePointer"]
+- !private ["C7swerver9TCPServer", "Void"]
+- !private ["C7swerver9TCPServer", "_alloc_cb"]
+- !private ["C7swerver9TCPServer", "_connection_cb"]
+- !private ["C7swerver9TCPServer", "_read_cb"]
+- !private ["C7swerver9TCPServer", "addr"]
+- ["C7swerver9TCPServer", "backlogSize"]
+- !private ["C7swerver9TCPServer", "cast_stream_to_handle"]
+- !private ["C7swerver9TCPServer", "cast_tcp_to_stream"]
+- ["C7swerver9TCPServer", "deinit"]
+- !private ["C7swerver9TCPServer", "exit"]
+- !private ["C7swerver9TCPServer", "free"]
+- ["C7swerver9TCPServer", "init"]
+- !private ["C7swerver9TCPServer", "loop"]
+- !private ["C7swerver9TCPServer", "malloc"]
+- !private ["C7swerver9TCPServer", "print"]
+- ["C7swerver9TCPServer", "processRequest"]
+- !private ["C7swerver9TCPServer", "size_t"]
+- ["C7swerver9TCPServer", "sockaddr"]
+- !private ["C7swerver9TCPServer", "sockaddr_in"]
+- !private ["C7swerver9TCPServer", "ssize_t"]
+- ["C7swerver9TCPServer", "start"]
+- !private ["C7swerver9TCPServer", "tcp"]
+- !private ["C7swerver9TCPServer", "unsafeBitCast"]
+- !private ["C7swerver9TCPServer", "uv_accept"]
+- !private ["C7swerver9TCPServer", "uv_buf_init"]
+- !private ["C7swerver9TCPServer", "uv_buf_t"]
+- !private ["C7swerver9TCPServer", "uv_close"]
+- !private ["C7swerver9TCPServer", "uv_default_loop"]
+- !private ["C7swerver9TCPServer", "uv_handle_t"]
+- !private ["C7swerver9TCPServer", "uv_ip4_addr"]
+- !private ["C7swerver9TCPServer", "uv_listen"]
+- ["C7swerver9TCPServer", "uv_loop_t"]
+- !private ["C7swerver9TCPServer", "uv_read_start"]
+- !private ["C7swerver9TCPServer", "uv_read_stop"]
+- !private ["C7swerver9TCPServer", "uv_run"]
+- !private ["C7swerver9TCPServer", "uv_stream_t"]
+- !private ["C7swerver9TCPServer", "uv_strerror"]
+- !private ["C7swerver9TCPServer", "uv_tcp_bind"]
+- !private ["C7swerver9TCPServer", "uv_tcp_init"]
+- ["C7swerver9TCPServer", "uv_tcp_t"]
+- !private ["C7swerver9TCPServer", "uv_write"]
+- !private ["C7swerver9TCPServer", "uv_write_t"]
+- !private ["Ps33_BuiltinBooleanLiteralConvertible", "_getBuiltinLogicValue"]
+- !private ["P10Foundation21_ObjectiveCBridgeable", "_getBuiltinLogicValue"]
+- !private ["Ps12_Reflectable", "_getBuiltinLogicValue"]
+depends-nominal:
+- "Ps9AnyObject"
+- !private "Sb"
+- !private "Ps25BooleanLiteralConvertible"
+- !private "Ps11BooleanType"
+- !private "Ps23CustomStringConvertible"
+- !private "Ps9Equatable"
+- !private "Ps8Hashable"
+- "C7swerver9TCPServer"
+- !private "Ps33_BuiltinBooleanLiteralConvertible"
+- !private "P10Foundation21_ObjectiveCBridgeable"
+- !private "Ps12_Reflectable"
+depends-dynamic-lookup:
+depends-external:
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/linux/x86_64/Swift.swiftmodule"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/UnicodeShims.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/SwiftStdint.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/SwiftStddef.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/LibcShims.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/RuntimeStubs.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/RuntimeShims.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/RefCount.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/HeapObject.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/GlobalObjects.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/FoundationShims.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/CoreFoundationShims.h"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/shims/module.map"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/linux/x86_64/Foundation.swiftmodule"
+- "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/lib/swift/linux/x86_64/Glibc.swiftmodule"
+interface-hash: "f544b2cdb29908a69e0458e303b4636d"

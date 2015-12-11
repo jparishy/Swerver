@@ -1,0 +1,29 @@
+client:
+  name: swift-build
+
+tools: {}
+
+targets:
+  "": [<swerver>]
+  swerver: [<swerver>]
+
+commands:
+  <swerver-swiftc>:
+    tool: swift-compiler
+    executable: "/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/bin/swiftc"
+    inputs: ["/home/jp/code/swerver/Sources/HTTP.swift","/home/jp/code/swerver/Sources/SwiftNonsense.swift","/home/jp/code/swerver/Sources/main.swift","/home/jp/code/swerver/Sources/TCPServer.swift","/home/jp/code/swerver/Sources/Router.swift","/home/jp/code/swerver/Sources/Server.swift","/home/jp/code/swerver/Sources/HTTP11.swift"]
+    outputs: ["<swerver-swiftc>","/home/jp/code/swerver/.build/debug/swerver.swiftmodule","/home/jp/code/swerver/.build/debug/swerver.o/Sources/HTTP.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/SwiftNonsense.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/main.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/TCPServer.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/Router.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/Server.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/HTTP11.swift.o"]
+    module-name: "swerver"
+    module-output-path: "/home/jp/code/swerver/.build/debug/swerver.swiftmodule"
+    is-library: false
+    sources: ["/home/jp/code/swerver/Sources/HTTP.swift","/home/jp/code/swerver/Sources/SwiftNonsense.swift","/home/jp/code/swerver/Sources/main.swift","/home/jp/code/swerver/Sources/TCPServer.swift","/home/jp/code/swerver/Sources/Router.swift","/home/jp/code/swerver/Sources/Server.swift","/home/jp/code/swerver/Sources/HTTP11.swift"]
+    objects: ["/home/jp/code/swerver/.build/debug/swerver.o/Sources/HTTP.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/SwiftNonsense.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/main.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/TCPServer.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/Router.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/Server.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/HTTP11.swift.o"]
+    import-paths: ["/home/jp/code/swerver/.build/debug"]
+    temps-path: "/home/jp/code/swerver/.build/debug/swerver.o/swerver"
+    other-args: ["-j8","-Onone","-g","-I","/usr/local/include"]
+  <swerver>:
+    tool: shell
+    inputs: ["<swerver-swiftc>","/home/jp/code/swerver/.build/debug/swerver.o/Sources/HTTP.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/SwiftNonsense.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/main.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/TCPServer.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/Router.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/Server.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/HTTP11.swift.o"]
+    outputs: ["<swerver>","/home/jp/code/swerver/.build/debug/swerver"]
+    args: ["/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/bin/swiftc","-o","/home/jp/code/swerver/.build/debug/swerver","/home/jp/code/swerver/.build/debug/swerver.o/Sources/HTTP.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/SwiftNonsense.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/main.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/TCPServer.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/Router.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/Server.swift.o","/home/jp/code/swerver/.build/debug/swerver.o/Sources/HTTP11.swift.o","-L/usr/local/lib"]
+    description: "Linking Executable:  .build/debug/swerver"

@@ -1,0 +1,47 @@
+{
+  "": {
+    "swift-dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/master.swiftdeps"
+  },
+  "/home/jp/code/swerver/Sources/HTTP.swift": {
+    "dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/HTTP.d",
+    "object": "/home/jp/code/swerver/.build/debug/Swerver.o/Sources/HTTP.swift.o",
+    "swiftmodule": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/HTTP~partial.swiftmodule",
+    "swift-dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/HTTP.swiftdeps"
+  },
+  "/home/jp/code/swerver/Sources/SwiftNonsense.swift": {
+    "dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/SwiftNonsense.d",
+    "object": "/home/jp/code/swerver/.build/debug/Swerver.o/Sources/SwiftNonsense.swift.o",
+    "swiftmodule": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/SwiftNonsense~partial.swiftmodule",
+    "swift-dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/SwiftNonsense.swiftdeps"
+  },
+  "/home/jp/code/swerver/Sources/main.swift": {
+    "dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/main.d",
+    "object": "/home/jp/code/swerver/.build/debug/Swerver.o/Sources/main.swift.o",
+    "swiftmodule": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/main~partial.swiftmodule",
+    "swift-dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/main.swiftdeps"
+  },
+  "/home/jp/code/swerver/Sources/TCPServer.swift": {
+    "dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/TCPServer.d",
+    "object": "/home/jp/code/swerver/.build/debug/Swerver.o/Sources/TCPServer.swift.o",
+    "swiftmodule": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/TCPServer~partial.swiftmodule",
+    "swift-dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/TCPServer.swiftdeps"
+  },
+  "/home/jp/code/swerver/Sources/Router.swift": {
+    "dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/Router.d",
+    "object": "/home/jp/code/swerver/.build/debug/Swerver.o/Sources/Router.swift.o",
+    "swiftmodule": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/Router~partial.swiftmodule",
+    "swift-dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/Router.swiftdeps"
+  },
+  "/home/jp/code/swerver/Sources/Server.swift": {
+    "dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/Server.d",
+    "object": "/home/jp/code/swerver/.build/debug/Swerver.o/Sources/Server.swift.o",
+    "swiftmodule": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/Server~partial.swiftmodule",
+    "swift-dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/Server.swiftdeps"
+  },
+  "/home/jp/code/swerver/Sources/HTTP11.swift": {
+    "dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/HTTP11.d",
+    "object": "/home/jp/code/swerver/.build/debug/Swerver.o/Sources/HTTP11.swift.o",
+    "swiftmodule": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/HTTP11~partial.swiftmodule",
+    "swift-dependencies": "/home/jp/code/swerver/.build/debug/Swerver.o/Swerver/HTTP11.swiftdeps"
+  }
+}

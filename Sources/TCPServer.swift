@@ -46,7 +46,7 @@ class TCPServer {
         
         let result = uv_listen(s, Int32(backlogSize), _connection_cb)
         if result != 0 {
-            print("Listen error: \(uv_strerror(result))")
+            print("Listen error: \(result)")
             exit(result)
         }
         
@@ -98,7 +98,7 @@ class TCPServer {
         let client = UnsafeMutablePointer<uv_tcp_t>.alloc(1)
         var result = uv_tcp_init(loop, client)
         if result != 0 {
-            print("uv_tcp_init failed: \(uv_strerror(result))")
+            print("uv_tcp_init failed: \(result)")
         }
         
         let stream = cast_tcp_to_stream(client)

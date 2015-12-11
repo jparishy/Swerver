@@ -17,6 +17,6 @@ extension String {
 
 extension NSString {
     func swerver_cStringUsingEncoding(encoding: NSStringEncoding) -> [UInt8] {
-        return (self as String).swerver_cStringUsingEncoding(encoding)
+        return self.bridge().swerver_cStringUsingEncoding(encoding)
     }
 }
