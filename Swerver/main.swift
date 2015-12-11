@@ -25,9 +25,10 @@ class ErrorProvider : RouteProvider {
 }
 
 let router = Router(routes: [
-    Route(path: "/hello_world", routeProvider: HelloProvider()),
-    Route(path: "/throw",       routeProvider: ErrorProvider()),
-    Route(path: "/",            routeProvider: Redirect("/hello_world"))
+    PathRoute(path: "/hello_world", routeProvider: HelloProvider()),
+    PathRoute(path: "/throw",       routeProvider: ErrorProvider()),
+    PathRoute(path: "/",            routeProvider: Redirect("/hello_world")),
+    Resource(name: "notes",         controller: NotesController())
 ])
 
 let server = HTTPServer<HTTP11>(port: 8080, router: router)
