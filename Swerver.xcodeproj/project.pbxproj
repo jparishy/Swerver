@@ -14,6 +14,7 @@
 		E83E0B501C12AAA400D6EFC9 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83E0B4F1C12AAA400D6EFC9 /* HTTP.swift */; };
 		E849E8681C1A7A3A00656C4C /* TCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E849E8671C1A7A3A00656C4C /* TCPServer.swift */; };
 		E849E86D1C1A7A8100656C4C /* Bridge.c in Sources */ = {isa = PBXBuildFile; fileRef = E849E86B1C1A7A8100656C4C /* Bridge.c */; };
+		E84FF9421C1AB0180009B89B /* SwiftNonsense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84FF9411C1AB0180009B89B /* SwiftNonsense.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +41,7 @@
 		E849E86B1C1A7A8100656C4C /* Bridge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Bridge.c; sourceTree = "<group>"; };
 		E849E86C1C1A7A8100656C4C /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		E849E86E1C1A7B2800656C4C /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		E84FF9411C1AB0180009B89B /* SwiftNonsense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftNonsense.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				E83E0B4F1C12AAA400D6EFC9 /* HTTP.swift */,
 				E83E0B4D1C12AA9900D6EFC9 /* HTTP11.swift */,
 				E849E8671C1A7A3A00656C4C /* TCPServer.swift */,
+				E84FF9411C1AB0180009B89B /* SwiftNonsense.swift */,
 				E849E86A1C1A7A6B00656C4C /* Supporting */,
 			);
 			path = Swerver;
@@ -155,6 +158,7 @@
 				E83E0B4A1C129FD900D6EFC9 /* Router.swift in Sources */,
 				E849E8681C1A7A3A00656C4C /* TCPServer.swift in Sources */,
 				E83E0B4E1C12AA9900D6EFC9 /* HTTP11.swift in Sources */,
+				E84FF9421C1AB0180009B89B /* SwiftNonsense.swift in Sources */,
 				E849E86D1C1A7A8100656C4C /* Bridge.c in Sources */,
 				E83E0B4C1C12A29600D6EFC9 /* Server.swift in Sources */,
 				E83E0B431C129E5800D6EFC9 /* main.swift in Sources */,

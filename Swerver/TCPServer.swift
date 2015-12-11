@@ -66,7 +66,7 @@ class TCPServer {
     private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: UnsafePointer<uv_buf_t>) {
         if let string = String(CString: buf.memory.base, encoding: NSUTF8StringEncoding), data = string.dataUsingEncoding(NSUTF8StringEncoding) {
             if let response = processRequest(data), string = NSString(data: response, encoding: NSUTF8StringEncoding) {
-                let cString = string.cStringUsingEncoding(NSUTF8StringEncoding)
+                let cString = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
                 
                 let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
                 let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(cString)
@@ -76,6 +76,7 @@ class TCPServer {
                 uv_write(write, stream, outBuf, 1, nil)
             }
         }
+        
         uv_read_stop(stream)
         uv_close(cast_stream_to_handle(stream), nil)
         

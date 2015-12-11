@@ -10,6 +10,10 @@
 #define bridge_h
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <uv.h>
 
 struct sockaddr_in * cast_sockaddr(struct sockaddr *s);

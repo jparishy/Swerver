@@ -51,9 +51,9 @@ class HTTP11 : HTTPVersion {
                 }
             } else {
                 let trimmed = line.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).stringByAppendingString("\n")
-                if let chunk = trimmed.dataUsingEncoding(NSUTF8StringEncoding) {
-                    data?.appendData(chunk)
-                }
+                let chunk = NSData(bytes: unsafeBitCast(trimmed.swerver_cStringUsingEncoding(NSUTF8StringEncoding), UnsafePointer<Void>.self), length: trimmed.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))    // trimmed.dataUsingEncoding(NSUTF8StringEncoding) {
+                    
+                data?.appendData(chunk)
             }
         }
         
