@@ -31,21 +31,28 @@ class Database {
         }
     }
     
-    func transaction(work: (Transaction) throws -> ()) throws {
+    func transaction<T>(work: (Transaction) throws -> (T)) throws -> T {
         let transaction = Transaction(connection: connection)
         try transaction.begin()
-        try work(transaction)
-        try transaction.commit()
+        let ret = try work(transaction)
+        if transaction._closed != true {
+            throw DatabaseError.TransactionNotClosed
+        }
+        
+        return ret
     }
 }
 
 enum DatabaseError : ErrorType {
     case OpenFailure(status: Int, message: String)
     case TransactionFailure(status: Int, message: String)
+    case TransactionNotClosed
 }
 
 public class Transaction {
     private let connection: COpaquePointer
+    
+    private var _closed = false
     private var _models: [Model] = []
     
     private init(connection: COpaquePointer) {
@@ -148,8 +155,12 @@ public class Transaction {
         try command("BEGIN")
     }
     
-    private func commit() throws {
-        try commitDirtyModels()
-        try command("END")
+    public func commit() {
+        do {
+            try commitDirtyModels()
+            try command("END")
+        } catch {}
+        
+        _closed = true
     }
 }

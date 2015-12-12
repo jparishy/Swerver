@@ -64,6 +64,7 @@ extension String {
     
     // Another naive approach
     func swerver_stringByTrimmingCharactersInSet(set: NSCharacterSet) -> String {
+#if os(Linux)
         var outString = ""
         let chars = swerver_cStringUsingEncoding(NSUTF8StringEncoding)
         
@@ -75,6 +76,9 @@ extension String {
         }
         
         return outString
+#else
+        return stringByTrimmingCharactersInSet(set)
+#endif
     }
 }
 

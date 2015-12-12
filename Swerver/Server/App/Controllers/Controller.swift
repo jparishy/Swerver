@@ -46,4 +46,21 @@ class Controller : RouteProvider {
     func delete(request: Request) throws /* UserError, InternalServerError */ -> Response {
         throw UserError.Unimplemented
     }
+    
+    func parse(request: Request) throws -> AnyObject? {
+        if let body = request.requestBody {
+            do {
+                let JSON = try NSJSONSerialization.JSONObjectWithData(body, options: NSJSONReadingOptions(rawValue: 0))
+                return JSON
+            } catch {
+                return nil
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    func connect() throws -> Database {
+        return try Database(databaseName: "notes", username: "jp", password: "password")
+    }
 }

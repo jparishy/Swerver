@@ -12,6 +12,7 @@ typealias Headers = [String:String]
 
 enum StatusCode {
     case Ok
+    case InvalidRequest
     case NotFound
     case MovedPermanently(to: String)
     case InternalServerError
@@ -19,6 +20,7 @@ enum StatusCode {
     var integerCode: Int {
         switch self {
         case .Ok: return 200
+        case .InvalidRequest: return 400
         case .NotFound: return 404
         case .MovedPermanently: return 301
         case .InternalServerError: return 500
@@ -40,6 +42,8 @@ enum StatusCode {
             return "200 OK"
         case 301:
             return "301 Moved Permanently"
+        case 400:
+            return "400 Invalid Request"
         case 404:
             return "404 Not Found"
         case (500...599):
@@ -104,6 +108,14 @@ class ResponseData {
         return ResponseData(string: string)
     }
     
+    static func Data(data: NSData) -> ResponseData? {
+        if let str = NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)?.bridge() {
+            return ResponseData(string: str)
+        } else {
+            return nil
+        }
+    }
+    
     static func PublicFile(filename: String) throws -> ResponseData? {
         let string = try NSString(contentsOfFile: "./Public/\(filename)", encoding: NSUTF8StringEncoding)
         return ResponseData.Str(string.bridge())
@@ -126,6 +138,19 @@ func BuiltInResponse(code: StatusCode) -> Response {
         
         default:
             return (code, [:], nil)
+    }
+}
+
+enum ResponseFormat {
+    case JSON
+    case HTML
+}
+
+func RespondTo(request: Request, work: (ResponseFormat) throws -> Response) throws -> Response {
+    if let format = request.headers["Accept"] where format == "text/html" {
+        return try work(.HTML)
+    } else {
+        return try work(.JSON)
     }
 }
 

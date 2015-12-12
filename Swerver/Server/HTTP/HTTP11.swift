@@ -63,8 +63,9 @@ class HTTP11 : HTTPVersion {
                 }
             } else {
                 let trimmed = line.bridge().swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).bridge().stringByAppendingString("\n")
-                let chunk = NSData(bytes: unsafeBitCast(trimmed.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding), UnsafePointer<Void>.self), length: trimmed.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
-                    
+                let bytes = trimmed.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+                let chunk = NSData(bytes: bytes, length: bytes.count)
+        
                 data?.appendData(chunk)
             }
         }

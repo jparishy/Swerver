@@ -15,6 +15,50 @@ class ModelQuery<T : Model> {
         self.transaction = transaction
     }
     
+    func insert(m: T) throws {
+        var query = "INSERT INTO \(T.table)("
+        
+        var index = 0
+        for (k,_) in m.map {
+            if k == T.primaryKey {
+                index++
+                continue
+            }
+            
+            query += "\(k)"
+            
+            if index < (m.map.count - 1) {
+                query += ", "
+            } else {
+                query += ")"
+            }
+            
+            index++
+        }
+        
+        query += " VALUES ("
+        
+        index = 0
+        for (k,v) in m.map {
+            if k == T.primaryKey {
+                index++
+                continue
+            }
+            
+            query += "\(try v.databaseValueForWriting())"
+            
+            if index < (m.map.count - 1) {
+                query += ", "
+            } else {
+                query += ")"
+            }
+            
+            index++
+        }
+        
+        try transaction.command(query)
+    }
+    
     func all() throws -> [T] {
         
         var results = [T]()

@@ -71,7 +71,7 @@ public class StringProperty : Property<String> {
     }
     
     override public func databaseValueForWriting() -> String {
-        return "\'\(value())\'"
+        return "'\(value())'"
     }
 }
 
@@ -108,4 +108,28 @@ public protocol Model : class {
     static var primaryKey: String { get }
     var map: [String:BaseProperty] { get }
     var transaction: Transaction? { get set }
+}
+
+func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
+    let m = T()
+    for (k,_) in m.map {
+        if let v = JSON[k] {
+            let str = String(v)
+            try m.map[k]?.databaseReadFromValue(str)
+        }
+    }
+    
+    return m
+}
+
+func JSONDictionaryFromModel<T : Model>(m: T) throws -> NSDictionary {
+    
+    let d = NSMutableDictionary()
+    
+    for (k,v) in m.map {
+        let vv = try v.databaseValueForWriting()
+        d[k] = vv
+    }
+    
+    return d
 }

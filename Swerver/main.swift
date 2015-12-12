@@ -31,23 +31,5 @@ let router = Router(routes: [
     Resource(name:  "notes",           controller: NotesController())
 ])
 
-do {
-    let db = try Database(databaseName: "notes", username: "jp", password: "password")
-    try db.transaction {
-        t in
-        let query = ModelQuery<Note>(transaction: t)
-        let results = try query.all()
-        if let result = results.first {
-            let str = result.text.value() + "|"
-            result.text.update(str)
-            print(result)
-        }
-    }
-} catch DatabaseError.OpenFailure(let status, let message) {
-    print("Failed to open database (statusCode=\(status)):\n\(message)")
-} catch DatabaseError.TransactionFailure(let status, let message) {
-    print("Transaction failed (statusCode=\(status)):\n\(message)")
-}
-
 let server = HTTPServer<HTTP11>(port: 8080, router: router)
 server.start()
