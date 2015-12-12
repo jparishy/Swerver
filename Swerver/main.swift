@@ -49,5 +49,7 @@ do {
     print("Transaction failed (statusCode=\(status)):\n\(message)")
 }
 
+print("About to start running")
+
 let server = HTTPServer(port: 80, router: router)
 server.start()
