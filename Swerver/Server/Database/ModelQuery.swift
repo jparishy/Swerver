@@ -19,7 +19,7 @@ class ModelQuery<T : Model> {
         
         var results = [T]()
         
-        let rows = try self.transaction.query("SELECT * FROM \(T.table)")
+        let rows = try self.transaction.query("SELECT * FROM \(T.table) ORDER BY \(T.primaryKey)")
         for row in rows {
         
             let m = T()
@@ -28,6 +28,8 @@ class ModelQuery<T : Model> {
                     try p.databaseReadFromValue(v)
                 }
             }
+            
+            transaction.register(m)
             
             results.append(m)
         }

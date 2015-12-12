@@ -13,12 +13,18 @@ enum ModelError : ErrorType {
 }
 
 public protocol BaseProperty {
+    var dirty: Bool { get }
     func databaseReadFromValue(value: String) throws
     func databaseValueForWriting() throws -> String
 }
 
 public class Property<T> : BaseProperty, CustomStringConvertible {
     let column: String
+    
+    internal var _dirty = false
+    public var dirty: Bool {
+        return _dirty
+    }
     
     private var internalValue: T
     
@@ -29,6 +35,8 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
     
     func update(value: T) -> T {
         internalValue = value
+        _dirty = true
+        
         return internalValue
     }
     
@@ -59,16 +67,16 @@ public class StringProperty : Property<String> {
     }
     
     override public func databaseReadFromValue(value: String) {
-        update(value)
+        internalValue = value
     }
     
     override public func databaseValueForWriting() -> String {
-        return value()
+        return "\'\(value())\'"
     }
 }
 
 extension String {
-    init(stringProperty: StringProperty) {
+    init(_ stringProperty: StringProperty) {
         self.init(stringProperty.value())
     }
 }
@@ -79,7 +87,7 @@ public class IntProperty : Property<Int> {
     }
     
     override public func databaseReadFromValue(value: String) {
-        update(value.bridge().integerValue)
+        internalValue = value.bridge().integerValue
     }
     
     override public func databaseValueForWriting() -> String {
@@ -88,14 +96,16 @@ public class IntProperty : Property<Int> {
 }
 
 extension Int {
-    init(intProperty: IntProperty) {
+    init(_ intProperty: IntProperty) {
         self.init(intProperty.value())
     }
 }
 
-public protocol Model {
+public protocol Model : class {
     init()
     static var table: String { get }
     static var columns: [String] { get }
+    static var primaryKey: String { get }
     var map: [String:BaseProperty] { get }
+    var transaction: Transaction? { get set }
 }

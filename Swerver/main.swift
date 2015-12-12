@@ -37,8 +37,10 @@ do {
         t in
         let query = ModelQuery<Note>(transaction: t)
         let results = try query.all()
-        
-        print(results)
+        if let result = results.first {
+            let str = result.text.value() + "|"
+            result.text.update(str)
+        }
     }
 } catch DatabaseError.OpenFailure(let status, let message) {
     print("Failed to open database (statusCode=\(status)):\n\(message)")

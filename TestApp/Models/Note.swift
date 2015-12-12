@@ -12,6 +12,8 @@ class Note {
     required init() {
     }
     
+    internal var transaction: Transaction? = nil
+    
     let id = IntProperty(column: "id")
     let text = StringProperty(column: "text")
 }
@@ -32,6 +34,10 @@ extension Note : Model {
             "id",
             "text"
         ]
+    }
+    
+    static var primaryKey: String {
+        return "id"
     }
     
     var map: [String : BaseProperty] {

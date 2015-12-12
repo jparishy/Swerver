@@ -44,8 +44,9 @@ enum DatabaseError : ErrorType {
     case TransactionFailure(status: Int, message: String)
 }
 
-class Transaction {
+public class Transaction {
     private let connection: COpaquePointer
+    private var _models: [Model] = []
     
     private init(connection: COpaquePointer) {
         self.connection = connection
@@ -69,7 +70,7 @@ class Transaction {
             var row = [String:String]()
             for j in 0..<numberOfFields {
                 if let key = NSString(CString: PQfname(result, j), encoding: NSUTF8StringEncoding)?.bridge(),
-                       value = NSString(CString: PQgetvalue(result, i, j), encoding: NSUTF8StringEncoding)?.bridge() {
+                     value = NSString(CString: PQgetvalue(result, i, j), encoding: NSUTF8StringEncoding)?.bridge() {
                     row[key] = value
                 }
             }
@@ -99,11 +100,56 @@ class Transaction {
         return result
     }
     
+    internal func register(model: Model) {
+        _models.append(model)
+    }
+    
+    private func commitDirtyModels() throws {
+        for m in _models {
+            let primaryKey = m.dynamicType.primaryKey
+            if let primaryKeyValue = try m.map[primaryKey]?.databaseValueForWriting() {
+                var query = "UPDATE \(m.dynamicType.table) SET "
+                
+                var index = 0
+                var dirtyProps = 0
+                for (k,v) in m.map {
+                    if v.dirty == false || k == primaryKey {
+                        index++
+                        continue
+                    }
+                    
+                    let vs = try v.databaseValueForWriting()
+                    query += "\(k) = \(vs)"
+                    
+                    if index < (m.map.count - 1) {
+                        query += ", "
+                    } else {
+                        query += " "
+                    }
+                    
+                    dirtyProps++
+                    index++
+                }
+                
+                if dirtyProps == 0 {
+                    break
+                }
+                
+                query += "WHERE \(m.dynamicType.primaryKey) = \(primaryKeyValue);"
+                print(query)
+                try self.command(query)
+            } else {
+                print("WARNING: \(m) is dirty but does not have a valid primary key and cannot be updated.")
+            }
+        }
+    }
+    
     private func begin() throws {
         try command("BEGIN")
     }
     
     private func commit() throws {
+        try commitDirtyModels()
         try command("END")
     }
 }
