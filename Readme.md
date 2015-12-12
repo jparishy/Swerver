@@ -38,7 +38,7 @@ _Note: I tried to get Swift to work on 14.x but failed. You may be smarter than 
 1. Install the Swift binaries. There are great instructions over at [Swift.org](https://swift.org/getting-started/). I put the swift root folder in `~/code/` so my PATH looks like `/home/jp/code/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu15.10/usr/bin:$PATH`; your mileage may vary.
 2. Ubuntu comes with libuv so you're good there. But you need to install the PostgreSQL libraries:
 
-    sudo apt-get install libpq-dev
+    `sudo apt-get install libpq-dev`
     
 3. While in the Swerver root folder, invoke the build script with `./build.sh`. I tried to make the build scirpt as generic as I could, but you may have some configuration differences on your system so if it fails open it up and see if any of the folders look off.
 4. If the build script succeeds, it places the app binary in the current directory with the name `app` so to run it just type `./app`.
