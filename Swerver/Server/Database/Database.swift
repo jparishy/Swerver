@@ -69,8 +69,8 @@ public class Transaction {
             
             var row = [String:String]()
             for j in 0..<numberOfFields {
-                if let key = NSString(CString: PQfname(result, j), encoding: NSUTF8StringEncoding)?.bridge(),
-                     value = NSString(CString: PQgetvalue(result, i, j), encoding: NSUTF8StringEncoding)?.bridge() {
+                if let key = NSString.fromCString(PQfname(result, j))?.bridge(),
+                     value = NSString.fromCString(PQgetvalue(result, i, j))?.bridge() {
                     row[key] = value
                 }
             }
@@ -88,7 +88,7 @@ public class Transaction {
         if status != expectedStatus {
         
             let message: String
-            if let pgMessage = NSString(CString: PQresultErrorMessage(result), encoding: NSUTF8StringEncoding)?.bridge() {
+            if let pgMessage = NSString.fromCString(PQresultErrorMessage(result))?.bridge() {
                 message = pgMessage
             } else {
                 message = "<No Error Message>"

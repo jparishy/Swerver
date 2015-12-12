@@ -78,8 +78,7 @@ extension NSString {
         let cString = UnsafePointer<Int8>(data)
 #if os(Linux)
         let r = NSString(CString: cString, encoding: NSUTF8StringEncoding)
-	print("r: \(r)")
-	return r
+        return r
 #else
         if let str = String(CString: cString, encoding: NSUTF8StringEncoding) {
             return str as NSString

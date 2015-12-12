@@ -82,6 +82,10 @@ extension NSString {
     }
 #endif
 
+    static func fromCString(CString: UnsafePointer<Int8>) -> NSString? {
+        return NSString(bytes: CString, length: Int(strlen(CString)), encoding: NSUTF8StringEncoding)
+    }
+
     func swerver_cStringUsingEncoding(encoding: NSStringEncoding) -> [UInt8] {
         return self.bridge().swerver_cStringUsingEncoding(encoding)
     }
