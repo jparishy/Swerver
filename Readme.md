@@ -24,6 +24,7 @@ Let's start off with the goals of Swerver.
 
 ##### OS X
 _Prerequisites: homebrew_
+
 1. Install libuv:
 
     brew install libuv
