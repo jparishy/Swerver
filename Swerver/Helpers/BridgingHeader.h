@@ -9,6 +9,6 @@
 #ifndef BridgingHeader_h
 #define BridgingHeader_h
 
-#import "Bridge.h"
+#import <Bridge.h>
 
 #endif /* BridgingHeader_h */

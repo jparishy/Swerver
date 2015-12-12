@@ -19,7 +19,11 @@
 
 #include <uv.h>
 
+#if LINUX
+#include <postgresql/libpq-fe.h>
+#else
 #include <libpq-fe.h>
+#endif
 
 struct sockaddr_in * cast_sockaddr(struct sockaddr *s);
 struct sockaddr * cast_sockaddr_in(struct sockaddr_in *s);
