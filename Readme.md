@@ -27,7 +27,7 @@ _Prerequisites: homebrew_
 
 1. Install libuv:
 
-    brew install libuv
+    `brew install libuv`
     
 2. Install [PostgreSQL.app](http://postgresapp.com/) and setup a new user & database. You'll need to change your settings in `main.swift` to reflect your role, password, and database name.
 3. Open the Xcode Project and use that. The included build script ***does not*** support OS X.
