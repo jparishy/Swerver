@@ -40,6 +40,7 @@ do {
         if let result = results.first {
             let str = result.text.value() + "|"
             result.text.update(str)
+            print(result)
         }
     }
 } catch DatabaseError.OpenFailure(let status, let message) {
@@ -47,3 +48,6 @@ do {
 } catch DatabaseError.TransactionFailure(let status, let message) {
     print("Transaction failed (statusCode=\(status)):\n\(message)")
 }
+
+let server = HTTPServer(port: 80, router: router)
+server.start()
