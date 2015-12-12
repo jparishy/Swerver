@@ -1,6 +1,8 @@
 # Swerver
 ### [WIP] Swift HTTP Server/MVC Framework
 
+![Example Screenshot](http://i.imgur.com/MncDaVp.jpg)
+
 Hiya. Swerver is an HTTP server and MVC framework for web applications in Swift.
 It is currently very much a work in progress, but it's coming along nicely so I wanted to put some information in the readme in case anyone wants to play along from home.
 
