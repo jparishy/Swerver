@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if os(Linux)
+import Glibc
+#endif
+
 /*
  * Extensions for bits of Foundation that are not yet in the shipped version.
  *
