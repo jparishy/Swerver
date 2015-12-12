@@ -32,7 +32,7 @@ let router = Router(routes: [
 ])
 
 do {
-    let db = try Database(databaseName: "notes", username: "jp")
+    let db = try Database(databaseName: "notes", username: "jp", password: "password")
     try db.transaction {
         t in
         let query = ModelQuery<Note>(transaction: t)
