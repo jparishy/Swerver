@@ -22,6 +22,7 @@
 		E886732B1C1BA55C00D3157E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732A1C1BA55C00D3157E /* Model.swift */; };
 		E886732E1C1BA63600D3157E /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732D1C1BA63600D3157E /* Note.swift */; };
 		E88673301C1BA7C400D3157E /* ModelQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732F1C1BA7C400D3157E /* ModelQuery.swift */; };
+		E88673321C1BDEB900D3157E /* Readme.md in Sources */ = {isa = PBXBuildFile; fileRef = E88673311C1BDEB900D3157E /* Readme.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,6 +58,7 @@
 		E886732A1C1BA55C00D3157E /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		E886732D1C1BA63600D3157E /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		E886732F1C1BA7C400D3157E /* ModelQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelQuery.swift; sourceTree = "<group>"; };
+		E88673311C1BDEB900D3157E /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			children = (
 				E88673011C1B7E9300D3157E /* Helpers */,
 				E88673001C1B753E00D3157E /* build.sh */,
+				E88673311C1BDEB900D3157E /* Readme.md */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 				E88673231C1B83D400D3157E /* NotesController.swift in Sources */,
 				E886731F1C1B806C00D3157E /* Resource.swift in Sources */,
 				E88673121C1B7ECF00D3157E /* TCPServer.swift in Sources */,
+				E88673321C1BDEB900D3157E /* Readme.md in Sources */,
 				E886732B1C1BA55C00D3157E /* Model.swift in Sources */,
 				E88673291C1B94CF00D3157E /* Database.swift in Sources */,
 				E88673111C1B7ECB00D3157E /* HTTPServer.swift in Sources */,

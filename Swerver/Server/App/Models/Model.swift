@@ -129,6 +129,7 @@ func JSONDictionaryFromModel<T : Model>(m: T) throws -> NSDictionary {
     for (k,v) in m.map {
         let vv = try v.databaseValueForWriting()
         d[k] = vv
+        d.setObject(vv, forKey: k)
     }
     
     return d
