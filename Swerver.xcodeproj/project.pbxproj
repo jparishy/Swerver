@@ -18,6 +18,10 @@
 		E886731D1C1B800A00D3157E /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731C1C1B800A00D3157E /* Controller.swift */; };
 		E886731F1C1B806C00D3157E /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731E1C1B806C00D3157E /* Resource.swift */; };
 		E88673231C1B83D400D3157E /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673221C1B83D400D3157E /* NotesController.swift */; };
+		E88673291C1B94CF00D3157E /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673281C1B94CF00D3157E /* Database.swift */; };
+		E886732B1C1BA55C00D3157E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732A1C1BA55C00D3157E /* Model.swift */; };
+		E886732E1C1BA63600D3157E /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732D1C1BA63600D3157E /* Note.swift */; };
+		E88673301C1BA7C400D3157E /* ModelQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732F1C1BA7C400D3157E /* ModelQuery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +53,10 @@
 		E886731E1C1B806C00D3157E /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		E88673221C1B83D400D3157E /* NotesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		E88673251C1B87CC00D3157E /* 500.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 500.html; sourceTree = "<group>"; };
+		E88673281C1B94CF00D3157E /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		E886732A1C1BA55C00D3157E /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		E886732D1C1BA63600D3157E /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		E886732F1C1BA7C400D3157E /* ModelQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelQuery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +149,7 @@
 		E88673181C1B7FCC00D3157E /* App */ = {
 			isa = PBXGroup;
 			children = (
+				E88673271C1B94BF00D3157E /* Database */,
 				E88673191C1B7FF300D3157E /* Controllers */,
 				E886731A1C1B7FF300D3157E /* Models */,
 				E886731B1C1B7FF300D3157E /* Views */,
@@ -162,6 +171,7 @@
 		E886731A1C1B7FF300D3157E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E886732A1C1BA55C00D3157E /* Model.swift */,
 			);
 			name = Models;
 			path = Swerver/Server/App/Models;
@@ -178,6 +188,7 @@
 		E88673201C1B83B200D3157E /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
+				E886732C1C1BA62E00D3157E /* Models */,
 				E88673241C1B87C000D3157E /* Public */,
 				E88673211C1B83CA00D3157E /* Controllers */,
 			);
@@ -200,6 +211,25 @@
 			);
 			name = Public;
 			path = TestApp/Public;
+			sourceTree = SOURCE_ROOT;
+		};
+		E88673271C1B94BF00D3157E /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				E88673281C1B94CF00D3157E /* Database.swift */,
+				E886732F1C1BA7C400D3157E /* ModelQuery.swift */,
+			);
+			name = Database;
+			path = Swerver/Server/Database;
+			sourceTree = SOURCE_ROOT;
+		};
+		E886732C1C1BA62E00D3157E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E886732D1C1BA63600D3157E /* Note.swift */,
+			);
+			name = Models;
+			path = TestApp/Models;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
@@ -265,7 +295,11 @@
 				E88673231C1B83D400D3157E /* NotesController.swift in Sources */,
 				E886731F1C1B806C00D3157E /* Resource.swift in Sources */,
 				E88673121C1B7ECF00D3157E /* TCPServer.swift in Sources */,
+				E886732B1C1BA55C00D3157E /* Model.swift in Sources */,
+				E88673291C1B94CF00D3157E /* Database.swift in Sources */,
 				E88673111C1B7ECB00D3157E /* HTTPServer.swift in Sources */,
+				E88673301C1BA7C400D3157E /* ModelQuery.swift in Sources */,
+				E886732E1C1BA63600D3157E /* Note.swift in Sources */,
 				E88673141C1B7ED400D3157E /* SwiftNonsense.swift in Sources */,
 				E886730E1C1B7EC700D3157E /* Router.swift in Sources */,
 				E88673171C1B7FC100D3157E /* Bridge.c in Sources */,
@@ -365,7 +399,10 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
-				OTHER_LDFLAGS = "-luv";
+				OTHER_LDFLAGS = (
+					"-luv",
+					"-lpq",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = Swerver/Helpers/BridgingHeader.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -381,7 +418,10 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
-				OTHER_LDFLAGS = "-luv";
+				OTHER_LDFLAGS = (
+					"-luv",
+					"-lpq",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = Swerver/Helpers/BridgingHeader.h;
 			};

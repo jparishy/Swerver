@@ -28,8 +28,20 @@ let router = Router(routes: [
     PathRoute(path: "/hello_world", routeProvider: HelloProvider()),
     PathRoute(path: "/throw",       routeProvider: ErrorProvider()),
     PathRoute(path: "/",            routeProvider: Redirect("/hello_world")),
-    Resource(name: "notes",         controller: NotesController())
+    Resource(name:  "notes",           controller: NotesController())
 ])
 
-let server = HTTPServer<HTTP11>(port: 8080, router: router)
-server.start()
+do {
+    let db = try Database(databaseName: "notes", username: "jp")
+    try db.transaction {
+        t in
+        let query = ModelQuery<Note>(transaction: t)
+        let results = try query.all()
+        
+        print(results)
+    }
+} catch DatabaseError.OpenFailure(let status, let message) {
+    print("Failed to open database (statusCode=\(status)):\n\(message)")
+} catch DatabaseError.TransactionFailure(let status, let message) {
+    print("Transaction failed (statusCode=\(status)):\n\(message)")
+}
