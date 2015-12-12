@@ -21,7 +21,7 @@ class Database {
         if status != CONNECTION_OK {
         
             let message: String
-            if let pgMessage = NSString(CString: PQerrorMessage(connection), encoding: NSUTF8StringEncoding)?.bridge() {
+            if let pgMessage = NSString.fromCString(PQerrorMessage(connection))?.bridge() {
                 message = pgMessage
             } else {
                 message = "<No Error Message>"
