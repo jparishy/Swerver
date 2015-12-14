@@ -91,6 +91,23 @@ class NotesController : Controller {
         }
     }
 }
+
+class HelloProvider : RouteProvider {
+    func apply(request: Request) throws -> Response {
+        return  (.Ok, ["Content-Type":"text/html"], ResponseData("<html><body><h1>Hello World! This server is running Swift!</h1></body></html>"))
+    }
+}
+
+let router = Router(routes: [
+    PathRoute(path: "/",            routeProvider: Redirect("/hello_world")),
+    PathRoute(path: "/hello_world", routeProvider: HelloProvider()),
+    Resource(name:  "notes",           controller: NotesController()),
+    PublicFiles(prefix: "public")
+])
+
+let server = HTTPServer<HTTP11>(port: 8080, router: router)
+server.start()
+
 ```
 
 #### Goals:
