@@ -139,7 +139,7 @@ class ResponseData {
         let data = try NSData(contentsOfFile: "\(dir)/\(filename)", options: NSDataReadingOptions(rawValue: 0))
         
         var headers: Headers = [:]
-        if let ext = filename.bridge().componentsSeparatedByString(".").last?.lowercaseString {
+        if let ext = filename.bridge().swerver_componentsSeparatedByString(".").last?.lowercaseString {
             let contentTypes = [
             
                 // Images
