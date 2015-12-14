@@ -18,16 +18,9 @@ class HelloProvider : RouteProvider {
     }
 }
 
-class ErrorProvider : RouteProvider {
-    func apply(request: Request) throws -> Response {
-        throw InternalServerError.Generic
-    }
-}
-
 let router = Router(routes: [
-    PathRoute(path: "/hello_world", routeProvider: HelloProvider()),
-    PathRoute(path: "/throw",       routeProvider: ErrorProvider()),
     PathRoute(path: "/",            routeProvider: Redirect("/hello_world")),
+    PathRoute(path: "/hello_world", routeProvider: HelloProvider()),
     Resource(name:  "notes",           controller: NotesController()),
     PublicFiles(prefix: "public")
 ])

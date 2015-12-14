@@ -8,7 +8,90 @@ It is currently very much a work in progress, but it's coming along nicely so I 
 
 Swerver's TCP handling is based on libuv's C API. An HTTP Server is built upon that, and routing lives above there. I try to make the directory structure reflect what parts of the code are doing what.
 
-Let's start off with the goals of Swerver.
+# Hello World
+This is what a hello world looks like in Swerver.
+
+```
+import Foundation
+
+class HelloProvider : RouteProvider {
+    func apply(request: Request) throws -> Response {
+        return  (.Ok, ["Content-Type":"text/html"], ResponseData("<html><body><h1>Hello World! This server is running Swift!</h1></body></html>"))
+    }
+}
+
+let router = Router(routes: [
+    PathRoute(path: "/", routeProvider: HelloProvider()),
+])
+
+let server = HTTPServer<HTTP11>(port: 8080, router: router)
+server.start()
+
+```
+
+And a more complicated example the test app inside of the Swerver codebase.
+
+```
+import Foundation
+
+class NotesController : Controller {
+    override func index(request: Request) throws -> Response {
+        do {
+            let db = try connect()
+            return try db.transaction {
+                t in
+                
+                let query = ModelQuery<Note>(transaction: t)
+                let results = try query.all()
+                
+                t.commit()
+                
+                do {
+                    return try RespondTo(request) {
+                        (format: ResponseFormat) throws -> Response in
+                        switch format {
+                        case .HTML:
+                            return (.Ok, [:], nil)
+                        case .JSON:
+                            let dicts = try JSONDictionariesFromModels(results)
+                            let data = try NSJSONSerialization.swerver_dataWithJSONObject(dicts, options: NSJSONWritingOptions(rawValue: 0))
+                            return (.Ok, ["Content-Type":"application/json"], ResponseData.Data(data))
+                        }
+                    }
+                } catch {
+                    return (.InternalServerError, [:], nil)
+                }
+            }
+        } catch {
+            return (.InternalServerError, [:], nil)
+        }
+    }
+    
+    override func create(request: Request) throws -> Response {
+        if let JSON = try parse(request) as? NSDictionary {
+            do {
+                let db = try connect()
+                return try db.transaction {
+                    t in
+                    
+                    let query = ModelQuery<Note>(transaction: t)
+
+                    let model: Note = try ModelFromJSONDictionary(JSON)
+                    try query.insert(model)
+                    
+                    t.commit()
+                    
+                    return (.Ok, [:], nil)
+                }
+            } catch {
+                return (.InternalServerError, [:], nil)
+            }
+        } else {
+            return (.InvalidRequest, [:], nil)
+        }
+    }
+}
+```
 
 #### Goals:
 1. Provide the Infrastructure for a Swift based HTTP server with built-in routing capabilities and dispatching to Controllers to handle Models and render Views.

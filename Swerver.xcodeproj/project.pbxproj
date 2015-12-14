@@ -241,9 +241,9 @@
 		E88CFA361C1E8C0E003F671C /* SwerverTodoMVC */ = {
 			isa = PBXGroup;
 			children = (
+				E88CFA3A1C1E8C0E003F671C /* Models */,
 				E88CFA371C1E8C0E003F671C /* Controllers */,
 				E88CFA391C1E8C0E003F671C /* main.swift */,
-				E88CFA3A1C1E8C0E003F671C /* Models */,
 				E88CFA3C1C1E8C0E003F671C /* Public */,
 			);
 			path = SwerverTodoMVC;
