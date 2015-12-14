@@ -161,7 +161,7 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
                     str = "\(num.doubleValue)".bridge()
                 }
             } else if let b = obj as? JSONBool {
-                str = b.stringValue
+                str = b.stringValue.bridge()
             } else {
                 str = obj as! NSString
             }
