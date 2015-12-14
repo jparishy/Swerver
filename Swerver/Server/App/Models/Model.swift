@@ -122,10 +122,15 @@ internal extension NSNumber {
     }
     
     func type() -> Type {
-        switch CFNumberGetType(self) {
-        case .ShortType, .IntType, .LongType, .LongLongType: return .Integer
-        case .Float32Type, .Float64Type, .FloatType, .DoubleType: return .Double
-        case .CharType: return .Boolean
+#if os(Linux)
+        let number = self as! CFNumber
+#else
+        let number = self
+#endif
+        switch Int(CFNumberGetType(number).rawValue) {
+        case (7...10): return .Integer
+        case (11...12): return .Double
+        case 6: return .Boolean
         default:
             return .Integer
         }
