@@ -149,13 +149,19 @@ extension NSArray {
 
 extension NSString {
     private func JSONString(prettyPrinted: Bool) throws -> String {
-        return "\"\(self)\""
+        return "\"\(self.bridge())\""
     }
 }
 
 extension NSNumber {
     private func JSONString(prettyPrinted: Bool) throws -> String {
-        return "\(self)"
+        let double = self.doubleValue
+        let decimal = double % 1.0
+        if decimal > 0.0 {
+            return "\(double)"
+        } else {
+            return "\(self.integerValue)"
+        }
     }
 }
 
