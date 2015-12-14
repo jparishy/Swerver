@@ -4,12 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Swerver.xcscheme</key>
+		<key>Tests.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>Tests.xcscheme</key>
+		<key>TodoMC.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
@@ -18,6 +18,21 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>E83E0B3E1C129E5800D6EFC9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E88CF9F81C1E8A4A003F671C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E88CFA131C1E8AD1003F671C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E88CFA481C1E8C22003F671C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -7,35 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E807FCCF1C1E617300CCA3D5 /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */; };
 		E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCD01C1E721100CCA3D5 /* StringTests.swift */; };
 		E807FCD21C1E726F00CCA3D5 /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */; };
-		E83E0B431C129E5800D6EFC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83E0B421C129E5800D6EFC9 /* main.swift */; };
-		E886730E1C1B7EC700D3157E /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730D1C1B7E9C00D3157E /* Router.swift */; };
-		E886730F1C1B7ECB00D3157E /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730A1C1B7E9C00D3157E /* HTTP.swift */; };
-		E88673101C1B7ECB00D3157E /* HTTP11.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730B1C1B7E9C00D3157E /* HTTP11.swift */; };
-		E88673111C1B7ECB00D3157E /* HTTPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730C1C1B7E9C00D3157E /* HTTPServer.swift */; };
-		E88673121C1B7ECF00D3157E /* TCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673061C1B7E9C00D3157E /* TCPServer.swift */; };
-		E88673171C1B7FC100D3157E /* Bridge.c in Sources */ = {isa = PBXBuildFile; fileRef = E88673151C1B7FC100D3157E /* Bridge.c */; };
-		E886731D1C1B800A00D3157E /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731C1C1B800A00D3157E /* Controller.swift */; };
-		E886731F1C1B806C00D3157E /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731E1C1B806C00D3157E /* Resource.swift */; };
-		E88673231C1B83D400D3157E /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673221C1B83D400D3157E /* NotesController.swift */; };
-		E88673291C1B94CF00D3157E /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673281C1B94CF00D3157E /* Database.swift */; };
-		E886732B1C1BA55C00D3157E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732A1C1BA55C00D3157E /* Model.swift */; };
-		E886732E1C1BA63600D3157E /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732D1C1BA63600D3157E /* Note.swift */; };
-		E88673301C1BA7C400D3157E /* ModelQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732F1C1BA7C400D3157E /* ModelQuery.swift */; };
+		E88CFA401C1E8C0E003F671C /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA381C1E8C0E003F671C /* NotesController.swift */; };
+		E88CFA411C1E8C0E003F671C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA391C1E8C0E003F671C /* main.swift */; };
+		E88CFA421C1E8C0E003F671C /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA3B1C1E8C0E003F671C /* Note.swift */; };
+		E88CFA431C1E8C0E003F671C /* 404.html in Resources */ = {isa = PBXBuildFile; fileRef = E88CFA3D1C1E8C0E003F671C /* 404.html */; };
+		E88CFA441C1E8C0E003F671C /* 500.html in Resources */ = {isa = PBXBuildFile; fileRef = E88CFA3E1C1E8C0E003F671C /* 500.html */; };
+		E88CFA501C1E8C35003F671C /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA381C1E8C0E003F671C /* NotesController.swift */; };
+		E88CFA511C1E8C35003F671C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA391C1E8C0E003F671C /* main.swift */; };
+		E88CFA521C1E8C35003F671C /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA3B1C1E8C0E003F671C /* Note.swift */; };
+		E88CFA551C1E8C35003F671C /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673281C1B94CF00D3157E /* Database.swift */; };
+		E88CFA561C1E8C35003F671C /* ModelQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732F1C1BA7C400D3157E /* ModelQuery.swift */; };
+		E88CFA571C1E8C35003F671C /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731C1C1B800A00D3157E /* Controller.swift */; };
+		E88CFA581C1E8C35003F671C /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731E1C1B806C00D3157E /* Resource.swift */; };
+		E88CFA591C1E8C35003F671C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732A1C1BA55C00D3157E /* Model.swift */; };
+		E88CFA5A1C1E8C35003F671C /* Bridge.c in Sources */ = {isa = PBXBuildFile; fileRef = E88673151C1B7FC100D3157E /* Bridge.c */; };
+		E88CFA5B1C1E8C35003F671C /* TCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673061C1B7E9C00D3157E /* TCPServer.swift */; };
+		E88CFA5C1C1E8C35003F671C /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730A1C1B7E9C00D3157E /* HTTP.swift */; };
+		E88CFA5D1C1E8C35003F671C /* HTTP11.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730B1C1B7E9C00D3157E /* HTTP11.swift */; };
+		E88CFA5E1C1E8C35003F671C /* HTTPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730C1C1B7E9C00D3157E /* HTTPServer.swift */; };
+		E88CFA5F1C1E8C35003F671C /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730D1C1B7E9C00D3157E /* Router.swift */; };
+		E88CFA601C1E8C35003F671C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF71C1CA20400B6536A /* String.swift */; };
+		E88CFA611C1E8C35003F671C /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF91C1CA21400B6536A /* JSON.swift */; };
+		E88CFA621C1E8C35003F671C /* _JSONReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89968651C1D0C4E0019B5B8 /* _JSONReading.swift */; };
+		E88CFA631C1E8C35003F671C /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */; };
 		E89968591C1D01650019B5B8 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89968581C1D01650019B5B8 /* Tests.swift */; };
 		E89968621C1D01C30019B5B8 /* JSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89968611C1D01C30019B5B8 /* JSONTests.swift */; };
 		E89968631C1D02110019B5B8 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF91C1CA21400B6536A /* JSON.swift */; };
 		E89968641C1D0BE80019B5B8 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF71C1CA20400B6536A /* String.swift */; };
-		E89968661C1D0C4E0019B5B8 /* _JSONReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89968651C1D0C4E0019B5B8 /* _JSONReading.swift */; };
 		E89968671C1D0C4E0019B5B8 /* _JSONReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89968651C1D0C4E0019B5B8 /* _JSONReading.swift */; };
-		E8CE2EF81C1CA20400B6536A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF71C1CA20400B6536A /* String.swift */; };
-		E8CE2EFA1C1CA21400B6536A /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF91C1CA21400B6536A /* JSON.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E83E0B3D1C129E5800D6EFC9 /* CopyFiles */ = {
+		E88CFA471C1E8C22003F671C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -49,8 +54,6 @@
 /* Begin PBXFileReference section */
 		E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _JSONWriting.swift; sourceTree = "<group>"; };
 		E807FCD01C1E721100CCA3D5 /* StringTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringTests.swift; sourceTree = "<group>"; };
-		E83E0B3F1C129E5800D6EFC9 /* Swerver */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Swerver; sourceTree = BUILT_PRODUCTS_DIR; };
-		E83E0B421C129E5800D6EFC9 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E88673001C1B753E00D3157E /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = SOURCE_ROOT; };
 		E88673021C1B7E9300D3157E /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		E88673061C1B7E9C00D3157E /* TCPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPServer.swift; sourceTree = "<group>"; };
@@ -62,13 +65,16 @@
 		E88673161C1B7FC100D3157E /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		E886731C1C1B800A00D3157E /* Controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		E886731E1C1B806C00D3157E /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
-		E88673221C1B83D400D3157E /* NotesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
-		E88673251C1B87CC00D3157E /* 500.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 500.html; sourceTree = "<group>"; };
 		E88673281C1B94CF00D3157E /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		E886732A1C1BA55C00D3157E /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		E886732D1C1BA63600D3157E /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		E886732F1C1BA7C400D3157E /* ModelQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelQuery.swift; sourceTree = "<group>"; };
 		E88673311C1BDEB900D3157E /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
+		E88CFA381C1E8C0E003F671C /* NotesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
+		E88CFA391C1E8C0E003F671C /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E88CFA3B1C1E8C0E003F671C /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		E88CFA3D1C1E8C0E003F671C /* 404.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 404.html; sourceTree = "<group>"; };
+		E88CFA3E1C1E8C0E003F671C /* 500.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 500.html; sourceTree = "<group>"; };
+		E88CFA491C1E8C22003F671C /* TodoMC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TodoMC; sourceTree = BUILT_PRODUCTS_DIR; };
 		E89968561C1D01650019B5B8 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E89968581C1D01650019B5B8 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		E899685A1C1D01650019B5B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -79,7 +85,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E83E0B3C1C129E5800D6EFC9 /* Frameworks */ = {
+		E88CFA461C1E8C22003F671C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -99,6 +105,7 @@
 		E83E0B361C129E5800D6EFC9 = {
 			isa = PBXGroup;
 			children = (
+				E88CFA1D1C1E8B5D003F671C /* Examples */,
 				E83E0B411C129E5800D6EFC9 /* Swerver */,
 				E89968571C1D01650019B5B8 /* Tests */,
 				E83E0B401C129E5800D6EFC9 /* Products */,
@@ -108,8 +115,8 @@
 		E83E0B401C129E5800D6EFC9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E83E0B3F1C129E5800D6EFC9 /* Swerver */,
 				E89968561C1D01650019B5B8 /* Tests.xctest */,
+				E88CFA491C1E8C22003F671C /* TodoMC */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,8 +126,6 @@
 			children = (
 				E89968511C1D013E0019B5B8 /* Tests */,
 				E88673041C1B7E9C00D3157E /* Server */,
-				E83E0B421C129E5800D6EFC9 /* main.swift */,
-				E88673201C1B83B200D3157E /* TestApp */,
 				E849E86A1C1A7A6B00656C4C /* Supporting */,
 			);
 			path = Swerver;
@@ -215,34 +220,6 @@
 			path = Swerver/Server/App/Views;
 			sourceTree = SOURCE_ROOT;
 		};
-		E88673201C1B83B200D3157E /* TestApp */ = {
-			isa = PBXGroup;
-			children = (
-				E886732C1C1BA62E00D3157E /* Models */,
-				E88673241C1B87C000D3157E /* Public */,
-				E88673211C1B83CA00D3157E /* Controllers */,
-			);
-			name = TestApp;
-			sourceTree = "<group>";
-		};
-		E88673211C1B83CA00D3157E /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				E88673221C1B83D400D3157E /* NotesController.swift */,
-			);
-			name = Controllers;
-			path = TestApp/Controllers;
-			sourceTree = SOURCE_ROOT;
-		};
-		E88673241C1B87C000D3157E /* Public */ = {
-			isa = PBXGroup;
-			children = (
-				E88673251C1B87CC00D3157E /* 500.html */,
-			);
-			name = Public;
-			path = TestApp/Public;
-			sourceTree = SOURCE_ROOT;
-		};
 		E88673271C1B94BF00D3157E /* Database */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,14 +230,57 @@
 			path = Swerver/Server/Database;
 			sourceTree = SOURCE_ROOT;
 		};
-		E886732C1C1BA62E00D3157E /* Models */ = {
+		E88CFA1D1C1E8B5D003F671C /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				E886732D1C1BA63600D3157E /* Note.swift */,
+				E88CFA361C1E8C0E003F671C /* SwerverTodoMVC */,
 			);
-			name = Models;
-			path = TestApp/Models;
-			sourceTree = SOURCE_ROOT;
+			path = Examples;
+			sourceTree = "<group>";
+		};
+		E88CFA361C1E8C0E003F671C /* SwerverTodoMVC */ = {
+			isa = PBXGroup;
+			children = (
+				E88CFA371C1E8C0E003F671C /* Controllers */,
+				E88CFA391C1E8C0E003F671C /* main.swift */,
+				E88CFA3A1C1E8C0E003F671C /* Models */,
+				E88CFA3C1C1E8C0E003F671C /* Public */,
+			);
+			path = SwerverTodoMVC;
+			sourceTree = "<group>";
+		};
+		E88CFA371C1E8C0E003F671C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E88CFA381C1E8C0E003F671C /* NotesController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		E88CFA3A1C1E8C0E003F671C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E88CFA3B1C1E8C0E003F671C /* Note.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E88CFA3C1C1E8C0E003F671C /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				E88CFA3D1C1E8C0E003F671C /* 404.html */,
+				E88CFA3E1C1E8C0E003F671C /* 500.html */,
+				E88CFA3F1C1E8C0E003F671C /* images */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
+		E88CFA3F1C1E8C0E003F671C /* images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = images;
+			sourceTree = "<group>";
 		};
 		E89968511C1D013E0019B5B8 /* Tests */ = {
 			isa = PBXGroup;
@@ -302,21 +322,21 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E83E0B3E1C129E5800D6EFC9 /* Swerver */ = {
+		E88CFA481C1E8C22003F671C /* TodoMC */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E83E0B461C129E5800D6EFC9 /* Build configuration list for PBXNativeTarget "Swerver" */;
+			buildConfigurationList = E88CFA4D1C1E8C22003F671C /* Build configuration list for PBXNativeTarget "TodoMC" */;
 			buildPhases = (
-				E83E0B3B1C129E5800D6EFC9 /* Sources */,
-				E83E0B3C1C129E5800D6EFC9 /* Frameworks */,
-				E83E0B3D1C129E5800D6EFC9 /* CopyFiles */,
+				E88CFA451C1E8C22003F671C /* Sources */,
+				E88CFA461C1E8C22003F671C /* Frameworks */,
+				E88CFA471C1E8C22003F671C /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Swerver;
-			productName = Swerver;
-			productReference = E83E0B3F1C129E5800D6EFC9 /* Swerver */;
+			name = TodoMC;
+			productName = TodoMC;
+			productReference = E88CFA491C1E8C22003F671C /* TodoMC */;
 			productType = "com.apple.product-type.tool";
 		};
 		E89968551C1D01650019B5B8 /* Tests */ = {
@@ -346,8 +366,8 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Julius Parishy";
 				TargetAttributes = {
-					E83E0B3E1C129E5800D6EFC9 = {
-						CreatedOnToolsVersion = 7.1.1;
+					E88CFA481C1E8C22003F671C = {
+						CreatedOnToolsVersion = 7.2;
 					};
 					E89968551C1D01650019B5B8 = {
 						CreatedOnToolsVersion = 7.2;
@@ -366,8 +386,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E83E0B3E1C129E5800D6EFC9 /* Swerver */,
 				E89968551C1D01650019B5B8 /* Tests */,
+				E88CFA481C1E8C22003F671C /* TodoMC */,
 			);
 		};
 /* End PBXProject section */
@@ -377,34 +397,36 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E88CFA441C1E8C0E003F671C /* 500.html in Resources */,
+				E88CFA431C1E8C0E003F671C /* 404.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E83E0B3B1C129E5800D6EFC9 /* Sources */ = {
+		E88CFA451C1E8C22003F671C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E886731D1C1B800A00D3157E /* Controller.swift in Sources */,
-				E886730F1C1B7ECB00D3157E /* HTTP.swift in Sources */,
-				E88673101C1B7ECB00D3157E /* HTTP11.swift in Sources */,
-				E88673231C1B83D400D3157E /* NotesController.swift in Sources */,
-				E8CE2EF81C1CA20400B6536A /* String.swift in Sources */,
-				E886731F1C1B806C00D3157E /* Resource.swift in Sources */,
-				E88673121C1B7ECF00D3157E /* TCPServer.swift in Sources */,
-				E807FCCF1C1E617300CCA3D5 /* _JSONWriting.swift in Sources */,
-				E886732B1C1BA55C00D3157E /* Model.swift in Sources */,
-				E88673291C1B94CF00D3157E /* Database.swift in Sources */,
-				E88673111C1B7ECB00D3157E /* HTTPServer.swift in Sources */,
-				E88673301C1BA7C400D3157E /* ModelQuery.swift in Sources */,
-				E886732E1C1BA63600D3157E /* Note.swift in Sources */,
-				E886730E1C1B7EC700D3157E /* Router.swift in Sources */,
-				E89968661C1D0C4E0019B5B8 /* _JSONReading.swift in Sources */,
-				E8CE2EFA1C1CA21400B6536A /* JSON.swift in Sources */,
-				E88673171C1B7FC100D3157E /* Bridge.c in Sources */,
-				E83E0B431C129E5800D6EFC9 /* main.swift in Sources */,
+				E88CFA621C1E8C35003F671C /* _JSONReading.swift in Sources */,
+				E88CFA631C1E8C35003F671C /* _JSONWriting.swift in Sources */,
+				E88CFA5B1C1E8C35003F671C /* TCPServer.swift in Sources */,
+				E88CFA571C1E8C35003F671C /* Controller.swift in Sources */,
+				E88CFA5E1C1E8C35003F671C /* HTTPServer.swift in Sources */,
+				E88CFA5A1C1E8C35003F671C /* Bridge.c in Sources */,
+				E88CFA501C1E8C35003F671C /* NotesController.swift in Sources */,
+				E88CFA581C1E8C35003F671C /* Resource.swift in Sources */,
+				E88CFA561C1E8C35003F671C /* ModelQuery.swift in Sources */,
+				E88CFA611C1E8C35003F671C /* JSON.swift in Sources */,
+				E88CFA5D1C1E8C35003F671C /* HTTP11.swift in Sources */,
+				E88CFA511C1E8C35003F671C /* main.swift in Sources */,
+				E88CFA5F1C1E8C35003F671C /* Router.swift in Sources */,
+				E88CFA521C1E8C35003F671C /* Note.swift in Sources */,
+				E88CFA601C1E8C35003F671C /* String.swift in Sources */,
+				E88CFA5C1C1E8C35003F671C /* HTTP.swift in Sources */,
+				E88CFA591C1E8C35003F671C /* Model.swift in Sources */,
+				E88CFA551C1E8C35003F671C /* Database.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,9 +436,12 @@
 			files = (
 				E89968671C1D0C4E0019B5B8 /* _JSONReading.swift in Sources */,
 				E807FCD21C1E726F00CCA3D5 /* _JSONWriting.swift in Sources */,
+				E88CFA411C1E8C0E003F671C /* main.swift in Sources */,
 				E89968631C1D02110019B5B8 /* JSON.swift in Sources */,
 				E89968591C1D01650019B5B8 /* Tests.swift in Sources */,
+				E88CFA421C1E8C0E003F671C /* Note.swift in Sources */,
 				E89968641C1D0BE80019B5B8 /* String.swift in Sources */,
+				E88CFA401C1E8C0E003F671C /* NotesController.swift in Sources */,
 				E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */,
 				E89968621C1D01C30019B5B8 /* JSONTests.swift in Sources */,
 			);
@@ -505,48 +530,45 @@
 			};
 			name = Release;
 		};
-		E83E0B471C129E5800D6EFC9 /* Debug */ = {
+		E88CFA4E1C1E8C22003F671C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Swerver/Supporting Files/PrefixHeader.pch";
 				HEADER_SEARCH_PATHS = (
-					/usr/local/include,
-					./Swerver/Helpers,
 					./Swerver/Server/Base,
+					/usr/include,
+					/usr/local/include,
 				);
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/usr/lib,
+				);
 				OTHER_LDFLAGS = (
 					"-luv",
 					"-lpq",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = Swerver/Helpers/BridgingHeader.h;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OBJC_BRIDGING_HEADER = ./Swerver/Helpers/BridgingHeader.h;
 			};
 			name = Debug;
 		};
-		E83E0B481C129E5800D6EFC9 /* Release */ = {
+		E88CFA4F1C1E8C22003F671C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Swerver/Supporting Files/PrefixHeader.pch";
 				HEADER_SEARCH_PATHS = (
-					/usr/local/include,
-					./Swerver/Helpers,
 					./Swerver/Server/Base,
+					/usr/include,
+					/usr/local/include,
 				);
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/usr/lib,
+				);
 				OTHER_LDFLAGS = (
 					"-luv",
 					"-lpq",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = Swerver/Helpers/BridgingHeader.h;
+				SWIFT_OBJC_BRIDGING_HEADER = ./Swerver/Helpers/BridgingHeader.h;
 			};
 			name = Release;
 		};
@@ -584,14 +606,13 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E83E0B461C129E5800D6EFC9 /* Build configuration list for PBXNativeTarget "Swerver" */ = {
+		E88CFA4D1C1E8C22003F671C /* Build configuration list for PBXNativeTarget "TodoMC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E83E0B471C129E5800D6EFC9 /* Debug */,
-				E83E0B481C129E5800D6EFC9 /* Release */,
+				E88CFA4E1C1E8C22003F671C /* Debug */,
+				E88CFA4F1C1E8C22003F671C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 		E899685B1C1D01650019B5B8 /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;

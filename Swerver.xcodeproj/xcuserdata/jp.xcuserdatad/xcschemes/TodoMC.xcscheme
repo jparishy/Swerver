@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0710"
+   LastUpgradeVersion = "0720"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E83E0B3E1C129E5800D6EFC9"
-               BuildableName = "Swerver"
-               BlueprintName = "Swerver"
+               BlueprintIdentifier = "E88CFA481C1E8C22003F671C"
+               BuildableName = "TodoMC"
+               BlueprintName = "TodoMC"
                ReferencedContainer = "container:Swerver.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E83E0B3E1C129E5800D6EFC9"
-            BuildableName = "Swerver"
-            BlueprintName = "Swerver"
+            BlueprintIdentifier = "E88CFA481C1E8C22003F671C"
+            BuildableName = "TodoMC"
+            BlueprintName = "TodoMC"
             ReferencedContainer = "container:Swerver.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -47,7 +47,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "/Users/jp/Desktop/Swerver/TestApp"
+      customWorkingDirectory = "/Users/jp/Desktop/Swerver/Examples/SwerverTodoMVC"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
@@ -56,9 +56,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E83E0B3E1C129E5800D6EFC9"
-            BuildableName = "Swerver"
-            BlueprintName = "Swerver"
+            BlueprintIdentifier = "E88CFA481C1E8C22003F671C"
+            BuildableName = "TodoMC"
+            BlueprintName = "TodoMC"
             ReferencedContainer = "container:Swerver.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,9 +75,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E83E0B3E1C129E5800D6EFC9"
-            BuildableName = "Swerver"
-            BlueprintName = "Swerver"
+            BlueprintIdentifier = "E88CFA481C1E8C22003F671C"
+            BuildableName = "TodoMC"
+            BlueprintName = "TodoMC"
             ReferencedContainer = "container:Swerver.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
