@@ -85,22 +85,23 @@ class TCPServer {
     private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: uv_buf_t) {
 	    let inBytes: [Int8] = Array(UnsafeBufferPointer(start: buf.base, count: buf.len))
 	    let string = String(inBytes.map { b in Character(UnicodeScalar(UInt8(b))) } )
+    
+        let cString = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+        let bytes = UnsafePointer<Int8>(cString)
+        let data = NSData(bytes: bytes, length: string.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        
+        let response = processRequest(data)
+        if let data = response {
+        
+            let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
             
-            let cString = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
-            let bytes = UnsafePointer<Int8>(cString)
-            let data = NSData(bytes: bytes, length: string.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+            let bytes = data.bytes
+            let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(bytes)
+            outBuf.memory = uv_buf_init(memory, UInt32(data.length))
             
-            let response = processRequest(data)
-            if let response = response, responseStr = NSString(bytes: response.bytes, length: response.length, encoding: NSUTF8StringEncoding)?.bridge() {
-                let repsonseCString = responseStr.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding)
-                
-                let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
-                let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(repsonseCString)
-                outBuf.memory = uv_buf_init(memory, UInt32(responseStr.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
-                
-                let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
-                uv_write(write, stream, outBuf, 1, nil)
-	    }
+            let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
+            uv_write(write, stream, outBuf, 1, nil)
+        }
         
         uv_read_stop(stream)
         
