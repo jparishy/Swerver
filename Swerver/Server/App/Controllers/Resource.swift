@@ -109,7 +109,7 @@ class Resource : Route {
         
         var URLString = request.path.bridge()
         if URLString.length > 0 && Character(UnicodeScalar(URLString.characterAtIndex(0))) == Character("/") {
-            URLString = URLString.substringFromIndex(1)
+            URLString = URLString.substringFromIndex(1).bridge()
         }
         
         if let namespace: NSString = self.namespace?.bridge() {
@@ -119,7 +119,7 @@ class Resource : Route {
                 if namespace == URLString {
                     return ResourceSubroute(method: request.method, action: .NamespaceIdentity)
                 } else {
-                    URLString = URLString.substringFromIndex(namespace.length)
+                    URLString = URLString.substringFromIndex(namespace.length).bridge()
                 }
             }
         }

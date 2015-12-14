@@ -103,7 +103,7 @@ class TCPServer {
             let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
             write.memory.data = unsafeBitCast(self, UnsafeMutablePointer<Void>.self)
     
-            uv_write(write, stream, outBuf, 1, nil)
+            uv_write(write, stream, outBuf, 1, _write_cb)
         }
         
         uv_read_stop(stream)
@@ -144,12 +144,12 @@ class TCPServer {
         free(buf.memory.base)
     }
     
+#endif
+    
     private func handleWrite(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
         let stream = write.memory.handle
         uv_close(cast_stream_to_handle(stream), nil)
     }
-    
-#endif
     
     private func handleConnection(server: UnsafeMutablePointer<uv_stream_t>, status: Int32) {
         if status < 0 {

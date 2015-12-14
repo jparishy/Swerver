@@ -152,11 +152,15 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     for (k,_) in m.map {
         if let v = JSON[k.bridge()] {
             let obj = v as! NSObject
-            let str: String
+            let str: NSString
             if let num = obj as? NSNumber {
-                str = num.stringValue
+                if num.doubleValue % 1 == 0 {
+                    str = "\(num.integerValue)".bridge()
+                } else {
+                    str = "\(num.doubleValue)".bridge()
+                }
             } else {
-                str = obj as! String
+                str = obj as! NSString
             }
             try m.map[k]?.databaseReadFromValue(str.bridge())
         }
