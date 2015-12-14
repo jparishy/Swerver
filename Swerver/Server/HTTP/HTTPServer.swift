@@ -49,8 +49,6 @@ class HTTPServer<HTTP: HTTPVersion> : TCPServer {
     }
     
     private func responseDataFromResponse(response: Response, HTTP: HTTPVersion) -> NSData {
-	let dataString = response.responseData?.dataString
-	let data: [UInt8]? = (dataString != nil) ? [UInt8](dataString!.utf8) : nil
-        return HTTP.response(response.statusCode, headers: response.headers, data: data) 
+        return HTTP.response(response.statusCode, headers: response.headers, data: response.responseData?.data)
     }
 }

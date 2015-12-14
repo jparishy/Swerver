@@ -94,43 +94,84 @@ extension NSString {
 }
 
 class ResponseData {
-    let dataString: String
+    let data: NSData
     
-    init(string: String) {
-        dataString = string
+    init(_ string: String) {
+        let str = string.bridge()
+        let bytes = str.cStringUsingEncoding(NSUTF8StringEncoding)
+        data = NSData(bytes: bytes, length: str.length)
+    }
+    
+    init(_ data: NSData) {
+        self.data = data
+    }
+    
+    var stringView: String? {
+        let bytes = data.bytes
+        return NSString(bytes: bytes, length: data.length, encoding: NSUTF8StringEncoding)?.bridge()
     }
     
     var description: String {
-        return "<Data: \"\(dataString)\">"
-    }
-    
-    static func Str(string: String) -> ResponseData {
-        return ResponseData(string: string)
+        if let stringView = stringView {
+            return "<Data: \"\(stringView)\">"
+        } else {
+            return "<Data: \(data)>"
+        }
     }
     
     static func Data(data: NSData) -> ResponseData? {
         if let str = NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)?.bridge() {
-            return ResponseData(string: str)
+            return ResponseData(str)
         } else {
             return nil
         }
     }
     
-    static func PublicFile(filename: String) throws -> ResponseData? {
-        let string = try NSString(contentsOfFile: "./Public/\(filename)", encoding: NSUTF8StringEncoding)
-        return ResponseData.Str(string.bridge())
+    static func PublicFile(filename: String) throws -> (ResponseData?, Headers) {
+        let data = try NSData(contentsOfFile: "./Public/\(filename)", options: NSDataReadingOptions(rawValue: 0))
+        
+        var headers: Headers = [:]
+        if let ext = filename.componentsSeparatedByString(".").last?.lowercaseString {
+            let contentTypes = [
+            
+                // Images
+                "jpg"  : "image/jpg",
+                "jpeg" : "image/jpg",
+                "png"  : "image/png",
+                "gif"  : "image/gif",
+                
+                // CSS
+                "css"  : "application/css",
+                
+                // JS
+                "js"   : "application/js"
+            ]
+            
+            if let contentType = contentTypes[ext] {
+                headers["Content-Type"] = contentType
+            }
+        }
+        
+        
+        return (ResponseData(data), headers)
     }
 }
 
 func BuiltInResponse(code: StatusCode) -> Response {
     switch code {
         case .NotFound:
-            return (code, [:], ResponseData.Str("Not Found"))
+            do {
+                let (file, headers) = try ResponseData.PublicFile("404.html")
+                return (code, headers, file)
+            } catch {
+                print("WARNING: 500.html Not Found.")
+                return (code, [:], nil)
+            }
         
         case .InternalServerError:
             do {
-                let file = try ResponseData.PublicFile("500.html")
-                return (code, [:], file)
+                let (file, headers) = try ResponseData.PublicFile("500.html")
+                return (code, headers, file)
             } catch {
                 print("WARNING: 500.html Not Found.")
                 return (code, [:], nil)
@@ -205,6 +246,63 @@ class PathRoute : Route {
         }
         
         super.init(routeProvider: routeProvider, matchFunction: matchFunction)
+    }
+}
+
+class PublicFiles : Route {
+    
+    let prefix: String
+    
+    class Provider : RouteProvider {
+        let prefix: String
+        
+        init(prefix: String) {
+            self.prefix = prefix
+        }
+        
+        func apply(request: Request) throws -> Response {
+            let path: NSString
+            if request.path.hasPrefix("/") {
+                path = request.path.bridge().substringFromIndex(1)
+            } else {
+                path = request.path.bridge()
+            }
+            
+            var restOfPath = path.substringFromIndex(self.prefix.bridge().length).bridge()
+            if restOfPath.hasPrefix("/") {
+                restOfPath = restOfPath.substringFromIndex(1)
+            }
+            
+            do {
+                let (file, headers) = try ResponseData.PublicFile(restOfPath.bridge())
+                return (.Ok, headers, file)
+            } catch {
+                return BuiltInResponse(.NotFound)
+            }
+        }
+    }
+    
+    init(prefix: String) {
+        self.prefix = prefix
+        
+        let matchFunction = {
+            (route: Route, request: Request) -> Bool in
+            
+            let path: NSString
+            if request.path.hasPrefix("/") {
+                path = request.path.bridge().substringFromIndex(1)
+            } else {
+                path = request.path.bridge()
+            }
+            
+            if let r = route as? PublicFiles {
+                return path.hasPrefix(r.prefix)
+            } else {
+                return false
+            }
+        }
+        
+        super.init(routeProvider: Provider(prefix: prefix), matchFunction: matchFunction)
     }
 }
 

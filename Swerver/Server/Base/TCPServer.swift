@@ -102,7 +102,6 @@ class TCPServer {
 	    }
         
         uv_read_stop(stream)
-        uv_close(cast_stream_to_handle(stream), nil)
         
         free(buf.base)
     }
@@ -122,12 +121,13 @@ class TCPServer {
             let data = NSData(bytes: bytes, length: string.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
             
             let response = processRequest(data)
-            if let response = response, responseStr = NSString(bytes: response.bytes, length: response.length, encoding: NSUTF8StringEncoding)?.bridge() {
-                let repsonseCString = responseStr.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding)
-                
+            if let data = response {
+            
                 let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
-                let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(repsonseCString)
-                outBuf.memory = uv_buf_init(memory, UInt32(responseStr.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+                
+                let bytes = data.bytes
+                let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(bytes)
+                outBuf.memory = uv_buf_init(memory, UInt32(data.length))
                 
                 let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
                 uv_write(write, stream, outBuf, 1, nil)

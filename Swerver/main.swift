@@ -14,7 +14,7 @@ import Glibc
 
 class HelloProvider : RouteProvider {
     func apply(request: Request) throws -> Response {
-        return  (.Ok, ["Content-Type":"text/html"], ResponseData.Str("<html><body><h1>Hello World! This server is running Swift!</h1></body></html>"))
+        return  (.Ok, ["Content-Type":"text/html"], ResponseData("<html><body><h1>Hello World! This server is running Swift!</h1></body></html>"))
     }
 }
 
@@ -28,7 +28,8 @@ let router = Router(routes: [
     PathRoute(path: "/hello_world", routeProvider: HelloProvider()),
     PathRoute(path: "/throw",       routeProvider: ErrorProvider()),
     PathRoute(path: "/",            routeProvider: Redirect("/hello_world")),
-    Resource(name:  "notes",           controller: NotesController())
+    Resource(name:  "notes",           controller: NotesController()),
+    PublicFiles(prefix: "public")
 ])
 
 let server = HTTPServer<HTTP11>(port: 8080, router: router)

@@ -77,7 +77,7 @@ class HTTP11 : HTTPVersion {
         return (headers, data)
     }
     
-    func response(statusCode: StatusCode, headers: Headers, data: [UInt8]?) -> NSData {
+    func response(statusCode: StatusCode, headers: Headers, data: NSData?) -> NSData {
     
         var output = ""
         output += "HTTP/1.1 \(statusCode.statusCodeString)\n"
@@ -99,11 +99,9 @@ class HTTP11 : HTTPVersion {
         }
 
         if let d = data {
-	   let str = String(d.map { b in Character(UnicodeScalar(b)) })
-            output += "Content-Length: \(str.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))\n"
+            output += "Content-Length: \(d.length)\n"
             addHeaders()
             output += "\r\n"
-            output += str
         } else {
             output += "Content-Length: 0\n"
             addHeaders()
@@ -112,6 +110,13 @@ class HTTP11 : HTTPVersion {
 
         let cString = output.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
         let bytes = UnsafePointer<Int8>(cString)
-        return NSData(bytes: bytes, length: output.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        
+        let outData =  NSMutableData(bytes: bytes, length: output.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        
+        if let data = data {
+            outData.appendData(data)
+        }
+        
+        return outData
     }
 }
