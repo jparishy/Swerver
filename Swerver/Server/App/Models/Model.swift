@@ -125,10 +125,12 @@ internal extension NSNumber {
     func type() -> Type {
 #if os(Linux)
         let number = self as! CFNumber
+        let type = CFNumberGetType(number)
 #else
         let number = self
+        let type = Int(CFNumberGetType(number).rawValue)
 #endif
-        switch Int(CFNumberGetType(number).rawValue) {
+        switch type {
         case (7...10): return .Integer
         case (11...12): return .Double
         case 6: return .Boolean
