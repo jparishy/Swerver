@@ -127,8 +127,8 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     let m = T()
     for (k,_) in m.map {
         if let v = JSON[k.bridge()] {
-            let str = String(v)
-            try m.map[k]?.databaseReadFromValue(str)
+            let str = v as! NSString
+            try m.map[k]?.databaseReadFromValue(str.bridge())
         }
     }
     

@@ -45,7 +45,8 @@ class ModelQuery<T : Model> {
                 continue
             }
             
-            query += "\(try v.databaseValueForWriting())"
+            let vv = try v.databaseValueForWriting()
+            query += vv
             
             if index < (m.map.count - 1) {
                 query += ", "

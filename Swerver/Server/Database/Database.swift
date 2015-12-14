@@ -143,7 +143,6 @@ public class Transaction {
                 }
                 
                 query += "WHERE \(m.dynamicType.primaryKey) = \(primaryKeyValue);"
-                print(query)
                 try self.command(query)
             } else {
                 print("WARNING: \(m) is dirty but does not have a valid primary key and cannot be updated.")

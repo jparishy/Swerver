@@ -49,7 +49,7 @@ class NotesController : Controller {
                     t in
                     
                     let query = ModelQuery<Note>(transaction: t)
-                    
+
                     let model: Note = try ModelFromJSONDictionary(JSON)
                     try query.insert(model)
                     
