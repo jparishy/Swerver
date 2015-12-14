@@ -413,7 +413,7 @@ private class JSONStringScanner {
         _scanLocation = outScanLocation
     }
     
-    func scanUpToString(string: String, intoString result: AutoreleasingUnsafeMutablePointer<NSString?>) -> Bool {
+    func scanUpToString(string: String, intoString result: UnsafeMutablePointer<NSString?>) -> Bool {
         let input = string.bridge()
         let inputLength = input.length
         let sstring = self.string.bridge()
@@ -435,9 +435,9 @@ private class JSONStringScanner {
                 i += 1
             }
             
-            if sub == input {
+            if sub == input.bridge() {
                 let scanned = sstring.substringWithRange(NSMakeRange(self.scanLocation, loc - self.scanLocation))
-                output = scanned.stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
+                output = NSString(string: scanned.bridge().stringByReplacingOccurrencesOfString("\\\"", withString: "\""))
                 outScanLocation = loc
                 break
             }
@@ -447,7 +447,7 @@ private class JSONStringScanner {
         
         if let output = output {
             if result != nil {
-                result.memory = output
+                result.memory = NSString(string: output.bridge())
             }
             _scanLocation = outScanLocation
             return true
@@ -456,7 +456,7 @@ private class JSONStringScanner {
         return false
     }
     
-    func scanString(string: String, intoString result: AutoreleasingUnsafeMutablePointer<NSString?>) -> Bool {
+    func scanString(string: String, intoString result: UnsafeMutablePointer<NSString?>) -> Bool {
         
         advance()
         
@@ -470,9 +470,9 @@ private class JSONStringScanner {
         
         let sub = sstring.substringWithRange(NSMakeRange(scanLocation, inputLength))
         
-        if sub == input {
+        if sub == input.bridge() {
             if result != nil {
-                result.memory = string
+                result.memory = string.bridge()
             }
             _scanLocation = scanLocation + inputLength
             return true

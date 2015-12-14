@@ -27,7 +27,7 @@ class NotesController : Controller {
                         case .HTML:
                             return (.Ok, [:], nil)
                         case .JSON:
-                            let dicts = try results.map { try JSONDictionaryFromModel($0) }
+                            let dicts = try JSONDictionariesFromModels(results)
                             let data = try NSJSONSerialization.dataWithJSONObject(dicts, options: NSJSONWritingOptions(rawValue: 0))
                             return (.Ok, ["Content-Type":"application/json"], ResponseData.Data(data))
                         }

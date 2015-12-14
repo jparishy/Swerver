@@ -16,8 +16,7 @@ public protocol BaseProperty {
     var dirty: Bool { get }
     func databaseReadFromValue(value: String) throws
     func databaseValueForWriting() throws -> String
-    func rawValueForWriting() throws -> AnyObject
-
+    func rawValueForWriting() throws -> NSObject
 }
 
 public class Property<T> : BaseProperty, CustomStringConvertible {
@@ -54,8 +53,8 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
         throw ModelError.MustOverrideInSubclass
     }
     
-    public func rawValueForWriting() throws -> AnyObject {
-        return value() as! AnyObject
+    public func rawValueForWriting() throws -> NSObject {
+        return value() as! NSObject
     }
     
     public var description: String {
@@ -119,7 +118,7 @@ public protocol Model : class {
 func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     let m = T()
     for (k,_) in m.map {
-        if let v = JSON[k] {
+        if let v = JSON[k.bridge()] {
             let str = String(v)
             try m.map[k]?.databaseReadFromValue(str)
         }
@@ -128,14 +127,21 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     return m
 }
 
+func JSONDictionariesFromModels<T : Model>(models: [T]) throws -> NSArray {
+    let array = NSMutableArray()
+    for m in models {
+        array.addObject(try JSONDictionaryFromModel(m))
+    }
+    return array
+}
+
 func JSONDictionaryFromModel<T : Model>(m: T) throws -> NSDictionary {
     
     let d = NSMutableDictionary()
     
     for (k,v) in m.map {
         let vv = try v.rawValueForWriting()
-        d[k] = vv
-        d.setObject(vv, forKey: k)
+        d.setObject(vv, forKey: k.bridge())
     }
     
     return d

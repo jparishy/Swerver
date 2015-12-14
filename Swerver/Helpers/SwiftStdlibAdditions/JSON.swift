@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if os(Linux)
+public typealias NSErrorPointer = UnsafeMutablePointer<NSError>
+#endif
+
 extension NSJSONSerialization {
 
     enum Error : ErrorType {
