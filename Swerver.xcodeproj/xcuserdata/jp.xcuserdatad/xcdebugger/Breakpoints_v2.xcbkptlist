@@ -1212,7 +1212,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swerver/Server/HTTP/HTTP11.swift"
-            timestampString = "471583140.000962"
+            timestampString = "471827827.957797"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "50"
@@ -1224,15 +1224,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swerver/Server/HTTP/HTTP11.swift"
-            timestampString = "471583476.232041"
+            timestampString = "471827925.772708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
             landmarkName = "parseHeadersAndBodyFromRestOfLines(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -2603,11 +2603,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swerver/Helpers/SwiftStdlibAdditions/String.swift"
-            timestampString = "471827693.037358"
+            timestampString = "471828153.270585"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
             landmarkName = "swerver_stringByReplacingOccurrencesOfString(_:withString:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -2682,11 +2682,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swerver/Helpers/SwiftStdlibAdditions/String.swift"
-            timestampString = "471827693.037358"
+            timestampString = "471828153.270585"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "swerver_stringByReplacingOccurrencesOfString(_:withString:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -2858,11 +2858,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swerver/Server/HTTP/HTTP11.swift"
-            timestampString = "471762491.22806"
+            timestampString = "471827925.772708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "response(_:headers:data:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -2874,11 +2874,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swerver/Server/HTTP/HTTP11.swift"
-            timestampString = "471762494.878269"
+            timestampString = "471827925.772708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "response(_:headers:data:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -4150,15 +4150,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swerver/Server/HTTP/HTTP11.swift"
-            timestampString = "471827513.96397"
+            timestampString = "471827925.772708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
             landmarkName = "parseHeadersAndBodyFromRestOfLines(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -4170,11 +4170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swerver/Helpers/SwiftStdlibAdditions/String.swift"
-            timestampString = "471827693.037358"
+            timestampString = "471828153.270585"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "swerver_stringByTrimmingCharactersInSet(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -4186,7 +4186,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tests/Swift/StringTests.swift"
-            timestampString = "471827636.415204"
+            timestampString = "471827967.009185"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "40"
@@ -4240,6 +4240,149 @@
                   offsetFromSymbolStart = "27">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Swerver/Server/HTTP/HTTP11.swift"
+            timestampString = "471827925.772708"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "parseHeadersAndBodyFromRestOfLines(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Swerver/Server/HTTP/HTTP11.swift"
+            timestampString = "471827925.772708"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "parseHeadersAndBodyFromRestOfLines(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Swerver/Server/HTTP/HTTP11.swift"
+            timestampString = "471827925.772708"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "parseHeadersAndBodyFromRestOfLines(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Swerver/Server/HTTP/HTTP11.swift"
+            timestampString = "471827940.450325"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "parseHeadersAndBodyFromRestOfLines(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tests/Swift/StringTests.swift"
+            timestampString = "471828119.634906"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "test_swerver_stringByTrimmingCharactersInSet()"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tests.StringTests.test_swerver_stringByTrimmingCharactersInSet (Tests.StringTests)() -&gt; ()"
+                  moduleName = "Tests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jp/Desktop/Swerver/Tests/Swift/StringTests.swift"
+                  timestampString = "471827983.186564"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "1592">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tests.StringTests.(test_swerver_stringByTrimmingCharactersInSet (Tests.StringTests) -&gt; () -&gt; ()).(implicit closure #9)"
+                  moduleName = "Tests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jp/Desktop/Swerver/Tests/Swift/StringTests.swift"
+                  timestampString = "471827983.186715"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "30">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tests.StringTests.(test_swerver_stringByTrimmingCharactersInSet (Tests.StringTests) -&gt; () -&gt; ()).(implicit closure #10)"
+                  moduleName = "Tests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jp/Desktop/Swerver/Tests/Swift/StringTests.swift"
+                  timestampString = "471827983.18694"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "30">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Swerver/Helpers/SwiftStdlibAdditions/String.swift"
+            timestampString = "471828153.270585"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "swerver_stringByTrimmingCharactersInSet(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

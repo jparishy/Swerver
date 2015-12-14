@@ -50,6 +50,7 @@ class HTTP11 : HTTPVersion {
         for line in lines {
             if line.bridge().swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0 {
                 stillParsingHeaders = false
+                
                 continue
             }
             

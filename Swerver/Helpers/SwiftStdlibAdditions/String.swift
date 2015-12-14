@@ -67,6 +67,10 @@ extension String {
         let chars = swerver_cStringUsingEncoding(NSUTF8StringEncoding)
         let len = chars.count
         
+        if len == 0 {
+            return self
+        }
+        
         var startLoc = 0
         var endLoc = len
     
@@ -87,7 +91,15 @@ extension String {
         } while (j > startLoc)
         
         if startLoc == 0 && endLoc == len {
-            return ""
+            if endLoc > startLoc {
+                if set.characterIsMember(unichar(chars[0])) { // fully in the set
+                    return ""
+                } else {
+                    return self // fully vlaid
+                }
+            } else {
+                return "" // empty string
+            }
         } else {
             return bridge().substringWithRange(NSMakeRange(startLoc, endLoc - startLoc))
         }
