@@ -34,6 +34,7 @@ class TCPServer {
 #else
         result = uv_ip4_addr(bindAddress, Int32(port), addr)
 #endif
+
         if result != 0 {
             print("uv_ip4_addr failed.")
         }
