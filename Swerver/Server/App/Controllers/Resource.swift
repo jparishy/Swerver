@@ -67,7 +67,7 @@ struct ResourceSubroute {
             switch action {
             case .Update, .Delete:
                 if let id = Int(path) {
-                    parameters["id"] = id
+                    parameters["id"] = NSNumber(integer: id)
                 }
                 
             default:

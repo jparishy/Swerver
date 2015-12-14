@@ -101,7 +101,8 @@ class TodosController : Controller {
     }
     
     override func delete(request: Request, parameters: Parameters) throws -> Response {
-        if let id = parameters["id"] as? Int {
+        print(parameters)
+        if let id = parameters["id"] as? NSNumber {
             do {
                 let db = try connect()
                 return try db.transaction {

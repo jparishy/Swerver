@@ -96,8 +96,10 @@ class ModelQuery<T : Model> {
     }
     
     func delete(primaryKeyValue: AnyObject) throws {
-        let query = "DELETE FROM \(T.table) WHERE \(T.primaryKey) = \(primaryKeyValue);"
-        try transaction.command(query)
+        if let pk = primaryKeyValue as? NSNumber {
+            let query = "DELETE FROM \(T.table) WHERE \(T.primaryKey) = \(pk.integerValue);"
+            try transaction.command(query)
+        }
     }
     
     func all() throws -> [T] {
