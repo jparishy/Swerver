@@ -104,7 +104,8 @@ class TCPServer {
         }
         
         uv_read_stop(stream)
-        
+        uv_close(cast_stream_to_handle(stream), nil)
+                
         free(buf.base)
     }
     
