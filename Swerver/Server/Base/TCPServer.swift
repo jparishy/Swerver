@@ -114,6 +114,7 @@ class TCPServer {
 
     private func handleAlloc(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t, buf: UnsafeMutablePointer<uv_buf_t>) {
         let memory: UnsafeMutablePointer<Int8> = unsafeBitCast(malloc(size), UnsafeMutablePointer<Int8>.self)
+        memset(memory, 0, Int(size))
         buf.memory = uv_buf_init(memory, UInt32(size))
     }
     

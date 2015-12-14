@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias Parameters = [String:AnyObject]
+
 enum ResourceAction {
     case Index
     case Create
@@ -21,6 +23,18 @@ struct ResourceSubroute {
     let method: String
     let action: ResourceAction
     
+    private let pathComponents: [String]?
+    
+    private init(method: String, action: ResourceAction, pathComponents: [String]?) {
+        self.method = method
+        self.action = action
+        self.pathComponents = pathComponents
+    }
+    
+    init(method: String, action: ResourceAction) {
+        self.init(method: method, action: action, pathComponents: nil)
+    }
+    
     static func CRUD() -> [ResourceSubroute] {
         return [
             ResourceSubroute(method: "GET",    action: .Index),
@@ -28,6 +42,40 @@ struct ResourceSubroute {
             ResourceSubroute(method: "PUT",    action: .Update),
             ResourceSubroute(method: "DELETE", action: .Delete)
         ]
+    }
+    
+    internal func parameters() -> Parameters {
+        var parameters = Parameters()
+        
+        if let pathComponents = pathComponents {
+            let path: String
+            
+            if pathComponents.count == 0 {
+                path = ""
+            } else {
+                if let first = pathComponents.first {
+                    if first == "/" {
+                        path = ""
+                    } else {
+                        path = first
+                    }
+                } else {
+                    path = ""
+                }
+            }
+            
+            switch action {
+            case .Update, .Delete:
+                if let id = Int(path) {
+                    parameters["id"] = id
+                }
+                
+            default:
+                break
+            }
+        }
+        
+        return parameters
     }
     
     private func matches(pathComponents: [String], method: String) -> Bool {
@@ -56,7 +104,11 @@ struct ResourceSubroute {
             return (path == "") && (method == "POST")
             
         case .Update:
-            return (path == "") && (method == "PUT")
+            if let _ = Int(path) {
+                return (method == "PUT")
+            } else {
+                return false
+            }
             
         case .Delete:
             return (path == "") && (method == "DELETE")
@@ -140,7 +192,7 @@ class Resource : Route {
                 let rest = [String](components.dropFirst(1))
                 for subroute in subroutes {
                     if subroute.matches(rest, method: request.method) {
-                        return subroute
+                        return ResourceSubroute(method: subroute.method, action: subroute.action, pathComponents: rest)
                     }
                 }
             }

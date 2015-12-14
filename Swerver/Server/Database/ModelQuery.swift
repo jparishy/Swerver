@@ -60,6 +60,32 @@ class ModelQuery<T : Model> {
         try transaction.command(query)
     }
     
+    func update(m: T) throws {
+        let primaryKey = m.dynamicType.primaryKey
+        if let primaryKeyValue = try m.map[primaryKey]?.databaseValueForWriting() {
+            var query = "UPDATE \(m.dynamicType.table) SET "
+            
+            var index = 0
+            for (k,v) in m.map {
+                let vs = try v.databaseValueForWriting()
+                query += "\(k) = \(vs)"
+                
+                if index < (m.map.count - 1) {
+                    query += ", "
+                } else {
+                    query += " "
+                }
+                
+                index++
+            }
+            
+            query += "WHERE \(m.dynamicType.primaryKey) = \(primaryKeyValue);"
+            try transaction.command(query)
+        } else {
+            print("WARNING: \(m) is dirty but does not have a valid primary key and cannot be updated.")
+        }
+    }
+    
     func all() throws -> [T] {
         
         var results = [T]()

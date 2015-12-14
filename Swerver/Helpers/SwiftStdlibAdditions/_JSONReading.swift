@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class JSONBool {
+public class JSONBool : CustomStringConvertible {
     let value: Bool
     init(bool value: Bool) {
         self.value = value
@@ -20,6 +20,10 @@ public class JSONBool {
     
     var stringValue: String {
         return value ? "true" : "false"
+    }
+    
+    public var description: String {
+        return "<JSONBool: \(stringValue)>"
     }
 }
 

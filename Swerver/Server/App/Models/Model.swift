@@ -121,7 +121,7 @@ public class BoolProperty : Property<Bool> {
     }
     
     override public func databaseReadFromValue(value: String) {
-        internalValue = (value.bridge() == "t") ? true : false
+        internalValue = (value.bridge() == "t" || value.bridge() == "true") ? true : false
     }
     
     override public func databaseValueForWriting() -> String {
@@ -165,6 +165,7 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
             } else {
                 str = obj as! NSString
             }
+            
             try m.map[k]?.databaseReadFromValue(str.bridge())
         }
     }

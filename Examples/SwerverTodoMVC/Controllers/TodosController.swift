@@ -9,7 +9,7 @@
 import Foundation
 
 class TodosController : Controller {
-    override func index(request: Request) throws -> Response {
+    override func index(request: Request, parameters: Parameters) throws -> Response {
         do {
             let db = try connect()
             return try db.transaction {
@@ -32,7 +32,7 @@ class TodosController : Controller {
                             return (.Ok, ["Content-Type":"application/json"], ResponseData.Data(data))
                         }
                     }
-                } catch DatabaseError.TransactionFailure(let code, let message) {
+                } catch DatabaseError.TransactionFailure(_, let message) {
                     print(message)
                     return (.InternalServerError, [:], nil)
                 }catch NSJSONSerialization.Error.InvalidInput {
@@ -48,7 +48,7 @@ class TodosController : Controller {
         }
     }
     
-    override func create(request: Request) throws -> Response {
+    override func create(request: Request, parameters: Parameters) throws -> Response {
         if let JSON = try parse(request) as? NSDictionary {
             do {
                 let db = try connect()
@@ -59,6 +59,30 @@ class TodosController : Controller {
 
                     let model: Todo = try ModelFromJSONDictionary(JSON)
                     try query.insert(model)
+                    
+                    t.commit()
+                    
+                    return (.Ok, [:], nil)
+                }
+            } catch {
+                return (.InternalServerError, [:], nil)
+            }
+        } else {
+            return (.InvalidRequest, [:], nil)
+        }
+    }
+    
+    override func update(request: Request, parameters: Parameters) throws -> Response {
+        if let JSON = try parse(request) as? NSDictionary {
+            do {
+                let db = try connect()
+                return try db.transaction {
+                    t in
+                    
+                    let query = ModelQuery<Todo>(transaction: t)
+
+                    let model: Todo = try ModelFromJSONDictionary(JSON)
+                    try query.update(model)
                     
                     t.commit()
                     

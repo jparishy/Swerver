@@ -14,15 +14,16 @@ class Controller : RouteProvider {
     
     func apply(request: Request) throws /* UserError, InternalServerError */ -> Response {
         if let subroute = resource?.subrouteForRequest(request) {
+            let parameters = subroute.parameters()
             switch subroute.action {
             case .Index:
-                return try self.index(request)
+                return try self.index(request, parameters: parameters)
             case .Create:
-                return try self.create(request)
+                return try self.create(request, parameters: parameters)
             case .Update:
-                return try self.update(request)
+                return try self.update(request, parameters: parameters)
             case .Delete:
-                return try self.delete(request)
+                return try self.delete(request, parameters: parameters)
             case .NamespaceIdentity:
                 return (.Ok, [:], nil)
             default:
@@ -33,19 +34,19 @@ class Controller : RouteProvider {
         }
     }
     
-    func index(request: Request) throws /* UserError, InternalServerError */ -> Response {
+    func index(request: Request, parameters: Parameters) throws /* UserError, InternalServerError */ -> Response {
         throw UserError.Unimplemented
     }
 
-    func create(request: Request) throws /* UserError, InternalServerError */ -> Response {
+    func create(request: Request, parameters: Parameters) throws /* UserError, InternalServerError */ -> Response {
         throw UserError.Unimplemented
     }
     
-    func update(request: Request) throws /* UserError, InternalServerError */ -> Response {
+    func update(request: Request, parameters: Parameters) throws /* UserError, InternalServerError */ -> Response {
         throw UserError.Unimplemented
     }
 
-    func delete(request: Request) throws /* UserError, InternalServerError */ -> Response {
+    func delete(request: Request, parameters: Parameters) throws /* UserError, InternalServerError */ -> Response {
         throw UserError.Unimplemented
     }
     
