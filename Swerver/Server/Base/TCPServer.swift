@@ -79,6 +79,7 @@ class TCPServer {
 
     private func handleAlloc(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t) -> uv_buf_t {
         let memory: UnsafeMutablePointer<Int8> = unsafeBitCast(malloc(size), UnsafeMutablePointer<Int8>.self)
+        memset(memory, 0, Int(size))
         return uv_buf_init(memory, UInt32(size))
     }
     
@@ -105,7 +106,7 @@ class TCPServer {
         
         uv_read_stop(stream)
         uv_close(cast_stream_to_handle(stream), nil)
-                
+        
         free(buf.base)
     }
     
