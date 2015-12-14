@@ -98,8 +98,8 @@ class ResponseData {
     
     init(_ string: String) {
         let str = string.bridge()
-        let bytes = str.cStringUsingEncoding(NSUTF8StringEncoding)
-        data = NSData(bytes: bytes, length: str.length)
+        let bytes = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+        data = NSData(bytes: bytes, length: bytes.count)
     }
     
     init(_ data: NSData) {
@@ -131,7 +131,7 @@ class ResponseData {
         let data = try NSData(contentsOfFile: "./Public/\(filename)", options: NSDataReadingOptions(rawValue: 0))
         
         var headers: Headers = [:]
-        if let ext = filename.componentsSeparatedByString(".").last?.lowercaseString {
+        if let ext = filename.bridge().componentsSeparatedByString(".").last?.lowercaseString {
             let contentTypes = [
             
                 // Images
@@ -263,14 +263,14 @@ class PublicFiles : Route {
         func apply(request: Request) throws -> Response {
             let path: NSString
             if request.path.hasPrefix("/") {
-                path = request.path.bridge().substringFromIndex(1)
+                path = request.path.bridge().substringFromIndex(1).bridge()
             } else {
                 path = request.path.bridge()
             }
             
             var restOfPath = path.substringFromIndex(self.prefix.bridge().length).bridge()
             if restOfPath.hasPrefix("/") {
-                restOfPath = restOfPath.substringFromIndex(1)
+                restOfPath = restOfPath.substringFromIndex(1).bridge()
             }
             
             do {
@@ -290,7 +290,7 @@ class PublicFiles : Route {
             
             let path: NSString
             if request.path.hasPrefix("/") {
-                path = request.path.bridge().substringFromIndex(1)
+                path = request.path.bridge().substringFromIndex(1).bridge()
             } else {
                 path = request.path.bridge()
             }
