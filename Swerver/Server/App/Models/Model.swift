@@ -17,7 +17,7 @@ public protocol BaseProperty {
     var dirty: Bool { get }
     func databaseReadFromValue(value: String) throws
     func databaseValueForWriting() throws -> String
-    func rawValueForWriting() throws -> NSObject
+    func rawValueForWriting() throws -> AnyObject
 }
 
 public class Property<T> : BaseProperty, CustomStringConvertible {
@@ -54,7 +54,7 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
         throw ModelError.MustOverrideInSubclass
     }
     
-    public func rawValueForWriting() throws -> NSObject {
+    public func rawValueForWriting() throws -> AnyObject {
         throw ModelError.MustOverrideInSubclass
     }
     
@@ -80,7 +80,7 @@ public class StringProperty : Property<String> {
         return "'\(value())'"
     }
     
-    public override func rawValueForWriting() throws -> NSObject {
+    public override func rawValueForWriting() throws -> AnyObject {
         return NSString(string: value())
     }
 }
@@ -104,7 +104,7 @@ public class IntProperty : Property<Int> {
         return String(value())
     }
     
-    public override func rawValueForWriting() throws -> NSObject {
+    public override func rawValueForWriting() throws -> AnyObject {
         return NSNumber(integer: value())
     }
 }
@@ -115,54 +115,21 @@ extension Int {
     }
 }
 
-internal extension NSNumber {
-    enum Type {
-        case Integer
-        case Double
-        case Boolean
-    }
-    
-    func type() -> Type {
-#if os(Linux)
-        let number = self as! CFNumber
-        let type = CFNumberGetType(number)
-#else
-        let number = self
-        let type = Int(CFNumberGetType(number).rawValue)
-#endif
-        switch type {
-        case (7...10): return .Integer
-        case (11...12): return .Double
-        case 6: return .Boolean
-        default:
-            return .Integer
-        }
-    }
-    
-    func swerver_stringValue() -> String {
-        switch type() {
-        case .Integer: return "\(integerValue)"
-        case .Double: return "\(doubleValue)"
-        case .Boolean: return self.boolValue ? "true" : "false"
-        }
-    }
-}
-
 public class BoolProperty : Property<Bool> {
     init(column: String) {
         super.init(column: column, initialValue: false)
     }
     
     override public func databaseReadFromValue(value: String) {
-        internalValue = (value.bridge() == "true") ? true : false
+        internalValue = (value.bridge() == "t") ? true : false
     }
     
     override public func databaseValueForWriting() -> String {
         return value() ? "true" : "false"
     }
     
-    public override func rawValueForWriting() throws -> NSObject {
-        return NSNumber(bool: value())
+    public override func rawValueForWriting() throws -> AnyObject {
+        return JSONBool(bool: value())
     }
 }
 
@@ -185,7 +152,7 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     let m = T()
     for (k,_) in m.map {
         if let v = JSON[k.bridge()] {
-            let obj = v as! NSObject
+            let obj = v
             let str: NSString
             if let num = obj as? NSNumber {
                 if num.doubleValue % 1 == 0 {
@@ -193,6 +160,8 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
                 } else {
                     str = "\(num.doubleValue)".bridge()
                 }
+            } else if let b = obj as? JSONBool {
+                str = b.stringValue
             } else {
                 str = obj as! NSString
             }

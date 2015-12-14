@@ -8,6 +8,21 @@
 
 import Foundation
 
+public class JSONBool {
+    let value: Bool
+    init(bool value: Bool) {
+        self.value = value
+    }
+    
+    convenience init(string value: String) {
+        self.init(bool: value == "true")
+    }
+    
+    var stringValue: String {
+        return value ? "true" : "false"
+    }
+}
+
 extension NSJSONSerialization {
     
     internal class func _impl_swerver_JSONObjectWithData(data: NSData, options opt: NSJSONReadingOptions) throws -> AnyObject {
@@ -18,6 +33,7 @@ extension NSJSONSerialization {
                 case Array
                 case String
                 case Number
+                case Boolean
             }
             
             init(_ type: Type) {
@@ -33,6 +49,9 @@ extension NSJSONSerialization {
                     case .Number:
                         closed = true
                         break
+                    case .Boolean:
+                        closed = true
+                        break
                 }
             }
             
@@ -46,6 +65,7 @@ extension NSJSONSerialization {
             var arrayValue: NSMutableArray? = nil
             var stringValue: NSString? = nil
             var numberValue: NSNumber? = nil
+            var booleanValue: JSONBool? = nil
             
             func equalTo(node: Node) -> Bool {
                 switch (type, node.type) {
@@ -198,9 +218,9 @@ extension NSJSONSerialization {
                         nextExpectedToken = .MaybeNext
                         
                         if string == "true" {
-                            parsedValue = NSNumber(bool: true)
+                            parsedValue = JSONBool(bool: true)
                         } else if string == "false" {
-                            parsedValue = NSNumber(bool: false)
+                            parsedValue = JSONBool(bool: false)
                         } else {
                             parsedValue = string
                         }
@@ -214,9 +234,9 @@ extension NSJSONSerialization {
                         nextExpectedToken = .MaybeNext
                         
                         if string == "true" {
-                            parsedValue = NSNumber(bool: true)
+                            parsedValue = JSONBool(bool: true)
                         } else if string == "false" {
-                            parsedValue = NSNumber(bool: false)
+                            parsedValue = JSONBool(bool: false)
                         } else {
                             parsedValue = string
                         }
@@ -229,9 +249,9 @@ extension NSJSONSerialization {
                         nextExpectedToken = .MaybeNext
                         
                         if string == "true" {
-                            parsedValue = NSNumber(bool: true)
+                            parsedValue = JSONBool(bool: true)
                         } else if string == "false" {
-                            parsedValue = NSNumber(bool: false)
+                            parsedValue = JSONBool(bool: false)
                         } else {
                             parsedValue = string
                         }

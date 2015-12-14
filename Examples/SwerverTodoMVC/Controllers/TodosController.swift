@@ -32,6 +32,13 @@ class TodosController : Controller {
                             return (.Ok, ["Content-Type":"application/json"], ResponseData.Data(data))
                         }
                     }
+                } catch DatabaseError.TransactionFailure(let code, let message) {
+                    print(message)
+                    return (.InternalServerError, [:], nil)
+                }catch NSJSONSerialization.Error.InvalidInput {
+                    print("invalid input")
+                    return (.InternalServerError, [:], nil)
+                    
                 } catch {
                     return (.InternalServerError, [:], nil)
                 }

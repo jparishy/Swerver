@@ -613,6 +613,7 @@
 				E88CFA4F1C1E8C22003F671C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E899685B1C1D01650019B5B8 /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;

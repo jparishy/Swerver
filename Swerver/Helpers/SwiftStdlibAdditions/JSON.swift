@@ -50,7 +50,7 @@ extension NSJSONSerialization {
                     }
                 }
             } else {
-                if (obj is NSString) || (obj is NSNumber) {
+                if (obj is NSString) || (obj is NSNumber) || (obj is JSONBool) {
                     return !rootObject
                 } else {
                     return false

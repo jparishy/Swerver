@@ -46,7 +46,6 @@ extension NSObject {
         } else if let string = self as? NSString {
             return try string.JSONString(prettyPrinted)
         } else if let number = self as? NSNumber {
-            print(number)
             return try number.JSONString(prettyPrinted)
         } else {
             throw NSJSONSerialization.Error.InvalidInput
@@ -70,7 +69,7 @@ extension NSDictionary {
         var index = 0
         for (k,v) in self {
             
-            if let k = k as? NSString, v = v as? NSObject {
+            if let k = k as? NSString {
                 if prettyPrinted {
                     output += Indentation(indentationLevel + 1)
                 }
@@ -80,7 +79,11 @@ extension NSDictionary {
                 if prettyPrinted {
                     output += " "
                 }
-                output += try v.JSONObjectString(prettyPrinted)
+                if let v = v as? NSObject {
+                    output += try v.JSONObjectString(prettyPrinted)
+                } else if let v = v as? JSONBool {
+                    output += try v.JSONString(prettyPrinted)
+                }
             } else {
                 throw NSJSONSerialization.Error.InvalidInput
             }
@@ -124,6 +127,8 @@ extension NSArray {
             
             if let v = v as? NSObject {
                 output += try v.JSONObjectString(prettyPrinted, indentationLevel: indentationLevel + 1)
+            } else if let v = v as? JSONBool {
+                output += try v.JSONString(prettyPrinted)
             } else {
                 throw NSJSONSerialization.Error.InvalidInput
             }
@@ -156,7 +161,17 @@ extension NSString {
 
 extension NSNumber {
     private func JSONString(prettyPrinted: Bool) throws -> String {
-        return swerver_stringValue()
+        if doubleValue % 1 == 0 {
+            return "\(doubleValue)"
+        } else {
+            return "\(integerValue)"
+        }
+    }
+}
+
+extension JSONBool {
+    private func JSONString(prettyPrinted: Bool) throws -> String {
+        return self.stringValue
     }
 }
 
