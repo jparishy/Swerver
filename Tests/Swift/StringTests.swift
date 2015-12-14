@@ -32,4 +32,10 @@ class StringTests: XCTestCase {
         XCTAssertEqual("hi hi hi hi".swerver_stringByReplacingOccurrencesOfString("i", withString: ""), "h h h h")
         XCTAssertEqual("help help help help".swerver_stringByReplacingOccurrencesOfString("elp", withString: "i"), "hi hi hi hi")
     }
+    
+    func test_swerver_stringByTrimmingCharactersInSet() {
+        XCTAssertEqual("  hi   \n\n".swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()), "hi")
+        XCTAssertEqual("  \nhi".swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()), "hi")
+        XCTAssertEqual("hi   \n\n".swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()), "hi")
+    }
 }

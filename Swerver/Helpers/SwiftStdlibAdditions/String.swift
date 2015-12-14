@@ -64,18 +64,30 @@ extension String {
     
     // Another naive approach
     func swerver_stringByTrimmingCharactersInSet(set: NSCharacterSet) -> String {
-#if os(Linux)
-        var outString = ""
+#if true //os(Linux)
         let chars = swerver_cStringUsingEncoding(NSUTF8StringEncoding)
-        
         let len = chars.count
+        
+        var startLoc = 0
+        var endLoc = len
+    
         for i in 0..<len {
             if set.characterIsMember(unichar(chars[i])) == false {
-                outString.append(Character(UnicodeScalar(chars[i])))
+                startLoc = i
+                break
             }
         }
+    
+        var j = len
+        repeat {
+            j -= 1
+            if set.characterIsMember(unichar(chars[j])) == false {
+                endLoc = j + 1
+                break
+            }
+        } while (j > startLoc)
         
-        return outString
+        return bridge().substringWithRange(NSMakeRange(startLoc, endLoc - startLoc))
 #else
         return stringByTrimmingCharactersInSet(set)
 #endif

@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCD01C1E721100CCA3D5 /* StringTests.swift */; };
 		E807FCD21C1E726F00CCA3D5 /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */; };
-		E88CFA401C1E8C0E003F671C /* TodosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA381C1E8C0E003F671C /* TodosController.swift */; };
-		E88CFA411C1E8C0E003F671C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA391C1E8C0E003F671C /* main.swift */; };
-		E88CFA421C1E8C0E003F671C /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA3B1C1E8C0E003F671C /* Todo.swift */; };
 		E88CFA431C1E8C0E003F671C /* 404.html in Resources */ = {isa = PBXBuildFile; fileRef = E88CFA3D1C1E8C0E003F671C /* 404.html */; };
 		E88CFA441C1E8C0E003F671C /* 500.html in Resources */ = {isa = PBXBuildFile; fileRef = E88CFA3E1C1E8C0E003F671C /* 500.html */; };
 		E88CFA501C1E8C35003F671C /* TodosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA381C1E8C0E003F671C /* TodosController.swift */; };
@@ -436,12 +433,9 @@
 			files = (
 				E89968671C1D0C4E0019B5B8 /* _JSONReading.swift in Sources */,
 				E807FCD21C1E726F00CCA3D5 /* _JSONWriting.swift in Sources */,
-				E88CFA411C1E8C0E003F671C /* main.swift in Sources */,
 				E89968631C1D02110019B5B8 /* JSON.swift in Sources */,
 				E89968591C1D01650019B5B8 /* Tests.swift in Sources */,
-				E88CFA421C1E8C0E003F671C /* Todo.swift in Sources */,
 				E89968641C1D0BE80019B5B8 /* String.swift in Sources */,
-				E88CFA401C1E8C0E003F671C /* TodosController.swift in Sources */,
 				E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */,
 				E89968621C1D01C30019B5B8 /* JSONTests.swift in Sources */,
 			);
