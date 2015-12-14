@@ -100,7 +100,7 @@ extension NSDictionary {
         }
         
         output += "}"
-        return output.bridge()
+        return output
     }
 }
 
@@ -143,7 +143,7 @@ extension NSArray {
         }
         
         output += "]"
-        return output.bridge()
+        return output
     }
 }
 
