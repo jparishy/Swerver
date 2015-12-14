@@ -23,6 +23,8 @@ class Controller : RouteProvider {
                 return try self.update(request)
             case .Delete:
                 return try self.delete(request)
+            case .NamespaceIdentity:
+                return (.Ok, [:], nil)
             default:
                 throw UserError.Unimplemented
             }
@@ -49,6 +51,7 @@ class Controller : RouteProvider {
     
     func parse(request: Request) throws -> AnyObject? {
         if let body = request.requestBody {
+            
             do {
                 let JSON = try NSJSONSerialization.swerver_JSONObjectWithData(body, options: NSJSONReadingOptions(rawValue: 0))
                 return JSON

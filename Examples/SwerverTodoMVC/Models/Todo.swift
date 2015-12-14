@@ -8,31 +8,34 @@
 
 import Foundation
 
-class Note {
+class Todo {
     required init() {
     }
     
     internal var transaction: Transaction? = nil
     
     let id = IntProperty(column: "id")
-    let text = StringProperty(column: "text")
+    
+    let title = StringProperty(column: "title")
+    let completed = BoolProperty(column: "completed")
 }
 
-extension Note : CustomStringConvertible {
+extension Todo : CustomStringConvertible {
     var description: String {
-        return "<Note: id=\(id); text=\"\(text)\";>"
+        return "<Note: id=\(id); text=\"\(title)\"; completed=\"\(completed)\";>"
     }
 }
 
-extension Note : Model {
+extension Todo : Model {
     static var table: String {
-        return "notes"
+        return "todos"
     }
     
     static var columns: [String] {
         return [
             "id",
-            "text"
+            "title",
+            "completed"
         ]
     }
     
@@ -43,7 +46,8 @@ extension Note : Model {
     var map: [String : BaseProperty] {
         return [
             "id"   : self.id,
-            "text" : self.text
+            "title" : self.title,
+            "completed" : self.completed
         ]
     }
 }

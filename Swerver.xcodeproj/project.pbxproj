@@ -9,14 +9,14 @@
 /* Begin PBXBuildFile section */
 		E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCD01C1E721100CCA3D5 /* StringTests.swift */; };
 		E807FCD21C1E726F00CCA3D5 /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */; };
-		E88CFA401C1E8C0E003F671C /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA381C1E8C0E003F671C /* NotesController.swift */; };
+		E88CFA401C1E8C0E003F671C /* TodosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA381C1E8C0E003F671C /* TodosController.swift */; };
 		E88CFA411C1E8C0E003F671C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA391C1E8C0E003F671C /* main.swift */; };
-		E88CFA421C1E8C0E003F671C /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA3B1C1E8C0E003F671C /* Note.swift */; };
+		E88CFA421C1E8C0E003F671C /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA3B1C1E8C0E003F671C /* Todo.swift */; };
 		E88CFA431C1E8C0E003F671C /* 404.html in Resources */ = {isa = PBXBuildFile; fileRef = E88CFA3D1C1E8C0E003F671C /* 404.html */; };
 		E88CFA441C1E8C0E003F671C /* 500.html in Resources */ = {isa = PBXBuildFile; fileRef = E88CFA3E1C1E8C0E003F671C /* 500.html */; };
-		E88CFA501C1E8C35003F671C /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA381C1E8C0E003F671C /* NotesController.swift */; };
+		E88CFA501C1E8C35003F671C /* TodosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA381C1E8C0E003F671C /* TodosController.swift */; };
 		E88CFA511C1E8C35003F671C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA391C1E8C0E003F671C /* main.swift */; };
-		E88CFA521C1E8C35003F671C /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA3B1C1E8C0E003F671C /* Note.swift */; };
+		E88CFA521C1E8C35003F671C /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88CFA3B1C1E8C0E003F671C /* Todo.swift */; };
 		E88CFA551C1E8C35003F671C /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673281C1B94CF00D3157E /* Database.swift */; };
 		E88CFA561C1E8C35003F671C /* ModelQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732F1C1BA7C400D3157E /* ModelQuery.swift */; };
 		E88CFA571C1E8C35003F671C /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731C1C1B800A00D3157E /* Controller.swift */; };
@@ -69,9 +69,9 @@
 		E886732A1C1BA55C00D3157E /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		E886732F1C1BA7C400D3157E /* ModelQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelQuery.swift; sourceTree = "<group>"; };
 		E88673311C1BDEB900D3157E /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
-		E88CFA381C1E8C0E003F671C /* NotesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
+		E88CFA381C1E8C0E003F671C /* TodosController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodosController.swift; sourceTree = "<group>"; };
 		E88CFA391C1E8C0E003F671C /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		E88CFA3B1C1E8C0E003F671C /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		E88CFA3B1C1E8C0E003F671C /* Todo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		E88CFA3D1C1E8C0E003F671C /* 404.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 404.html; sourceTree = "<group>"; };
 		E88CFA3E1C1E8C0E003F671C /* 500.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 500.html; sourceTree = "<group>"; };
 		E88CFA491C1E8C22003F671C /* TodoMC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TodoMC; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -252,7 +252,7 @@
 		E88CFA371C1E8C0E003F671C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E88CFA381C1E8C0E003F671C /* NotesController.swift */,
+				E88CFA381C1E8C0E003F671C /* TodosController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -260,7 +260,7 @@
 		E88CFA3A1C1E8C0E003F671C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E88CFA3B1C1E8C0E003F671C /* Note.swift */,
+				E88CFA3B1C1E8C0E003F671C /* Todo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -415,14 +415,14 @@
 				E88CFA571C1E8C35003F671C /* Controller.swift in Sources */,
 				E88CFA5E1C1E8C35003F671C /* HTTPServer.swift in Sources */,
 				E88CFA5A1C1E8C35003F671C /* Bridge.c in Sources */,
-				E88CFA501C1E8C35003F671C /* NotesController.swift in Sources */,
+				E88CFA501C1E8C35003F671C /* TodosController.swift in Sources */,
 				E88CFA581C1E8C35003F671C /* Resource.swift in Sources */,
 				E88CFA561C1E8C35003F671C /* ModelQuery.swift in Sources */,
 				E88CFA611C1E8C35003F671C /* JSON.swift in Sources */,
 				E88CFA5D1C1E8C35003F671C /* HTTP11.swift in Sources */,
 				E88CFA511C1E8C35003F671C /* main.swift in Sources */,
 				E88CFA5F1C1E8C35003F671C /* Router.swift in Sources */,
-				E88CFA521C1E8C35003F671C /* Note.swift in Sources */,
+				E88CFA521C1E8C35003F671C /* Todo.swift in Sources */,
 				E88CFA601C1E8C35003F671C /* String.swift in Sources */,
 				E88CFA5C1C1E8C35003F671C /* HTTP.swift in Sources */,
 				E88CFA591C1E8C35003F671C /* Model.swift in Sources */,
@@ -439,9 +439,9 @@
 				E88CFA411C1E8C0E003F671C /* main.swift in Sources */,
 				E89968631C1D02110019B5B8 /* JSON.swift in Sources */,
 				E89968591C1D01650019B5B8 /* Tests.swift in Sources */,
-				E88CFA421C1E8C0E003F671C /* Note.swift in Sources */,
+				E88CFA421C1E8C0E003F671C /* Todo.swift in Sources */,
 				E89968641C1D0BE80019B5B8 /* String.swift in Sources */,
-				E88CFA401C1E8C0E003F671C /* NotesController.swift in Sources */,
+				E88CFA401C1E8C0E003F671C /* TodosController.swift in Sources */,
 				E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */,
 				E89968621C1D01C30019B5B8 /* JSONTests.swift in Sources */,
 			);

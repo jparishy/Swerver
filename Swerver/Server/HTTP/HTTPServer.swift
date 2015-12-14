@@ -12,8 +12,11 @@ let SwerverName = "Swerver"
 let SwerverVersion = "1.0"
 
 class HTTPServer<HTTP: HTTPVersion> : TCPServer {
+    
     let port: Int
     let router: Router
+    
+    let publicDirectory: String = "./Public"
     
     init(port: Int, router: Router) {
         self.port = port
@@ -28,21 +31,28 @@ class HTTPServer<HTTP: HTTPVersion> : TCPServer {
                 do {
                     return try route.routeProvider.apply(request)
                 } catch {
-                    return BuiltInResponse(.InternalServerError)
+                    return BuiltInResponse(.InternalServerError, publicDirectory: self.publicDirectory)
                 }
             } else {
-                return BuiltInResponse(.NotFound)
+                return BuiltInResponse(.NotFound, publicDirectory: self.publicDirectory)
             }
         }
 
-        return BuiltInResponse(.InternalServerError)
+        return BuiltInResponse(.InternalServerError, publicDirectory: self.publicDirectory)
     }
     
     override func processRequest(request: NSData?) -> NSData? {
         if let data = request {
             let HTTP = GetHTTP(data)
+            
             let response = handle(data, HTTP: HTTP)
-            return responseDataFromResponse(response, HTTP: HTTP)
+            let data = responseDataFromResponse(response, HTTP: HTTP)
+            
+            if let request = HTTP.request() {
+                print("\(response.statusCode.statusCodeString) - \(request.method) \(request.path) with response of \(data.length) bytes")
+            }
+            
+            return data
         }
         
         return nil

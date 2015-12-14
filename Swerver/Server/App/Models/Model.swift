@@ -114,6 +114,30 @@ extension Int {
     }
 }
 
+public class BoolProperty : Property<Bool> {
+    init(column: String) {
+        super.init(column: column, initialValue: false)
+    }
+    
+    override public func databaseReadFromValue(value: String) {
+        internalValue = (value.bridge() == "true") ? true : false
+    }
+    
+    override public func databaseValueForWriting() -> String {
+        return String(value())
+    }
+    
+    public override func rawValueForWriting() throws -> NSObject {
+        return NSNumber(bool: value())
+    }
+}
+
+extension Bool {
+    init(_ boolProperty: BoolProperty) {
+        self.init(boolProperty.value())
+    }
+}
+
 public protocol Model : class {
     init()
     static var table: String { get }
@@ -127,7 +151,13 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     let m = T()
     for (k,_) in m.map {
         if let v = JSON[k.bridge()] {
-            let str = v as! NSString
+            let obj = v as! NSObject
+            let str: String
+            if let num = obj as? NSNumber {
+                str = num.stringValue
+            } else {
+                str = obj as! String
+            }
             try m.map[k]?.databaseReadFromValue(str.bridge())
         }
     }

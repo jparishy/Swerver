@@ -195,26 +195,46 @@ extension NSJSONSerialization {
                         }
                         
                         scanner.scanString(",", intoString: nil)
-                        parsedValue = string
                         nextExpectedToken = .MaybeNext
+                        
+                        if string == "true" {
+                            parsedValue = NSNumber(bool: true)
+                        } else if string == "false" {
+                            parsedValue = NSNumber(bool: false)
+                        } else {
+                            parsedValue = string
+                        }
+                        
                         
                     } else if scanner.scanUpToString("}", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
                             throw Error.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
                         }
                         
-                        scanner.scanString("}", intoString: nil)
-                        parsedValue = string
-                        nextExpectedToken = .Undetermined
+                        nextExpectedToken = .MaybeNext
+                        
+                        if string == "true" {
+                            parsedValue = NSNumber(bool: true)
+                        } else if string == "false" {
+                            parsedValue = NSNumber(bool: false)
+                        } else {
+                            parsedValue = string
+                        }
                         
                     } else if scanner.scanUpToString("]", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
                             throw Error.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
                         }
                         
-                        scanner.scanString("]", intoString: nil)
-                        parsedValue = string
-                        nextExpectedToken = .Undetermined
+                        nextExpectedToken = .MaybeNext
+                        
+                        if string == "true" {
+                            parsedValue = NSNumber(bool: true)
+                        } else if string == "false" {
+                            parsedValue = NSNumber(bool: false)
+                        } else {
+                            parsedValue = string
+                        }
                         
                     } else {
                         throw Error.UnexpectedToken(message: "Invalid end of value.", location: scanner.scanLocation)

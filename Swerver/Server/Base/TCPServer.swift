@@ -125,23 +125,28 @@ class TCPServer {
             let data = NSData(bytes: bytes, length: string.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
             
             let response = processRequest(data)
-            if let data = response {
+            if let response = response {
             
                 let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
                 
-                let bytes = data.bytes
-                let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(bytes)
-                outBuf.memory = uv_buf_init(memory, UInt32(data.length))
+                let responseBytes = response.bytes
+                let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(responseBytes)
+                outBuf.memory = uv_buf_init(memory, UInt32(response.length))
                 
                 let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
-                uv_write(write, stream, outBuf, 1, nil)
+                write.memory.data = unsafeBitCast(self, UnsafeMutablePointer<Void>.self)
+                
+                uv_write(write, stream, outBuf, 1, _write_cb)
             }
         }
         
         uv_read_stop(stream)
-        uv_close(cast_stream_to_handle(stream), nil)
-        
         free(buf.memory.base)
+    }
+    
+    private func handleWrite(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
+        let stream = write.memory.handle
+        uv_close(cast_stream_to_handle(stream), nil)
     }
     
 #endif
@@ -190,6 +195,11 @@ private func _alloc_cb(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t, 
 private func _read_cb(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: UnsafePointer<uv_buf_t>) {
     let tcpServer = unsafeBitCast(stream.memory.loop.memory.data, TCPServer.self)
     tcpServer.handleRead(stream, size: size, buf: buf)
+}
+
+private func _write_cb(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
+    let tcpServer = unsafeBitCast(write.memory.data, TCPServer.self)
+    tcpServer.handleWrite(write, status: status)
 }
 
 #endif

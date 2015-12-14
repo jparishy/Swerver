@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if os(Linux)
+import Glibc
+#endif
+
 typealias Headers = [String:String]
 
 enum StatusCode {
@@ -126,8 +130,13 @@ class ResponseData {
         }
     }
     
-    static func PublicFile(filename: String) throws -> (ResponseData?, Headers) {
-        let data = try NSData(contentsOfFile: "./Public/\(filename)", options: NSDataReadingOptions(rawValue: 0))
+    static func PublicFileExists(filename: String, publicDirectory dir: String) -> Bool {
+        let filename = "\(dir)/\(filename)"
+        return (access(filename, F_OK) >= 0)
+    }
+    
+    class func PublicFile(filename: String, publicDirectory dir: String) throws -> (ResponseData?, Headers) {
+        let data = try NSData(contentsOfFile: "\(dir)/\(filename)", options: NSDataReadingOptions(rawValue: 0))
         
         var headers: Headers = [:]
         if let ext = filename.bridge().componentsSeparatedByString(".").last?.lowercaseString {
@@ -139,8 +148,11 @@ class ResponseData {
                 "png"  : "image/png",
                 "gif"  : "image/gif",
                 
+                // HTML
+                "html" : "text/html",
+                
                 // CSS
-                "css"  : "application/css",
+                "css"  : "text/css",
                 
                 // JS
                 "js"   : "application/js"
@@ -156,11 +168,11 @@ class ResponseData {
     }
 }
 
-func BuiltInResponse(code: StatusCode) -> Response {
+func BuiltInResponse(code: StatusCode, publicDirectory dir: String) -> Response {
     switch code {
         case .NotFound:
             do {
-                let (file, headers) = try ResponseData.PublicFile("404.html")
+                let (file, headers) = try ResponseData.PublicFile("404.html", publicDirectory: dir)
                 return (code, headers, file)
             } catch {
                 print("WARNING: 500.html Not Found.")
@@ -169,7 +181,7 @@ func BuiltInResponse(code: StatusCode) -> Response {
         
         case .InternalServerError:
             do {
-                let (file, headers) = try ResponseData.PublicFile("500.html")
+                let (file, headers) = try ResponseData.PublicFile("500.html", publicDirectory: dir)
                 return (code, headers, file)
             } catch {
                 print("WARNING: 500.html Not Found.")
@@ -251,12 +263,15 @@ class PathRoute : Route {
 class PublicFiles : Route {
     
     let prefix: String
+    let publicDirectory: String
     
     class Provider : RouteProvider {
         let prefix: String
+        let publicDirectory: String
         
-        init(prefix: String) {
+        init(prefix: String, publicDirectory dir: String) {
             self.prefix = prefix
+            self.publicDirectory = dir
         }
         
         func apply(request: Request) throws -> Response {
@@ -273,15 +288,17 @@ class PublicFiles : Route {
             }
             
             do {
-                let (file, headers) = try ResponseData.PublicFile(restOfPath.bridge())
+                let (file, headers) = try ResponseData.PublicFile(restOfPath.bridge(), publicDirectory: self.publicDirectory)
                 return (.Ok, headers, file)
             } catch {
-                return BuiltInResponse(.NotFound)
+                return BuiltInResponse(.NotFound, publicDirectory: self.publicDirectory)
             }
         }
     }
     
-    init(prefix: String) {
+    init(publicDirectory dir: String, prefix: String = "" /* Root Level of URL */) {
+    
+        self.publicDirectory = dir
         self.prefix = prefix
         
         let matchFunction = {
@@ -295,13 +312,22 @@ class PublicFiles : Route {
             }
             
             if let r = route as? PublicFiles {
-                return path.hasPrefix(r.prefix)
+                let prefix = r.prefix
+                if prefix == "" {
+                    return ResponseData.PublicFileExists(path.bridge(), publicDirectory: r.publicDirectory)
+                } else {
+                    if path.hasPrefix(prefix) {
+                        return ResponseData.PublicFileExists(path.bridge(), publicDirectory: r.publicDirectory)
+                    } else {
+                        return false
+                    }
+                }
             } else {
                 return false
             }
         }
         
-        super.init(routeProvider: Provider(prefix: prefix), matchFunction: matchFunction)
+        super.init(routeProvider: Provider(prefix: prefix ?? "", publicDirectory: self.publicDirectory), matchFunction: matchFunction)
     }
 }
 

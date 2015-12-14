@@ -1,5 +1,5 @@
 //
-//  NotesController.swift
+//  TodosController.swift
 //  Swerver
 //
 //  Created by Julius Parishy on 12/11/15.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-class NotesController : Controller {
+class TodosController : Controller {
     override func index(request: Request) throws -> Response {
         do {
             let db = try connect()
             return try db.transaction {
                 t in
                 
-                let query = ModelQuery<Note>(transaction: t)
+                let query = ModelQuery<Todo>(transaction: t)
                 let results = try query.all()
                 
                 t.commit()
@@ -48,9 +48,9 @@ class NotesController : Controller {
                 return try db.transaction {
                     t in
                     
-                    let query = ModelQuery<Note>(transaction: t)
+                    let query = ModelQuery<Todo>(transaction: t)
 
-                    let model: Note = try ModelFromJSONDictionary(JSON)
+                    let model: Todo = try ModelFromJSONDictionary(JSON)
                     try query.insert(model)
                     
                     t.commit()

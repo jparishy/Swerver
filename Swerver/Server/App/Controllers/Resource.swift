@@ -13,6 +13,7 @@ enum ResourceAction {
     case Create
     case Update
     case Delete
+    case NamespaceIdentity
     case Custom(path: String)
 }
 
@@ -60,7 +61,7 @@ struct ResourceSubroute {
         case .Delete:
             return (path == "") && (method == "DELETE")
             
-        case .Custom:
+        default:
             return false
         }
     }
@@ -69,22 +70,30 @@ struct ResourceSubroute {
 class Resource : Route {
     
     let name: String
+    let namespace: String?
     let controller: Controller
     let subroutes: [ResourceSubroute]
     
-    convenience init(name: String, controller: Controller) {
-        self.init(name: name, controller: controller, subroutes: ResourceSubroute.CRUD())
+    convenience init(name: String, controller: Controller, namespace: String? = nil) {
+        self.init(name: name, controller: controller, subroutes: ResourceSubroute.CRUD(), namespace: namespace)
         controller.resource = self
     }
     
-    init(name: String, controller: Controller, subroutes: [ResourceSubroute]) {
+    init(name: String, controller: Controller, subroutes: [ResourceSubroute], namespace: String? = nil) {
         self.name = name
+        self.namespace = namespace
         self.controller = controller
         self.subroutes = subroutes
         
         let matchFunction = {
             (route: Route, request: Request) -> Bool in
             if let r = route as? Resource {
+                
+                // Namespace Identity
+                if let namespace = r.namespace where request.path == namespace {
+                    return true
+                }
+                
                 if r.subrouteForRequest(request) != nil {
                     return true
                 }
@@ -97,7 +106,25 @@ class Resource : Route {
     }
     
     internal func subrouteForRequest(request: Request) -> ResourceSubroute? {
-        if let URL = NSURL(string: request.path), allComponents = URL.pathComponents {
+        
+        var URLString = request.path.bridge()
+        if URLString.length > 0 && Character(UnicodeScalar(URLString.characterAtIndex(0))) == Character("/") {
+            URLString = URLString.substringFromIndex(1)
+        }
+        
+        if let namespace: NSString = self.namespace?.bridge() {
+            if URLString.hasPrefix(namespace.bridge()) == false {
+                return nil
+            } else {
+                if namespace == URLString {
+                    return ResourceSubroute(method: request.method, action: .NamespaceIdentity)
+                } else {
+                    URLString = URLString.substringFromIndex(namespace.length)
+                }
+            }
+        }
+        
+        if let URL = NSURL(string: URLString.bridge()), allComponents = URL.pathComponents {
             let components: [String]
             if let first = allComponents.first where first == "/" {
                 components = [String](allComponents.dropFirst(1))

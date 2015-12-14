@@ -19,10 +19,9 @@ class HelloProvider : RouteProvider {
 }
 
 let router = Router(routes: [
-    PathRoute(path: "/",            routeProvider: Redirect("/hello_world")),
-    PathRoute(path: "/hello_world", routeProvider: HelloProvider()),
-    Resource(name:  "notes",           controller: NotesController()),
-    PublicFiles(prefix: "public")
+    PathRoute(path: "/",            routeProvider: Redirect("/index.html")),
+    Resource(name:  "todos",           controller: TodosController(), namespace: "api"),
+    PublicFiles(publicDirectory: "./Public")
 ])
 
 let server = HTTPServer<HTTP11>(port: 8080, router: router)
