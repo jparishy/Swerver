@@ -86,7 +86,11 @@ extension String {
             }
         } while (j > startLoc)
         
-        return bridge().substringWithRange(NSMakeRange(startLoc, endLoc - startLoc))
+        if startLoc == 0 && endLoc == len {
+            return ""
+        } else {
+            return bridge().substringWithRange(NSMakeRange(startLoc, endLoc - startLoc))
+        }
     }
 }
 

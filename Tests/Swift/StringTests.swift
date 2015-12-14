@@ -37,5 +37,6 @@ class StringTests: XCTestCase {
         XCTAssertEqual("  hi   \n\n".swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()), "hi")
         XCTAssertEqual("  \nhi".swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()), "hi")
         XCTAssertEqual("hi   \n\n".swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()), "hi")
+        XCTAssertEqual("\r\n".swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()), "")
     }
 }
