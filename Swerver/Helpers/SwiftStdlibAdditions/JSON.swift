@@ -65,7 +65,7 @@ extension NSJSONSerialization {
     
     
     public class func swerver_dataWithJSONObject(obj: AnyObject, options opt: NSJSONWritingOptions) throws -> NSData {
-        throw Error.Unimplemented
+        return try _impl_swerver_dataWithJSONObject(obj, options: opt)
     }
     
     public class func swerver_JSONObjectWithData(data: NSData, options opt: NSJSONReadingOptions) throws -> AnyObject {

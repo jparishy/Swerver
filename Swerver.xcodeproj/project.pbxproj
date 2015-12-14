@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E807FCCF1C1E617300CCA3D5 /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */; };
 		E83E0B431C129E5800D6EFC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83E0B421C129E5800D6EFC9 /* main.swift */; };
 		E886730E1C1B7EC700D3157E /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730D1C1B7E9C00D3157E /* Router.swift */; };
 		E886730F1C1B7ECB00D3157E /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730A1C1B7E9C00D3157E /* HTTP.swift */; };
@@ -21,7 +22,6 @@
 		E886732B1C1BA55C00D3157E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732A1C1BA55C00D3157E /* Model.swift */; };
 		E886732E1C1BA63600D3157E /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732D1C1BA63600D3157E /* Note.swift */; };
 		E88673301C1BA7C400D3157E /* ModelQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732F1C1BA7C400D3157E /* ModelQuery.swift */; };
-		E88673321C1BDEB900D3157E /* Readme.md in Sources */ = {isa = PBXBuildFile; fileRef = E88673311C1BDEB900D3157E /* Readme.md */; };
 		E89968591C1D01650019B5B8 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89968581C1D01650019B5B8 /* Tests.swift */; };
 		E89968621C1D01C30019B5B8 /* JSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89968611C1D01C30019B5B8 /* JSONTests.swift */; };
 		E89968631C1D02110019B5B8 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF91C1CA21400B6536A /* JSON.swift */; };
@@ -45,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _JSONWriting.swift; sourceTree = "<group>"; };
 		E83E0B3F1C129E5800D6EFC9 /* Swerver */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Swerver; sourceTree = BUILT_PRODUCTS_DIR; };
 		E83E0B421C129E5800D6EFC9 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E88673001C1B753E00D3157E /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = SOURCE_ROOT; };
@@ -289,6 +290,7 @@
 				E8CE2EF71C1CA20400B6536A /* String.swift */,
 				E8CE2EF91C1CA21400B6536A /* JSON.swift */,
 				E89968651C1D0C4E0019B5B8 /* _JSONReading.swift */,
+				E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */,
 			);
 			path = SwiftStdlibAdditions;
 			sourceTree = "<group>";
@@ -388,7 +390,7 @@
 				E8CE2EF81C1CA20400B6536A /* String.swift in Sources */,
 				E886731F1C1B806C00D3157E /* Resource.swift in Sources */,
 				E88673121C1B7ECF00D3157E /* TCPServer.swift in Sources */,
-				E88673321C1BDEB900D3157E /* Readme.md in Sources */,
+				E807FCCF1C1E617300CCA3D5 /* _JSONWriting.swift in Sources */,
 				E886732B1C1BA55C00D3157E /* Model.swift in Sources */,
 				E88673291C1B94CF00D3157E /* Database.swift in Sources */,
 				E88673111C1B7ECB00D3157E /* HTTPServer.swift in Sources */,
@@ -592,6 +594,7 @@
 				E899685D1C1D01650019B5B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
