@@ -64,7 +64,6 @@ extension String {
     
     // Another naive approach
     func swerver_stringByTrimmingCharactersInSet(set: NSCharacterSet) -> String {
-#if true //os(Linux)
         let chars = swerver_cStringUsingEncoding(NSUTF8StringEncoding)
         let len = chars.count
         
@@ -88,9 +87,6 @@ extension String {
         } while (j > startLoc)
         
         return bridge().substringWithRange(NSMakeRange(startLoc, endLoc - startLoc))
-#else
-        return stringByTrimmingCharactersInSet(set)
-#endif
     }
 }
 
