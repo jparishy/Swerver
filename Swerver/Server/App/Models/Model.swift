@@ -114,6 +114,32 @@ extension Int {
     }
 }
 
+internal extension NSNumber {
+    enum Type {
+        case Integer
+        case Double
+        case Boolean
+    }
+    
+    func type() -> Type {
+        switch CFNumberGetType(self) {
+        case .ShortType, .IntType, .LongType, .LongLongType: return .Integer
+        case .Float32Type, .Float64Type, .FloatType, .DoubleType: return .Double
+        case .CharType: return .Boolean
+        default:
+            return .Integer
+        }
+    }
+    
+    func swerver_stringValue() -> String {
+        switch type() {
+        case .Integer: return "\(integerValue)"
+        case .Double: return "\(doubleValue)"
+        case .Boolean: return self.boolValue ? "true" : "false"
+        }
+    }
+}
+
 public class BoolProperty : Property<Bool> {
     init(column: String) {
         super.init(column: column, initialValue: false)
@@ -124,7 +150,7 @@ public class BoolProperty : Property<Bool> {
     }
     
     override public func databaseValueForWriting() -> String {
-        return String(value())
+        return value() ? "true" : "false"
     }
     
     public override func rawValueForWriting() throws -> NSObject {

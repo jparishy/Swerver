@@ -46,6 +46,7 @@ extension NSObject {
         } else if let string = self as? NSString {
             return try string.JSONString(prettyPrinted)
         } else if let number = self as? NSNumber {
+            print(number)
             return try number.JSONString(prettyPrinted)
         } else {
             throw NSJSONSerialization.Error.InvalidInput
@@ -155,13 +156,7 @@ extension NSString {
 
 extension NSNumber {
     private func JSONString(prettyPrinted: Bool) throws -> String {
-        let double = self.doubleValue
-        let decimal = double % 1.0
-        if decimal > 0.0 {
-            return "\(double)"
-        } else {
-            return "\(self.integerValue)"
-        }
+        return swerver_stringValue()
     }
 }
 
