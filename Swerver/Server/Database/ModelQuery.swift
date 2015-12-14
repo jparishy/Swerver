@@ -15,7 +15,7 @@ class ModelQuery<T : Model> {
         self.transaction = transaction
     }
     
-    func insert(m: T) throws {
+    func insert(m: T) throws -> T {
         var query = "INSERT INTO \(T.table)("
         
         var index = 0
@@ -57,10 +57,17 @@ class ModelQuery<T : Model> {
             index++
         }
         
-        try transaction.command(query)
+        query += " RETURNING \(T.primaryKey)"
+        
+        let queryResults = try transaction.command(query)
+        if let first = queryResults?.first, id = first[T.primaryKey] {
+            try m.map[T.primaryKey]?.databaseReadFromValue(id)
+        }
+        
+        return m
     }
     
-    func update(m: T) throws {
+    func update(m: T) throws -> T {
         let primaryKey = m.dynamicType.primaryKey
         if let primaryKeyValue = try m.map[primaryKey]?.databaseValueForWriting() {
             var query = "UPDATE \(m.dynamicType.table) SET "
@@ -84,6 +91,13 @@ class ModelQuery<T : Model> {
         } else {
             print("WARNING: \(m) is dirty but does not have a valid primary key and cannot be updated.")
         }
+        
+        return m
+    }
+    
+    func delete(primaryKeyValue: AnyObject) throws {
+        let query = "DELETE FROM \(T.table) WHERE \(T.primaryKey) = \(primaryKeyValue);"
+        try transaction.command(query)
     }
     
     func all() throws -> [T] {

@@ -58,11 +58,13 @@ class TodosController : Controller {
                     let query = ModelQuery<Todo>(transaction: t)
 
                     let model: Todo = try ModelFromJSONDictionary(JSON)
-                    try query.insert(model)
+                    let created = try query.insert(model)
                     
                     t.commit()
                     
-                    return (.Ok, [:], nil)
+                    let dict = try JSONDictionaryFromModel(created)
+                    let data = try NSJSONSerialization.swerver_dataWithJSONObject(dict, options: NSJSONWritingOptions(rawValue: 0))
+                    return (.Ok, [:], ResponseData(data))
                 }
             } catch {
                 return (.InternalServerError, [:], nil)
@@ -82,7 +84,31 @@ class TodosController : Controller {
                     let query = ModelQuery<Todo>(transaction: t)
 
                     let model: Todo = try ModelFromJSONDictionary(JSON)
-                    try query.update(model)
+                    let updated = try query.update(model)
+                    
+                    t.commit()
+                    
+                    let dict = try JSONDictionaryFromModel(updated)
+                    let data = try NSJSONSerialization.swerver_dataWithJSONObject(dict, options: NSJSONWritingOptions(rawValue: 0))
+                    return (.Ok, [:], ResponseData(data))
+                }
+            } catch {
+                return (.InternalServerError, [:], nil)
+            }
+        } else {
+            return (.InvalidRequest, [:], nil)
+        }
+    }
+    
+    override func delete(request: Request, parameters: Parameters) throws -> Response {
+        if let id = parameters["id"] as? Int {
+            do {
+                let db = try connect()
+                return try db.transaction {
+                    t in
+                    
+                    let query = ModelQuery<Todo>(transaction: t)
+                    try query.delete(id)
                     
                     t.commit()
                     
@@ -92,7 +118,7 @@ class TodosController : Controller {
                 return (.InternalServerError, [:], nil)
             }
         } else {
-            return (.InvalidRequest, [:], nil)
+            return (.NotFound, [:], nil)
         }
     }
 }

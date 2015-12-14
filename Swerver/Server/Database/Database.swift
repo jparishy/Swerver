@@ -61,12 +61,35 @@ public class Transaction {
     
     typealias QueryResult = [[String:String]]
     
-    internal func command(command: String) throws {
-        try exec(command, expectedStatus: PGRES_COMMAND_OK)
+    internal func command(command: String) throws -> QueryResult? {
+        let result = try exec(command)
+        
+        let numberOfFields = PQnfields(result)
+        if numberOfFields > 0 {
+            var results = [[String:String]]()
+            
+            let numberOfResults = PQntuples(result)
+            for i in 0..<numberOfResults {
+                
+                var row = [String:String]()
+                for j in 0..<numberOfFields {
+                    if let key = NSString.fromCString(PQfname(result, j))?.bridge(),
+                        value = NSString.fromCString(PQgetvalue(result, i, j))?.bridge() {
+                            row[key] = value
+                    }
+                }
+                
+                results.append(row)
+            }
+            
+            return results
+        } else {
+            return nil
+        }
     }
     
     internal func query(command: String) throws -> QueryResult {
-        let result = try exec(command, expectedStatus: PGRES_TUPLES_OK)
+        let result = try exec(command)
         
         let numberOfFields = PQnfields(result)
         var results = [[String:String]]()
@@ -88,11 +111,11 @@ public class Transaction {
         return results
     }
     
-    private func exec(command: String, expectedStatus: ExecStatusType) throws -> COpaquePointer {
+    private func exec(command: String) throws -> COpaquePointer {
         let result = PQexec(connection, command)
         
         let status = PQresultStatus(result)
-        if status != expectedStatus {
+        if status != PGRES_COMMAND_OK && status != PGRES_TUPLES_OK {
         
             let message: String
             if let pgMessage = NSString.fromCString(PQresultErrorMessage(result))?.bridge() {

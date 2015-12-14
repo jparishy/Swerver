@@ -111,7 +111,11 @@ struct ResourceSubroute {
             }
             
         case .Delete:
-            return (path == "") && (method == "DELETE")
+            if let _ = Int(path) {
+                return (method == "DELETE")
+            } else {
+                return false
+            }
             
         default:
             return false

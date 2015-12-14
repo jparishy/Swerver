@@ -219,7 +219,19 @@ extension NSJSONSerialization {
                         }
                         
                         scanner.scanString(",", intoString: nil)
-                        nextExpectedToken = .MaybeNext
+                        
+                        if let current = currentNode {
+                            switch current.type {
+                            case .Dictionary:
+                                nextExpectedToken = .Key
+                            case .Array:
+                                nextExpectedToken = .Value
+                            default:
+                                nextExpectedToken = .Undetermined
+                            }
+                        } else {
+                            nextExpectedToken = .Undetermined
+                        }
                         
                         if string == "true" {
                             parsedValue = JSONBool(bool: true)
@@ -228,7 +240,6 @@ extension NSJSONSerialization {
                         } else {
                             parsedValue = string
                         }
-                        
                         
                     } else if scanner.scanUpToString("}", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
@@ -369,6 +380,7 @@ extension NSJSONSerialization {
                             }
                         
                         } else if scanner.scanLocation != scanner.string.bridge().length - 1 {
+                            print(rootNode?.dictionaryValue)
                             throw Error.UnexpectedToken(message: "Unexpected end of context.", location: scanner.scanLocation)
                         }
                     } else {
