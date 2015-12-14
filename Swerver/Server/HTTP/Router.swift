@@ -97,7 +97,6 @@ class ResponseData {
     let data: NSData
     
     init(_ string: String) {
-        let str = string.bridge()
         let bytes = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
         data = NSData(bytes: bytes, length: bytes.count)
     }
