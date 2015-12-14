@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E807FCCF1C1E617300CCA3D5 /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */; };
+		E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCD01C1E721100CCA3D5 /* StringTests.swift */; };
+		E807FCD21C1E726F00CCA3D5 /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */; };
 		E83E0B431C129E5800D6EFC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83E0B421C129E5800D6EFC9 /* main.swift */; };
 		E886730E1C1B7EC700D3157E /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730D1C1B7E9C00D3157E /* Router.swift */; };
 		E886730F1C1B7ECB00D3157E /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730A1C1B7E9C00D3157E /* HTTP.swift */; };
@@ -46,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		E807FCCE1C1E617300CCA3D5 /* _JSONWriting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _JSONWriting.swift; sourceTree = "<group>"; };
+		E807FCD01C1E721100CCA3D5 /* StringTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringTests.swift; sourceTree = "<group>"; };
 		E83E0B3F1C129E5800D6EFC9 /* Swerver */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Swerver; sourceTree = BUILT_PRODUCTS_DIR; };
 		E83E0B421C129E5800D6EFC9 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E88673001C1B753E00D3157E /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = SOURCE_ROOT; };
@@ -280,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				E89968611C1D01C30019B5B8 /* JSONTests.swift */,
+				E807FCD01C1E721100CCA3D5 /* StringTests.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -409,9 +413,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E89968671C1D0C4E0019B5B8 /* _JSONReading.swift in Sources */,
+				E807FCD21C1E726F00CCA3D5 /* _JSONWriting.swift in Sources */,
 				E89968631C1D02110019B5B8 /* JSON.swift in Sources */,
 				E89968591C1D01650019B5B8 /* Tests.swift in Sources */,
 				E89968641C1D0BE80019B5B8 /* String.swift in Sources */,
+				E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */,
 				E89968621C1D01C30019B5B8 /* JSONTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

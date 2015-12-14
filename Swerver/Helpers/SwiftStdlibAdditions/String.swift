@@ -109,4 +109,33 @@ extension NSString {
     func swerver_stringByTrimmingCharactersInSet(set: NSCharacterSet) -> String {
         return self.bridge().swerver_stringByTrimmingCharactersInSet(set)
     }
+    
+    func swerver_stringByReplacingOccurrencesOfString(string: NSString, withString replacement: NSString) -> String {
+        var output = ""
+        
+        var index = 0
+        repeat {
+            
+                print(self)
+                print(output)
+                print(string)
+                print(replacement)
+                print("\n")
+            
+            let sub = self.substringWithRange(NSMakeRange(index, string.length))
+            if sub == string {
+                output += replacement.bridge()
+                index += string.length
+                
+            } else {
+                output.append(Character(UnicodeScalar(self.characterAtIndex(index))))
+                index += 1
+            }
+        } while(index + string.length <= self.length)
+        
+        let rest = self.substringFromIndex(index)
+        output += rest
+        
+        return output
+    }
 }

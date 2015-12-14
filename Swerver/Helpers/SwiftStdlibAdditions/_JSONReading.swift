@@ -437,7 +437,7 @@ private class JSONStringScanner {
             
             if sub == input.bridge() {
                 let scanned = sstring.substringWithRange(NSMakeRange(self.scanLocation, loc - self.scanLocation))
-                output = NSString(string: scanned.bridge().stringByReplacingOccurrencesOfString("\\\"", withString: "\""))
+                output = NSString(string: scanned.bridge().swerver_stringByReplacingOccurrencesOfString("\\\"", withString: "\""))
                 outScanLocation = loc
                 break
             }
