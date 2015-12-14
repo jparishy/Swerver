@@ -116,14 +116,8 @@ extension NSString {
         var index = 0
         repeat {
             
-                print(self)
-                print(output)
-                print(string)
-                print(replacement)
-                print("\n")
-            
             let sub = self.substringWithRange(NSMakeRange(index, string.length))
-            if sub == string {
+            if sub == string.bridge() {
                 output += replacement.bridge()
                 index += string.length
                 

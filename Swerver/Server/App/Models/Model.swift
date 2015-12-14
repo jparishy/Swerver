@@ -54,7 +54,7 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
     }
     
     public func rawValueForWriting() throws -> NSObject {
-        return value() as! NSObject
+        throw ModelError.MustOverrideInSubclass
     }
     
     public var description: String {
@@ -78,6 +78,10 @@ public class StringProperty : Property<String> {
     override public func databaseValueForWriting() -> String {
         return "'\(value())'"
     }
+    
+    public override func rawValueForWriting() throws -> NSObject {
+        return NSString(string: value())
+    }
 }
 
 extension String {
@@ -97,6 +101,10 @@ public class IntProperty : Property<Int> {
     
     override public func databaseValueForWriting() -> String {
         return String(value())
+    }
+    
+    public override func rawValueForWriting() throws -> NSObject {
+        return NSNumber(integer: value())
     }
 }
 
