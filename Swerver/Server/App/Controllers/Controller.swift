@@ -50,7 +50,7 @@ class Controller : RouteProvider {
     func parse(request: Request) throws -> AnyObject? {
         if let body = request.requestBody {
             do {
-                let JSON = try NSJSONSerialization.JSONObjectWithData(body, options: NSJSONReadingOptions(rawValue: 0))
+                let JSON = try NSJSONSerialization.swerver_JSONObjectWithData(body, options: NSJSONReadingOptions(rawValue: 0))
                 return JSON
             } catch {
                 return nil

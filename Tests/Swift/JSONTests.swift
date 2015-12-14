@@ -107,8 +107,8 @@ class JSONTests: XCTestCase {
                 do {
                     let result = try NSJSONSerialization.swerver_JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0))
                     XCTAssertEqual(result as? NSObject, expectedObject as? NSObject, message)
-                } catch NSJSONSerialization.Error.InvalidInput(let m) {
-                    XCTFail(m)
+                } catch NSJSONSerialization.Error.UnexpectedToken(let m, let loc) {
+                    XCTFail("\(m) — at loc \(loc)")
                 } catch let error as NSError {
                     XCTFail("NSJSONSerialization threw: \(error.localizedDescription)")
                 }
@@ -163,6 +163,24 @@ class JSONTests: XCTestCase {
             [ "key3" : "value3" ],
         ])
         
+        expectTrue("valid array of dicts with first dict value being dict", "[{\"key1\": {\"value1\":[1,2,3]}},{\"key2\":\"value2\"},{\"key3\":\"value3\"}]", [
+            [ "key1" : [ "value1" : [ 1, 2, 3] ] ],
+            [ "key2" : "value2" ],
+            [ "key3" : "value3" ],
+        ])
+        
         expectThrows("missing coma", "{\"key1\":\"value1\" \"key2\":\"value2\",\"key3\":\"value3\"}")
+        expectThrows("missing closing curly brace", "{\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"")
+        
+        expectThrows("unescaped quote in string key", "{\"ke\"y1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"")
+        expectThrows("unescaped quote in string value", "{\"key1\":\"val\"ue1\",\"key2\":\"value2\",\"key3\":\"value3\"")
+        
+        expectTrue("escaped quote in string key", "{\"k\\\"ey\":\"value\"}", [
+            "k\"ey" : "value"
+        ])
+    
+        expectTrue("escaped quote in string value", "{\"key\":\"this is a \\\"quoted string\\\"\"}", [
+            "key" : "this is a \"quoted string\""
+        ])
     }
 }

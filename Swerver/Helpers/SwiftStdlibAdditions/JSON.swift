@@ -12,7 +12,8 @@ extension NSJSONSerialization {
 
     enum Error : ErrorType {
         case Unimplemented
-        case InvalidInput(message: String)
+        case InvalidInput
+        case UnexpectedToken(message: String, location: Int)
     }
     
     public class func swerver_isValidJSONObject(rootObject: AnyObject) -> Bool {

@@ -28,14 +28,17 @@ extension NSJSONSerialization {
                     case .Array:
                         arrayValue = NSMutableArray()
                     case .String:
+                        closed = true
                         break
                     case .Number:
+                        closed = true
                         break
                 }
             }
             
             var parent: Node? = nil
             var nextDictionaryKey: NSString?
+            var closed = false
             
             var type: Type
             
@@ -43,19 +46,24 @@ extension NSJSONSerialization {
             var arrayValue: NSMutableArray? = nil
             var stringValue: NSString? = nil
             var numberValue: NSNumber? = nil
+            
+            func equalTo(node: Node) -> Bool {
+                switch (type, node.type) {
+                    case (.Dictionary, .Dictionary): return dictionaryValue?.isEqual(node.dictionaryValue) ?? false
+                    case (.Array, .Array): return arrayValue?.isEqual(node.arrayValue) ?? false
+                    case (.String, .String): return stringValue == node.stringValue
+                    case (.Number, .Number): return numberValue == node.numberValue
+                    default: return false
+                }
+            }
         }
         
         enum TokenType {
             case Undetermined /* wtfbbq */
-            case ObjectOpen   /* { */
-            case ObjectClose  /* } */
-            case ArrayOpen    /* [ */
-            case ArrayClose   /* ] */
             case Key          /* \"str\" or str */
             case Value        /* \"str\", str, or 3 */
             case Colon        /* : */
             case MaybeNext    /* ',' or end-of-value */
-            case Quote        /* " */
         }
         
         if let string = NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding) {
@@ -65,7 +73,7 @@ extension NSJSONSerialization {
             
             var nextExpectedToken: TokenType = .Undetermined
             
-            let scanner = NSScanner(string: string.bridge())
+            let scanner = JSONStringScanner(string: string.bridge())
             
             let invalidUnquotedToken = {
                 (string: NSString) -> Bool in
@@ -73,11 +81,11 @@ extension NSJSONSerialization {
                 let alphaNumeric = NSCharacterSet.alphanumericCharacterSet()
                 for i in 0..<string.length {
                     if !alphaNumeric.characterIsMember(string.characterAtIndex(i)) {
-                        return false
+                        return true
                     }
                 }
                 
-                return true
+                return false
             }
             
             repeat {
@@ -88,6 +96,10 @@ extension NSJSONSerialization {
                  * Before we even have the root node
                  */
                 case .Undetermined:
+                    if rootNode != nil {
+                        continue
+                    }
+                    
                     if scanner.scanString("{", intoString: nil) {
                         rootNode = Node(.Dictionary)
                         nextExpectedToken = .Key
@@ -95,7 +107,7 @@ extension NSJSONSerialization {
                         rootNode = Node(.Array)
                         nextExpectedToken = .Value
                     } else {
-                        throw Error.InvalidInput(message: "Fragments are unsupported.")
+                        throw Error.UnexpectedToken(message: "Fragments are unsupported.", location: scanner.scanLocation)
                     }
                     
                     currentNode = rootNode
@@ -112,22 +124,22 @@ extension NSJSONSerialization {
                             currentNode?.nextDictionaryKey = key
                             nextExpectedToken = .Colon
                         } else {
-                            throw Error.InvalidInput(message: "Expected quote to end key.")
+                            throw Error.UnexpectedToken(message: "Expected quote to end key.", location: scanner.scanLocation)
                         }
                     } else if scanner.scanUpToString(":", intoString: &string) {
                         if let string = string {
                             if invalidUnquotedToken(string) {
-                                throw Error.InvalidInput(message: "Invalid key in dictionary.")
+                                throw Error.UnexpectedToken(message: "Invalid key in dictionary.", location: scanner.scanLocation)
                             }
                             
                             currentNode?.nextDictionaryKey = string
                             nextExpectedToken = .Colon
                             
                         } else {
-                            throw Error.InvalidInput(message: "Expected dictionary key.")
+                            throw Error.UnexpectedToken(message: "Expected dictionary key.", location: scanner.scanLocation)
                         }
                     } else {
-                        throw Error.InvalidInput(message: "Expected dictionary key.")
+                        throw Error.UnexpectedToken(message: "Expected dictionary key.", location: scanner.scanLocation)
                     }
                 
                 /* 
@@ -138,14 +150,14 @@ extension NSJSONSerialization {
                     
                     let parsedValue: AnyObject?
                     
-                    var floatValue: CFloat = 0
-                    var intValue: CInt = 0
+                    var doubleValue: Double = 0
+                    var intValue: Int = 0
             
-                    if scanner.scanFloat(&floatValue) {
-                        parsedValue = NSNumber(double: Double(floatValue))
+                    if scanner.scanDouble(&doubleValue) {
+                        parsedValue = NSNumber(double: doubleValue)
                         nextExpectedToken = .MaybeNext
                     } else if scanner.scanInt(&intValue) {
-                        parsedValue = NSNumber(integer: Int(intValue))
+                        parsedValue = NSNumber(integer: intValue)
                         nextExpectedToken = .MaybeNext
                     } else if scanner.scanString("\"", intoString: nil) {
                         var value: NSString? = nil
@@ -156,7 +168,7 @@ extension NSJSONSerialization {
                             parsedValue = value
                             nextExpectedToken = .MaybeNext
                         } else {
-                            throw Error.InvalidInput(message: "Expected value.")
+                            throw Error.UnexpectedToken(message: "Expected value.", location: scanner.scanLocation)
                         }
                     } else if scanner.scanString("{", intoString: nil) {
                         let parent = currentNode
@@ -179,7 +191,7 @@ extension NSJSONSerialization {
                         
                     } else if scanner.scanUpToString(",", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
-                            throw Error.InvalidInput(message: "Value contains invalid characters")
+                            throw Error.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
                         }
                         
                         scanner.scanString(",", intoString: nil)
@@ -188,7 +200,7 @@ extension NSJSONSerialization {
                         
                     } else if scanner.scanUpToString("}", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
-                            throw Error.InvalidInput(message: "Value contains invalid characters")
+                            throw Error.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
                         }
                         
                         scanner.scanString("}", intoString: nil)
@@ -197,7 +209,7 @@ extension NSJSONSerialization {
                         
                     } else if scanner.scanUpToString("]", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
-                            throw Error.InvalidInput(message: "Value contains invalid characters")
+                            throw Error.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
                         }
                         
                         scanner.scanString("]", intoString: nil)
@@ -205,7 +217,7 @@ extension NSJSONSerialization {
                         nextExpectedToken = .Undetermined
                         
                     } else {
-                        throw Error.InvalidInput(message: "Invalid end of value.")
+                        throw Error.UnexpectedToken(message: "Invalid end of value.", location: scanner.scanLocation)
                     }
                     
                     if let current = currentNode {
@@ -220,10 +232,10 @@ extension NSJSONSerialization {
                                 current.arrayValue?.addObject(value)
                             }
                         default:
-                            throw Error.InvalidInput(message: "Invalid value.")
+                            throw Error.UnexpectedToken(message: "Invalid value.", location: scanner.scanLocation)
                         }
                     } else {
-                        throw Error.InvalidInput(message: "Invalid value.")
+                        throw Error.UnexpectedToken(message: "Invalid value.", location: scanner.scanLocation)
                     }
                     
                     if nextExpectedToken == .Undetermined, let parent = currentNode?.parent {
@@ -242,65 +254,81 @@ extension NSJSONSerialization {
                             case .Array:
                                 nextExpectedToken = .Value
                             default:
-                                throw Error.InvalidInput(message: "Unexpected ','")
+                                throw Error.UnexpectedToken(message: "Unexpected ','", location: scanner.scanLocation)
                             }
                         } else if scanner.scanString("]", intoString: nil) {
                             if let current = currentNode, parent = current.parent, key = parent.nextDictionaryKey {
+                                if current.type != .Array {
+                                    throw Error.UnexpectedToken(message: "Unexpected ']'", location: scanner.scanLocation)
+                                }
                                 switch parent.type {
                                 case .Dictionary:
                                     if let array = current.arrayValue {
                                         parent.dictionaryValue?.setObject(array, forKey: key)
+                                        current.closed = true
                                         currentNode = parent
                                         nextExpectedToken = .MaybeNext
                                     } else {
-                                        throw Error.InvalidInput(message: "Unexpected nested type.")
+                                        throw Error.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
                                     }
                                 case .Array:
                                     if let array = current.arrayValue {
                                         parent.arrayValue?.addObject(array)
+                                        current.closed = true
                                         currentNode = parent
                                         nextExpectedToken = .MaybeNext
                                     } else {
-                                        throw Error.InvalidInput(message: "Unexpected nested type.")
+                                        throw Error.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
                                     }
                                 default:
-                                    throw Error.InvalidInput(message: "Unexpected end of dictionary.")
+                                    throw Error.UnexpectedToken(message: "Unexpected end of dictionary.", location: scanner.scanLocation)
                                 }
                             } else {
+                                if let root = rootNode, current = currentNode where current.equalTo(root) {
+                                    currentNode?.closed = true
+                                }
                                 continue
                             }
                             
                         } else if scanner.scanString("}", intoString: nil) {
-                            if let current = currentNode, parent = current.parent{
+                            if let current = currentNode, parent = current.parent {
+                                if current.type != .Dictionary {
+                                    throw Error.UnexpectedToken(message: "Unexpected '}'", location: scanner.scanLocation)
+                                }
                                 switch parent.type {
                                 case .Dictionary:
                                     if let key = parent.nextDictionaryKey, dictionary = current.dictionaryValue {
                                         parent.dictionaryValue?.setObject(dictionary, forKey: key)
+                                        current.closed = true
                                         currentNode = parent
                                         nextExpectedToken = .MaybeNext
                                     } else {
-                                        throw Error.InvalidInput(message: "Unexpected nested type.")
+                                        throw Error.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
                                     }
                                 case .Array:
                                     if let dictionary = current.dictionaryValue {
                                         parent.arrayValue?.addObject(dictionary)
+                                        current.closed = true
                                         currentNode = parent
                                         nextExpectedToken = .MaybeNext
                                     } else {
-                                        throw Error.InvalidInput(message: "Unexpected nested type.")
+                                        throw Error.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
                                     }
                                 default:
-                                    throw Error.InvalidInput(message: "Unexpected end of dictionary.")
+                                    throw Error.UnexpectedToken(message: "Unexpected end of dictionary.", location: scanner.scanLocation)
                                 }
                             } else {
+                                if let root = rootNode, current = currentNode where current.equalTo(root) {
+                                    currentNode?.closed = true
+                                }
                                 continue
                             }
                         
                         } else if scanner.scanLocation != scanner.string.bridge().length - 1 {
-                            throw Error.InvalidInput(message: "Unexpected end of context.")
+                            throw Error.UnexpectedToken(message: "Unexpected end of context.", location: scanner.scanLocation)
                         }
                     } else {
-                        throw Error.InvalidInput(message: "Unexpected end of context.")
+                        throw Error.UnexpectedToken(message: "Unexpected end of context.", location: scanner.scanLocation)
                     }
             
                 /*
@@ -309,16 +337,18 @@ extension NSJSONSerialization {
                 case .Colon:
                     var result: NSString? = nil
                     if scanner.scanString(":", intoString: &result) == false {
-                        throw Error.InvalidInput(message: "Expected ':'")
+                        throw Error.UnexpectedToken(message: "Expected ':'", location: scanner.scanLocation)
                     }
                     
                     nextExpectedToken = .Value
                     
-                default:
-                    break
                 }
                 
-            } while(!scanner.atEnd && scanner.scanLocation != scanner.string.bridge().length - 1)
+            } while(!scanner.atEnd)
+            
+            if let currentNode = currentNode where currentNode.closed == false {
+                throw Error.UnexpectedToken(message: "Unexpected end of file ", location: scanner.scanLocation)
+            }
             
             if let rootNode = rootNode {
                 switch rootNode.type {
@@ -335,13 +365,193 @@ extension NSJSONSerialization {
                 default: break
                 }
                 
-                throw Error.InvalidInput(message: "Invalid root object or unexpected end of data")
+                throw Error.UnexpectedToken(message: "Invalid root object or unexpected end of data", location: scanner.scanLocation)
                 
             } else {
-                throw Error.InvalidInput(message: "Could not find root object in data")
+                throw Error.UnexpectedToken(message: "Could not find root object in data", location: scanner.scanLocation)
             }
         } else {
-            throw Error.InvalidInput(message: "Invalid data")
+            throw Error.InvalidInput
         }
+    }
+}
+
+/*
+ * NSScanner replacement that better suits the needs of a JSON parser,
+ * namely being able to handle escaped characters within JSON strings.
+ */
+private class JSONStringScanner {
+    let string: String
+    
+    private var _scanLocation = 0
+    var scanLocation: Int {
+        return _scanLocation
+    }
+    
+    var atEnd: Bool {
+        return scanLocation >= string.bridge().length - 1
+    }
+    
+    init(string: String) {
+        self.string = string
+    }
+    
+    private func advance() {
+        let whitespace = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+        let sstring = self.string.bridge()
+        
+        var outScanLocation = self.scanLocation
+        for i in (self.scanLocation..<sstring.length) {
+            if whitespace.characterIsMember(sstring.characterAtIndex(i)) {
+                continue
+            } else {
+                outScanLocation = i
+                break
+            }
+        }
+        
+        _scanLocation = outScanLocation
+    }
+    
+    func scanUpToString(string: String, intoString result: AutoreleasingUnsafeMutablePointer<NSString?>) -> Bool {
+        let input = string.bridge()
+        let inputLength = input.length
+        let sstring = self.string.bridge()
+        
+        var output: NSString? = nil
+        var outScanLocation: Int = 0
+        
+        var i = scanLocation
+        repeat {
+            if i + inputLength >= sstring.length {
+                break
+            }
+            
+            var sub = sstring.substringWithRange(NSMakeRange(i, inputLength))
+            var loc = i
+            if sub == "\\" && (i + 1 < sstring.length) {
+                sub = sstring.substringWithRange(NSMakeRange(i, 2))
+                loc = i + 1
+                i += 1
+            }
+            
+            if sub == input {
+                let scanned = sstring.substringWithRange(NSMakeRange(self.scanLocation, loc - self.scanLocation))
+                output = scanned.stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
+                outScanLocation = loc
+                break
+            }
+            
+            i += 1
+        } while (i < sstring.length)
+        
+        if let output = output {
+            if result != nil {
+                result.memory = output
+            }
+            _scanLocation = outScanLocation
+            return true
+        }
+        
+        return false
+    }
+    
+    func scanString(string: String, intoString result: AutoreleasingUnsafeMutablePointer<NSString?>) -> Bool {
+        
+        advance()
+        
+        let input = string.bridge()
+        let inputLength = input.length
+        let sstring = self.string.bridge()
+        
+        if scanLocation + inputLength >= sstring.length {
+            return false
+        }
+        
+        let sub = sstring.substringWithRange(NSMakeRange(scanLocation, inputLength))
+        
+        if sub == input {
+            if result != nil {
+                result.memory = string
+            }
+            _scanLocation = scanLocation + inputLength
+            return true
+        }
+        
+        return false
+    }
+    
+    func scanInt(result: UnsafeMutablePointer<Int>) -> Bool {
+    
+        advance()
+        
+        let sstring = self.string.bridge()
+        
+        let numbers = NSCharacterSet.decimalDigitCharacterSet()
+        
+        var endOfInt: Int = self.scanLocation
+        
+        for i in (self.scanLocation..<sstring.length) {
+            
+            let char = sstring.characterAtIndex(i)
+            if numbers.characterIsMember(char) == false {
+                endOfInt = i
+                break
+            }
+        }
+        
+        if endOfInt > self.scanLocation {
+            let sub = sstring.substringWithRange(NSMakeRange(self.scanLocation, endOfInt - self.scanLocation))
+            
+            if result != nil, let output = Int(sub) {
+                result.memory = output
+            }
+            
+            _scanLocation = endOfInt
+            
+            return true
+        }
+        
+        return false
+    }
+    
+    func scanDouble(result: UnsafeMutablePointer<Double>) -> Bool {
+        
+        advance()
+        
+        let sstring = self.string.bridge()
+        
+        let numbers = NSCharacterSet.decimalDigitCharacterSet()
+        
+        var endOfDouble: Int = self.scanLocation
+        var foundDecimalPoint = false
+        
+        for i in (self.scanLocation..<sstring.length) {
+            
+            let char = sstring.characterAtIndex(i)
+            let isValidDecimal = Character(UnicodeScalar(char)) == Character(".")
+            if numbers.characterIsMember(char) == false || isValidDecimal {
+                endOfDouble = i
+                if isValidDecimal && !foundDecimalPoint {
+                    foundDecimalPoint = true
+                } else {
+                    break
+                }
+            }
+        }
+        
+        if endOfDouble > self.scanLocation && foundDecimalPoint {
+            let sub = sstring.substringWithRange(NSMakeRange(self.scanLocation, endOfDouble - self.scanLocation))
+            
+            if result != nil, let output = Double(sub) {
+                result.memory = output
+            }
+            
+            _scanLocation = endOfDouble
+            
+            return true
+        }
+        
+        return false
     }
 }
