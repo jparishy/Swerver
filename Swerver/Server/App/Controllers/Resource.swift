@@ -40,7 +40,7 @@ struct ResourceSubroute {
             ResourceSubroute(method: "GET",    action: .Index),
             ResourceSubroute(method: "POST",   action: .Create),
             ResourceSubroute(method: "PUT",    action: .Update),
-            ResourceSubroute(method: "DELETE", action: .Delete)
+            ResourceSubroute(method: "DELETE", action: .Delete),
         ]
     }
     
@@ -113,6 +113,8 @@ struct ResourceSubroute {
         case .Delete:
             if let _ = Int(path) {
                 return (method == "DELETE")
+            } else if path == "" {
+                return true
             } else {
                 return false
             }

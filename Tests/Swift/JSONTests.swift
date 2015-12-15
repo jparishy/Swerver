@@ -107,7 +107,7 @@ class JSONTests: XCTestCase {
                 do {
                     let result = try NSJSONSerialization.swerver_JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0))
                     XCTAssertEqual(result as? NSObject, expectedObject as? NSObject, message)
-                } catch NSJSONSerialization.Error.UnexpectedToken(let m, let loc) {
+                } catch JSONError.UnexpectedToken(let m, let loc) {
                     XCTFail("\(m) — at loc \(loc)")
                 } catch let error as NSError {
                     XCTFail("NSJSONSerialization threw: \(error.localizedDescription)")

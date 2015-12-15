@@ -11,7 +11,7 @@ import Foundation
 extension NSJSONSerialization {
     public class func _impl_swerver_dataWithJSONObject(obj: AnyObject, options opt: NSJSONWritingOptions) throws -> NSData {
         if !swerver_isValidJSONObject(obj) {
-            throw Error.InvalidInput
+            throw JSONError.InvalidInput
         }
         
         if let obj = obj as? NSObject {
@@ -20,7 +20,7 @@ extension NSJSONSerialization {
             let bytes = output.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding)
             return NSData(bytes: bytes, length: bytes.count)
         } else {
-            throw Error.InvalidInput
+            throw JSONError.InvalidInput
         }
     }
 }
@@ -48,7 +48,7 @@ extension NSObject {
         } else if let number = self as? NSNumber {
             return try number.JSONString(prettyPrinted)
         } else {
-            throw NSJSONSerialization.Error.InvalidInput
+            throw JSONError.InvalidInput
         }
     }
 }
@@ -85,7 +85,7 @@ extension NSDictionary {
                     output += try v.JSONString(prettyPrinted)
                 }
             } else {
-                throw NSJSONSerialization.Error.InvalidInput
+                throw JSONError.InvalidInput
             }
             
             if index < self.count - 1 {
@@ -130,7 +130,7 @@ extension NSArray {
             } else if let v = v as? JSONBool {
                 output += try v.JSONString(prettyPrinted)
             } else {
-                throw NSJSONSerialization.Error.InvalidInput
+                throw JSONError.InvalidInput
             }
             
             if index < self.count - 1 {

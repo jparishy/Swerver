@@ -19,7 +19,7 @@ class ModelQuery<T : Model> {
         var query = "INSERT INTO \(T.table)("
         
         var index = 0
-        for (k,_) in m.map {
+        for (k,_) in ModelsMap(m.properties) {
             if k == T.primaryKey {
                 index++
                 continue
@@ -27,7 +27,7 @@ class ModelQuery<T : Model> {
             
             query += "\(k)"
             
-            if index < (m.map.count - 1) {
+            if index < (ModelsMap(m.properties).count - 1) {
                 query += ", "
             } else {
                 query += ")"
@@ -39,7 +39,7 @@ class ModelQuery<T : Model> {
         query += " VALUES ("
         
         index = 0
-        for (k,v) in m.map {
+        for (k,v) in ModelsMap(m.properties) {
             if k == T.primaryKey {
                 index++
                 continue
@@ -48,7 +48,7 @@ class ModelQuery<T : Model> {
             let vv = try v.databaseValueForWriting()
             query += vv
             
-            if index < (m.map.count - 1) {
+            if index < (ModelsMap(m.properties).count - 1) {
                 query += ", "
             } else {
                 query += ")"
@@ -61,7 +61,7 @@ class ModelQuery<T : Model> {
         
         let queryResults = try transaction.command(query)
         if let first = queryResults?.first, id = first[T.primaryKey] {
-            try m.map[T.primaryKey]?.databaseReadFromValue(id)
+            try ModelsMap(m.properties)[T.primaryKey]?.databaseReadFromValue(id)
         }
         
         return m
@@ -69,15 +69,15 @@ class ModelQuery<T : Model> {
     
     func update(m: T) throws -> T {
         let primaryKey = m.dynamicType.primaryKey
-        if let primaryKeyValue = try m.map[primaryKey]?.databaseValueForWriting() {
+        if let primaryKeyValue = try ModelsMap(m.properties)[primaryKey]?.databaseValueForWriting() {
             var query = "UPDATE \(m.dynamicType.table) SET "
             
             var index = 0
-            for (k,v) in m.map {
+            for (k,v) in ModelsMap(m.properties) {
                 let vs = try v.databaseValueForWriting()
                 query += "\(k) = \(vs)"
                 
-                if index < (m.map.count - 1) {
+                if index < (ModelsMap(m.properties).count - 1) {
                     query += ", "
                 } else {
                     query += " "
@@ -102,6 +102,11 @@ class ModelQuery<T : Model> {
         }
     }
     
+    func deleteAll() throws {
+        let query = "DELETE FROM \(T.table);"
+        try transaction.command(query)
+    }
+    
     func all() throws -> [T] {
         
         var results = [T]()
@@ -111,7 +116,60 @@ class ModelQuery<T : Model> {
         
             let m = T()
             for (k,v) in row {
-                if let p = m.map[k] {
+                if let p = ModelsMap(m.properties)[k] {
+                    try p.databaseReadFromValue(v)
+                }
+            }
+            
+            transaction.register(m)
+            
+            results.append(m)
+        }
+        
+        return results
+    }
+    
+    func findWhere(params: [String:AnyObject]) throws -> [T] {
+        
+        var query = "SELECT * FROM \(T.table)"
+        
+        if params.count > 0 {
+            query += " WHERE("
+        
+            var index = 0
+            for (k, v) in params {
+                
+                query += k
+                query += " = "
+                
+                if v is String {
+                    query += "'\(v)'"
+                } else if let v = v as? Bool {
+                    query += (v ? "true" : "false")
+                } else {
+                    query += "\(v)"
+                }
+                
+                if index < params.count - 1 {
+                    query += ", "
+                }
+                
+                index += 1
+            }
+            
+            query += ") "
+        }
+        
+        query += "ORDER BY \(T.primaryKey);"
+        
+        var results = [T]()
+        
+        let rows = try self.transaction.query(query)
+        for row in rows {
+        
+            let m = T()
+            for (k,v) in row {
+                if let p = ModelsMap(m.properties)[k] {
                     try p.databaseReadFromValue(v)
                 }
             }

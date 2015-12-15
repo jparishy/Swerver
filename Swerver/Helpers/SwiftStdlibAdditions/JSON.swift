@@ -12,14 +12,14 @@ import Foundation
 public typealias NSErrorPointer = UnsafeMutablePointer<NSError>
 #endif
 
+enum JSONError : ErrorType {
+    case Unimplemented
+    case InvalidInput
+    case UnexpectedToken(message: String, location: Int)
+}
+
 extension NSJSONSerialization {
 
-    enum Error : ErrorType {
-        case Unimplemented
-        case InvalidInput
-        case UnexpectedToken(message: String, location: Int)
-    }
-    
     public class func swerver_isValidJSONObject(rootObject: AnyObject) -> Bool {
         var isValid: ((AnyObject, Bool) -> Bool)! = nil
         isValid = {
@@ -78,6 +78,6 @@ extension NSJSONSerialization {
     }
     
     public class func swerver_JSONObjectWithStream(stream: NSInputStream, options opt: NSJSONReadingOptions) throws -> AnyObject {
-        throw Error.Unimplemented
+        throw JSONError.Unimplemented
     }
 }

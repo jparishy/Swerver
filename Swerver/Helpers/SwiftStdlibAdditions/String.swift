@@ -140,6 +140,10 @@ extension NSString {
         var index = 0
         repeat {
             
+            if index + string.length > self.length {
+                break
+            }
+            
             let sub = self.substringWithRange(NSMakeRange(index, string.length))
             if sub == string.bridge() {
                 output += replacement.bridge()
@@ -149,7 +153,7 @@ extension NSString {
                 output.append(Character(UnicodeScalar(self.characterAtIndex(index))))
                 index += 1
             }
-        } while(index + string.length <= self.length)
+        } while(true)
         
         let rest = self.substringFromIndex(index)
         output += rest

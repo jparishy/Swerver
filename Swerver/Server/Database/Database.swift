@@ -35,7 +35,7 @@ class Database {
         let transaction = Transaction(connection: connection)
         try transaction.begin()
         let ret = try work(transaction)
-        if transaction._closed != true {
+        if transaction._closed != true && transaction._needsToBeClosed() {
             throw DatabaseError.TransactionNotClosed
         }
         
@@ -137,12 +137,12 @@ public class Transaction {
     private func commitDirtyModels() throws {
         for m in _models {
             let primaryKey = m.dynamicType.primaryKey
-            if let primaryKeyValue = try m.map[primaryKey]?.databaseValueForWriting() {
+            if let primaryKeyValue = try ModelsMap(m.properties)[primaryKey]?.databaseValueForWriting() {
                 var query = "UPDATE \(m.dynamicType.table) SET "
                 
                 var index = 0
                 var dirtyProps = 0
-                for (k,v) in m.map {
+                for (k,v) in ModelsMap(m.properties) {
                     if v.dirty == false || k == primaryKey {
                         index++
                         continue
@@ -151,7 +151,7 @@ public class Transaction {
                     let vs = try v.databaseValueForWriting()
                     query += "\(k) = \(vs)"
                     
-                    if index < (m.map.count - 1) {
+                    if index < (ModelsMap(m.properties).count - 1) {
                         query += ", "
                     } else {
                         query += " "
@@ -184,5 +184,17 @@ public class Transaction {
         } catch {}
         
         _closed = true
+    }
+    
+    private func _needsToBeClosed() -> Bool {
+        for m in _models {
+            for (_,v) in ModelsMap(m.properties) {
+                if v.dirty {
+                    return true
+                }
+            }
+        }
+        
+        return false
     }
 }

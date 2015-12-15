@@ -131,7 +131,7 @@ extension NSJSONSerialization {
                         rootNode = Node(.Array)
                         nextExpectedToken = .Value
                     } else {
-                        throw Error.UnexpectedToken(message: "Fragments are unsupported.", location: scanner.scanLocation)
+                        throw JSONError.UnexpectedToken(message: "Fragments are unsupported.", location: scanner.scanLocation)
                     }
                     
                     currentNode = rootNode
@@ -148,22 +148,22 @@ extension NSJSONSerialization {
                             currentNode?.nextDictionaryKey = key
                             nextExpectedToken = .Colon
                         } else {
-                            throw Error.UnexpectedToken(message: "Expected quote to end key.", location: scanner.scanLocation)
+                            throw JSONError.UnexpectedToken(message: "Expected quote to end key.", location: scanner.scanLocation)
                         }
                     } else if scanner.scanUpToString(":", intoString: &string) {
                         if let string = string {
                             if invalidUnquotedToken(string) {
-                                throw Error.UnexpectedToken(message: "Invalid key in dictionary.", location: scanner.scanLocation)
+                                throw JSONError.UnexpectedToken(message: "Invalid key in dictionary.", location: scanner.scanLocation)
                             }
                             
                             currentNode?.nextDictionaryKey = string
                             nextExpectedToken = .Colon
                             
                         } else {
-                            throw Error.UnexpectedToken(message: "Expected dictionary key.", location: scanner.scanLocation)
+                            throw JSONError.UnexpectedToken(message: "Expected dictionary key.", location: scanner.scanLocation)
                         }
                     } else {
-                        throw Error.UnexpectedToken(message: "Expected dictionary key.", location: scanner.scanLocation)
+                        throw JSONError.UnexpectedToken(message: "Expected dictionary key.", location: scanner.scanLocation)
                     }
                 
                 /* 
@@ -192,7 +192,7 @@ extension NSJSONSerialization {
                             parsedValue = value
                             nextExpectedToken = .MaybeNext
                         } else {
-                            throw Error.UnexpectedToken(message: "Expected value.", location: scanner.scanLocation)
+                            throw JSONError.UnexpectedToken(message: "Expected value.", location: scanner.scanLocation)
                         }
                     } else if scanner.scanString("{", intoString: nil) {
                         let parent = currentNode
@@ -215,7 +215,7 @@ extension NSJSONSerialization {
                         
                     } else if scanner.scanUpToString(",", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
-                            throw Error.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
+                            throw JSONError.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
                         }
                         
                         scanner.scanString(",", intoString: nil)
@@ -243,7 +243,7 @@ extension NSJSONSerialization {
                         
                     } else if scanner.scanUpToString("}", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
-                            throw Error.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
+                            throw JSONError.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
                         }
                         
                         nextExpectedToken = .MaybeNext
@@ -258,7 +258,7 @@ extension NSJSONSerialization {
                         
                     } else if scanner.scanUpToString("]", intoString: &string) {
                         if let string = string where  invalidUnquotedToken(string) {
-                            throw Error.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
+                            throw JSONError.UnexpectedToken(message: "Value contains invalid characters", location: scanner.scanLocation)
                         }
                         
                         nextExpectedToken = .MaybeNext
@@ -272,7 +272,7 @@ extension NSJSONSerialization {
                         }
                         
                     } else {
-                        throw Error.UnexpectedToken(message: "Invalid end of value.", location: scanner.scanLocation)
+                        throw JSONError.UnexpectedToken(message: "Invalid end of value.", location: scanner.scanLocation)
                     }
                     
                     if let current = currentNode {
@@ -287,10 +287,10 @@ extension NSJSONSerialization {
                                 current.arrayValue?.addObject(value)
                             }
                         default:
-                            throw Error.UnexpectedToken(message: "Invalid value.", location: scanner.scanLocation)
+                            throw JSONError.UnexpectedToken(message: "Invalid value.", location: scanner.scanLocation)
                         }
                     } else {
-                        throw Error.UnexpectedToken(message: "Invalid value.", location: scanner.scanLocation)
+                        throw JSONError.UnexpectedToken(message: "Invalid value.", location: scanner.scanLocation)
                     }
                     
                     if nextExpectedToken == .Undetermined, let parent = currentNode?.parent {
@@ -309,12 +309,12 @@ extension NSJSONSerialization {
                             case .Array:
                                 nextExpectedToken = .Value
                             default:
-                                throw Error.UnexpectedToken(message: "Unexpected ','", location: scanner.scanLocation)
+                                throw JSONError.UnexpectedToken(message: "Unexpected ','", location: scanner.scanLocation)
                             }
                         } else if scanner.scanString("]", intoString: nil) {
                             if let current = currentNode, parent = current.parent, key = parent.nextDictionaryKey {
                                 if current.type != .Array {
-                                    throw Error.UnexpectedToken(message: "Unexpected ']'", location: scanner.scanLocation)
+                                    throw JSONError.UnexpectedToken(message: "Unexpected ']'", location: scanner.scanLocation)
                                 }
                                 switch parent.type {
                                 case .Dictionary:
@@ -324,7 +324,7 @@ extension NSJSONSerialization {
                                         currentNode = parent
                                         nextExpectedToken = .MaybeNext
                                     } else {
-                                        throw Error.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
+                                        throw JSONError.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
                                     }
                                 case .Array:
                                     if let array = current.arrayValue {
@@ -333,10 +333,10 @@ extension NSJSONSerialization {
                                         currentNode = parent
                                         nextExpectedToken = .MaybeNext
                                     } else {
-                                        throw Error.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
+                                        throw JSONError.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
                                     }
                                 default:
-                                    throw Error.UnexpectedToken(message: "Unexpected end of dictionary.", location: scanner.scanLocation)
+                                    throw JSONError.UnexpectedToken(message: "Unexpected end of dictionary.", location: scanner.scanLocation)
                                 }
                             } else {
                                 if let root = rootNode, current = currentNode where current.equalTo(root) {
@@ -348,7 +348,7 @@ extension NSJSONSerialization {
                         } else if scanner.scanString("}", intoString: nil) {
                             if let current = currentNode, parent = current.parent {
                                 if current.type != .Dictionary {
-                                    throw Error.UnexpectedToken(message: "Unexpected '}'", location: scanner.scanLocation)
+                                    throw JSONError.UnexpectedToken(message: "Unexpected '}'", location: scanner.scanLocation)
                                 }
                                 switch parent.type {
                                 case .Dictionary:
@@ -358,7 +358,7 @@ extension NSJSONSerialization {
                                         currentNode = parent
                                         nextExpectedToken = .MaybeNext
                                     } else {
-                                        throw Error.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
+                                        throw JSONError.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
                                     }
                                 case .Array:
                                     if let dictionary = current.dictionaryValue {
@@ -367,10 +367,10 @@ extension NSJSONSerialization {
                                         currentNode = parent
                                         nextExpectedToken = .MaybeNext
                                     } else {
-                                        throw Error.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
+                                        throw JSONError.UnexpectedToken(message: "Unexpected nested type.", location: scanner.scanLocation)
                                     }
                                 default:
-                                    throw Error.UnexpectedToken(message: "Unexpected end of dictionary.", location: scanner.scanLocation)
+                                    throw JSONError.UnexpectedToken(message: "Unexpected end of dictionary.", location: scanner.scanLocation)
                                 }
                             } else {
                                 if let root = rootNode, current = currentNode where current.equalTo(root) {
@@ -380,11 +380,10 @@ extension NSJSONSerialization {
                             }
                         
                         } else if scanner.scanLocation != scanner.string.bridge().length - 1 {
-                            print(rootNode?.dictionaryValue)
-                            throw Error.UnexpectedToken(message: "Unexpected end of context.", location: scanner.scanLocation)
+                            throw JSONError.UnexpectedToken(message: "Unexpected end of context.", location: scanner.scanLocation)
                         }
                     } else {
-                        throw Error.UnexpectedToken(message: "Unexpected end of context.", location: scanner.scanLocation)
+                        throw JSONError.UnexpectedToken(message: "Unexpected end of context.", location: scanner.scanLocation)
                     }
             
                 /*
@@ -393,7 +392,7 @@ extension NSJSONSerialization {
                 case .Colon:
                     var result: NSString? = nil
                     if scanner.scanString(":", intoString: &result) == false {
-                        throw Error.UnexpectedToken(message: "Expected ':'", location: scanner.scanLocation)
+                        throw JSONError.UnexpectedToken(message: "Expected ':'", location: scanner.scanLocation)
                     }
                     
                     nextExpectedToken = .Value
@@ -403,7 +402,7 @@ extension NSJSONSerialization {
             } while(!scanner.atEnd)
             
             if let currentNode = currentNode where currentNode.closed == false {
-                throw Error.UnexpectedToken(message: "Unexpected end of file ", location: scanner.scanLocation)
+                throw JSONError.UnexpectedToken(message: "Unexpected end of file ", location: scanner.scanLocation)
             }
             
             if let rootNode = rootNode {
@@ -421,13 +420,13 @@ extension NSJSONSerialization {
                 default: break
                 }
                 
-                throw Error.UnexpectedToken(message: "Invalid root object or unexpected end of data", location: scanner.scanLocation)
+                throw JSONError.UnexpectedToken(message: "Invalid root object or unexpected end of data", location: scanner.scanLocation)
                 
             } else {
-                throw Error.UnexpectedToken(message: "Could not find root object in data", location: scanner.scanLocation)
+                throw JSONError.UnexpectedToken(message: "Could not find root object in data", location: scanner.scanLocation)
             }
         } else {
-            throw Error.InvalidInput
+            throw JSONError.InvalidInput
         }
     }
 }

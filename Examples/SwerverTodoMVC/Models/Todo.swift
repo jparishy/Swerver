@@ -22,7 +22,7 @@ class Todo {
 
 extension Todo : CustomStringConvertible {
     var description: String {
-        return "<Note: id=\(id); text=\"\(title)\"; completed=\"\(completed)\";>"
+        return "<Todo: id=\(id); text=\(title); completed=\(completed);>"
     }
 }
 
@@ -43,11 +43,11 @@ extension Todo : Model {
         return "id"
     }
     
-    var map: [String : BaseProperty] {
+    var properties: [BaseProperty] {
         return [
-            "id"   : self.id,
-            "title" : self.title,
-            "completed" : self.completed
+            self.id,
+            self.title,
+            self.completed
         ]
     }
 }

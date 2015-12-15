@@ -193,6 +193,13 @@ func BuiltInResponse(code: StatusCode, publicDirectory dir: String) -> Response 
     }
 }
 
+struct Ok {
+    static func JSON(json: AnyObject) throws -> Response {
+        let data = try NSJSONSerialization.swerver_dataWithJSONObject(json, options: NSJSONWritingOptions(rawValue: 0))
+        return (.Ok, ["Content-Type" : "application/json"], ResponseData(data))
+    }
+}
+
 enum ResponseFormat {
     case JSON
     case HTML

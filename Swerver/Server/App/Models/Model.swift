@@ -14,6 +14,7 @@ enum ModelError : ErrorType {
 }
 
 public protocol BaseProperty {
+    var column: String { get }
     var dirty: Bool { get }
     func databaseReadFromValue(value: String) throws
     func databaseValueForWriting() throws -> String
@@ -21,7 +22,11 @@ public protocol BaseProperty {
 }
 
 public class Property<T> : BaseProperty, CustomStringConvertible {
-    let column: String
+    public let column: String
+    
+    public var hashValue: Int {
+        return column.hashValue
+    }
     
     internal var _dirty = false
     public var dirty: Bool {
@@ -44,6 +49,10 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
     
     func value() -> T {
         return internalValue
+    }
+    
+    public var properties: [BaseProperty] {
+        return []
     }
     
     public func databaseReadFromValue(value: String) throws {
@@ -144,13 +153,21 @@ public protocol Model : class {
     static var table: String { get }
     static var columns: [String] { get }
     static var primaryKey: String { get }
-    var map: [String:BaseProperty] { get }
+    var properties: [BaseProperty] { get }
     var transaction: Transaction? { get set }
+}
+
+internal func ModelsMap(props: [BaseProperty]) -> [String:BaseProperty] {
+    var map: [String:BaseProperty] = [:]
+    for prop in props {
+        map[prop.column] = prop
+    }
+    return map
 }
 
 func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     let m = T()
-    for (k,_) in m.map {
+    for (k,_) in ModelsMap(m.properties) {
         if let v = JSON[k.bridge()] {
             let obj = v
             let str: NSString
@@ -166,7 +183,7 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
                 str = obj as! NSString
             }
             
-            try m.map[k]?.databaseReadFromValue(str.bridge())
+            try ModelsMap(m.properties)[k]?.databaseReadFromValue(str.bridge())
         }
     }
     
@@ -185,7 +202,7 @@ func JSONDictionaryFromModel<T : Model>(m: T) throws -> NSDictionary {
     
     let d = NSMutableDictionary()
     
-    for (k,v) in m.map {
+    for (k,v) in ModelsMap(m.properties) {
         let vv = try v.rawValueForWriting()
         d.setObject(vv, forKey: k.bridge())
     }
