@@ -13,11 +13,14 @@ struct Cookie {
     let value: String
     
     init?(string: String) {
-        let parts = string.bridge().swerver_componentsSeparatedByString("=")
+        let scanner = NSScanner(string: string)
         
-        if parts.count == 2 {
-            name = parts[0]
-            value = parts[1]
+        var name: NSString? = nil
+        if scanner.scanUpToString("=", intoString: &name), let name = name {
+            let value = string.bridge().substringFromIndex(scanner.scanLocation + 1).swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            
+            self.name = name.bridge()
+            self.value = value
         } else {
             return nil
         }
