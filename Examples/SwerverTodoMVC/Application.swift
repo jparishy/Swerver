@@ -8,7 +8,11 @@
 
 import Foundation
 
-
+public struct DatabaseConfiguration {
+    let username: String
+    let password: String
+    let databaseName: String
+}
 
 public class Application {
 
@@ -16,23 +20,32 @@ public class Application {
     
     private var server: HTTPServer<HTTP11>?
     
-    private var _publicDirectory: String
+    let databaseConfiguration: DatabaseConfiguration
     
+    private var _applicationSecret: String
+    public var applicationSecret: String {
+        return _applicationSecret
+    }
+    
+    private var _publicDirectory: String
     public var publicDirectory: String {
         return _publicDirectory
     }
     
-    init(publicDirectory dir: String) {
+    init(applicationSecret secret: String, databaseConfiguration configuration: DatabaseConfiguration, publicDirectory dir: String) {
+        _applicationSecret = secret
         _publicDirectory = dir
+        
+        databaseConfiguration = configuration
     }
     
     private func start(port: Int, router: Router) {
         server?.start()
     }
     
-    static func start(publicDirectory: String = Application.DefaultPublicDirectory, configuration: (Application) -> (port: Int, router: Router)) {
+    static func start(applicationSecret: String, databaseConfiguration: DatabaseConfiguration, publicDirectory: String = Application.DefaultPublicDirectory, configuration: (Application) -> (port: Int, router: Router)) {
         
-        let app = Application(publicDirectory: publicDirectory)
+        let app = Application(applicationSecret: applicationSecret, databaseConfiguration: databaseConfiguration, publicDirectory: publicDirectory)
         
         let (port, router) = configuration(app)
         app.server = HTTPServer<HTTP11>(port: port, router: router)
@@ -40,11 +53,11 @@ public class Application {
         app.start(port, router: router)
     }
     
-    func resource<T : Controller>(name: String, additionRoutes: (T) -> ([ResourceSubroute])) -> Resource {
+    func resource<T : Controller>(name: String, namespace: String? = nil, additionRoutes: (T) -> ([ResourceSubroute])) -> Resource {
         let controller = T()
         controller.application = self
         
         let routes = additionRoutes(controller)
-        return Resource(name: name, controller: controller, subroutes: ResourceSubroute.CRUD(routes))
+        return Resource(name: name, controller: controller, subroutes: ResourceSubroute.CRUD(routes), namespace: namespace)
     }
 }
