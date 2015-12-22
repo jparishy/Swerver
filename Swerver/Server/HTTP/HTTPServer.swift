@@ -49,6 +49,9 @@ class HTTPServer<HTTP: HTTPVersion> : TCPServer {
             let data = responseDataFromResponse(response, HTTP: HTTP)
             
             if let request = HTTP.request() {
+                if let cookies = request.headers["Cookie"] {
+                    Cookie.parse(cookies)
+                }
                 print("\(response.statusCode.statusCodeString) - \(request.method) \(request.path) with response of \(data.length) bytes")
             }
             

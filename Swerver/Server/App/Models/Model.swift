@@ -148,13 +148,24 @@ extension Bool {
     }
 }
 
-public protocol Model : class {
-    init()
-    static var table: String { get }
-    static var columns: [String] { get }
-    static var primaryKey: String { get }
-    var properties: [BaseProperty] { get }
-    var transaction: Transaction? { get set }
+public class Model {
+    public required init() {}
+    class var table: String { get { return "" } }
+    class var columns: [String] { get { return [] } }
+    class var primaryKey: String { get { return "" } }
+    var properties: [BaseProperty] { get { return [] } }
+    var transaction: Transaction? { get { return nil } }
+    
+    func JSON() throws -> NSDictionary {
+        return try JSONDictionaryFromModel(self)
+    }
+}
+
+public extension SequenceType where Generator.Element == Model {
+    func JSON() throws -> NSArray {
+        let models = Array(self)
+        return try JSONDictionariesFromModels(models)
+    }
 }
 
 internal func ModelsMap(props: [BaseProperty]) -> [String:BaseProperty] {
@@ -190,7 +201,7 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     return m
 }
 
-func JSONDictionariesFromModels<T : Model>(models: [T]) throws -> NSArray {
+func JSONDictionariesFromModels(models: [Model]) throws -> NSArray {
     let array = NSMutableArray()
     for m in models {
         array.addObject(try JSONDictionaryFromModel(m))
@@ -198,7 +209,7 @@ func JSONDictionariesFromModels<T : Model>(models: [T]) throws -> NSArray {
     return array
 }
 
-func JSONDictionaryFromModel<T : Model>(m: T) throws -> NSDictionary {
+func JSONDictionaryFromModel(m: Model) throws -> NSDictionary {
     
     let d = NSMutableDictionary()
     

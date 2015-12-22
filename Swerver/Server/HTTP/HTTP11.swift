@@ -50,17 +50,16 @@ class HTTP11 : HTTPVersion {
         for line in lines {
             if line.bridge().swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0 {
                 stillParsingHeaders = false
-                
                 continue
             }
             
             if stillParsingHeaders {
-                let components = line.bridge().swerver_componentsSeparatedByString(":").map {
-                    str in
-                    str.bridge().swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-                }
-                if components.count == 2 {
-                    headers[components[0]] = components[1]
+                let scanner = NSScanner(string: line)
+                
+                var key: NSString? = nil
+                if scanner.scanUpToString(":", intoString: &key), let key = key {
+                    let value = line.bridge().substringFromIndex(scanner.scanLocation + 1).swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+                    headers[key.bridge()] = value
                 }
             } else {
                 let trimmed = line.bridge().swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).bridge().stringByAppendingString("\n")

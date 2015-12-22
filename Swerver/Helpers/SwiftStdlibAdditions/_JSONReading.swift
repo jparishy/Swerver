@@ -162,6 +162,28 @@ extension NSJSONSerialization {
                         } else {
                             throw JSONError.UnexpectedToken(message: "Expected dictionary key.", location: scanner.scanLocation)
                         }
+                    } else if scanner.scanString("}", intoString: nil) {
+                        
+                        if let current = currentNode, dict = current.dictionaryValue where current.type == .Dictionary {
+                            if dict.count == 0 {
+                                current.closed = true
+                            } else {
+                                throw JSONError.UnexpectedToken(message: "Expected dictionary key, got '}'", location: scanner.scanLocation)
+                            }
+                        } else {
+                            throw JSONError.UnexpectedToken(message: "Expected dictionary key, got '}'", location: scanner.scanLocation)
+                        }
+                    } else if scanner.scanString("]", intoString: nil) {
+                        
+                        if let current = currentNode, array = current.arrayValue where current.type == .Array {
+                            if array.count == 0 {
+                                current.closed = true
+                            } else {
+                                throw JSONError.UnexpectedToken(message: "Expected dictionary key, got '}'", location: scanner.scanLocation)
+                            }
+                        } else {
+                            throw JSONError.UnexpectedToken(message: "Expected dictionary key, got '}'", location: scanner.scanLocation)
+                        }
                     } else {
                         throw JSONError.UnexpectedToken(message: "Expected dictionary key.", location: scanner.scanLocation)
                     }
@@ -444,7 +466,7 @@ private class JSONStringScanner {
     }
     
     var atEnd: Bool {
-        return scanLocation >= string.bridge().length - 1
+        return scanLocation >= string.bridge().length
     }
     
     init(string: String) {
@@ -519,7 +541,7 @@ private class JSONStringScanner {
         let inputLength = input.length
         let sstring = self.string.bridge()
         
-        if scanLocation + inputLength >= sstring.length {
+        if scanLocation + inputLength > sstring.length {
             return false
         }
         

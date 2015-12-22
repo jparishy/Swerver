@@ -16,7 +16,7 @@ enum ResourceAction {
     case Update
     case Delete
     case NamespaceIdentity
-    case Custom(path: String)
+    case Custom(path: String, handler: ControllerRequestHandler)
 }
 
 struct ResourceSubroute {
@@ -35,13 +35,17 @@ struct ResourceSubroute {
         self.init(method: method, action: action, pathComponents: nil)
     }
     
-    static func CRUD() -> [ResourceSubroute] {
-        return [
+    static func CRUD(extras: [ResourceSubroute] = []) -> [ResourceSubroute] {
+        var all = [
             ResourceSubroute(method: "GET",    action: .Index),
             ResourceSubroute(method: "POST",   action: .Create),
             ResourceSubroute(method: "PUT",    action: .Update),
             ResourceSubroute(method: "DELETE", action: .Delete),
         ]
+        
+        all += extras
+        
+        return all
     }
     
     internal func parameters() -> Parameters {
@@ -78,7 +82,7 @@ struct ResourceSubroute {
         return parameters
     }
     
-    private func matches(pathComponents: [String], method: String) -> Bool {
+    private func matches(fullPath: String, pathComponents: [String], method: String) -> Bool {
 
         let path: String
         
@@ -119,6 +123,9 @@ struct ResourceSubroute {
                 return false
             }
             
+        case .Custom(let customPath, _):
+            return (customPath == fullPath)
+            
         default:
             return false
         }
@@ -134,7 +141,6 @@ class Resource : Route {
     
     convenience init(name: String, controller: Controller, namespace: String? = nil) {
         self.init(name: name, controller: controller, subroutes: ResourceSubroute.CRUD(), namespace: namespace)
-        controller.resource = self
     }
     
     init(name: String, controller: Controller, subroutes: [ResourceSubroute], namespace: String? = nil) {
@@ -161,6 +167,8 @@ class Resource : Route {
         }
         
         super.init(routeProvider: controller, matchFunction: matchFunction)
+        
+        controller.resource = self
     }
     
     internal func subrouteForRequest(request: Request) -> ResourceSubroute? {
@@ -197,7 +205,7 @@ class Resource : Route {
             if let name = components.first where name == self.name {
                 let rest = [String](components.dropFirst(1))
                 for subroute in subroutes {
-                    if subroute.matches(rest, method: request.method) {
+                    if subroute.matches(request.path, pathComponents: rest, method: request.method) {
                         return ResourceSubroute(method: subroute.method, action: subroute.action, pathComponents: rest)
                     }
                 }

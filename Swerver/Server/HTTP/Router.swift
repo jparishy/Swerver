@@ -66,13 +66,62 @@ enum UserError : ErrorType {
     case Unimplemented
 }
 
-typealias Response = (statusCode: StatusCode, headers: Headers, responseData: ResponseData?)
+//typealias Response = (statusCode: StatusCode, headers: Headers, responseData: ResponseData?)
+
+struct Session {
+    static let CookieName = "_swerver_session"
+    internal var dictionary: [String:AnyObject] = [:]
+    
+    internal init?(JSONData: NSData) {
+        do {
+            if let JSON = try NSJSONSerialization.swerver_JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
+                dictionary = JSON.mutableCopy() as! [String:AnyObject]
+            } else {
+                return nil
+            }
+        } catch {
+            return nil
+        }
+    }
+    
+    init() { }
+    
+    mutating func update(key: String, _ value: AnyObject?) {
+        dictionary[key] = value ?? NSNull()
+    }
+    
+    mutating func merge(otherSession session: Session) {
+        for (k,v) in session.dictionary {
+            if v is NSNull {
+                dictionary.removeValueForKey(k)
+            } else {
+                dictionary[k] = v
+            }
+        }
+    }
+    
+    subscript(key: String) -> AnyObject? {
+        return dictionary[key]
+    }
+}
 
 struct Request {
     let method: String
     let path: String
     let headers: Headers
     let requestBody: NSData?
+}
+
+class Response {
+    let statusCode: StatusCode
+    let headers: Headers
+    let responseData: ResponseData?
+    
+    init(_ statusCode: StatusCode, headers: Headers = [:], responseData: ResponseData? = nil) {
+        self.statusCode = statusCode
+        self.headers = headers
+        self.responseData = responseData
+    }
 }
 
 extension Request : CustomStringConvertible {
@@ -173,43 +222,87 @@ func BuiltInResponse(code: StatusCode, publicDirectory dir: String) -> Response 
         case .NotFound:
             do {
                 let (file, headers) = try ResponseData.PublicFile("404.html", publicDirectory: dir)
-                return (code, headers, file)
+                return Response(code, headers: headers, responseData: file)
             } catch {
                 print("WARNING: 500.html Not Found.")
-                return (code, [:], nil)
+                return Response(code)
             }
         
         case .InternalServerError:
             do {
                 let (file, headers) = try ResponseData.PublicFile("500.html", publicDirectory: dir)
-                return (code, headers, file)
+                return Response(code, headers: headers, responseData: file)
             } catch {
                 print("WARNING: 500.html Not Found.")
-                return (code, [:], nil)
+                return Response(code)
             }
         
         default:
-            return (code, [:], nil)
+            return Response(code)
     }
 }
 
 struct Ok {
-    static func JSON(json: AnyObject) throws -> Response {
-        let data = try NSJSONSerialization.swerver_dataWithJSONObject(json, options: NSJSONWritingOptions(rawValue: 0))
-        return (.Ok, ["Content-Type" : "application/json"], ResponseData(data))
+    static func JSON(model: Model) throws -> Response {
+        let data = try NSJSONSerialization.swerver_dataWithJSONObject(try model.JSON(), options: NSJSONWritingOptions(rawValue: 0))
+        return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
+    }
+    
+    static func JSON(models: [Model]) throws -> Response {
+        let data = try NSJSONSerialization.swerver_dataWithJSONObject(try models.JSON(), options: NSJSONWritingOptions(rawValue: 0))
+        return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
+    }
+    
+    static func JSON(dictionary: NSDictionary) throws -> Response {
+        let data = try NSJSONSerialization.swerver_dataWithJSONObject(dictionary, options: NSJSONWritingOptions(rawValue: 0))
+        return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
+    }
+    
+    static func JSON(array: NSArray) throws -> Response {
+        let data = try NSJSONSerialization.swerver_dataWithJSONObject(array, options: NSJSONWritingOptions(rawValue: 0))
+        return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
 }
 
-enum ResponseFormat {
+enum ContentType {
+    case Unspecified
     case JSON
+    case URLEncoded
     case HTML
 }
 
-func RespondTo(request: Request, work: (ResponseFormat) throws -> Response) throws -> Response {
+func RespondToFormat(request: Request, work: (ContentType) throws -> Response) throws -> Response? {
     if let format = request.headers["Accept"] where format == "text/html" {
         return try work(.HTML)
     } else {
         return try work(.JSON)
+    }
+}
+
+func Respond(request: Request, _ allowedContentTypes: [ContentType] = [], work: (responseContentType: ContentType) throws -> Response?) throws -> Response {
+    
+    let requestType: ContentType
+    if let format = request.headers["Content-Type"] where format.bridge().rangeOfString("application/json").location != NSNotFound {
+        requestType = .JSON
+    } else {
+        requestType = .Unspecified
+    }
+    
+    if requestType != .Unspecified && allowedContentTypes.contains(requestType) == false {
+        return Response(.InvalidRequest)
+    }
+    
+    let responseType: ContentType
+    if let format = request.headers["Accept"] where format.bridge().rangeOfString("application/json").location != NSNotFound {
+        responseType = .JSON
+    } else {
+        responseType = .HTML
+    }
+    
+    if let response =  try work(responseContentType: responseType) {
+        return response
+    } else {
+        return Response(.InvalidRequest)
     }
 }
 
@@ -224,7 +317,7 @@ private class RedirectRouteProvider : RouteProvider {
     }
     
     func apply(request: Request) throws -> Response {
-        return (.MovedPermanently(to: to), [:], nil)
+        return Response(.MovedPermanently(to: to))
     }
 }
 
@@ -265,6 +358,10 @@ class PathRoute : Route {
         
         super.init(routeProvider: routeProvider, matchFunction: matchFunction)
     }
+    
+    class func root(to: String) -> Route {
+        return PathRoute(path: "/", routeProvider: Redirect(to))
+    }
 }
 
 class PublicFiles : Route {
@@ -296,14 +393,14 @@ class PublicFiles : Route {
             
             do {
                 let (file, headers) = try ResponseData.PublicFile(restOfPath.bridge(), publicDirectory: self.publicDirectory)
-                return (.Ok, headers, file)
+                return Response(.Ok, headers: headers, responseData: file)
             } catch {
                 return BuiltInResponse(.NotFound, publicDirectory: self.publicDirectory)
             }
         }
     }
     
-    init(publicDirectory dir: String, prefix: String = "" /* Root Level of URL */) {
+    init(directory dir: String, prefix: String = "" /* Root Level of URL */) {
     
         self.publicDirectory = dir
         self.prefix = prefix
@@ -340,6 +437,10 @@ class PublicFiles : Route {
 
 struct Router {
     let routes: [Route]
+    
+    init(_ routes: [Route]) {
+        self.routes = routes
+    }
     
     func route(request: Request) -> Route? {
         let route = routes.filter { $0.matches(request) }.first

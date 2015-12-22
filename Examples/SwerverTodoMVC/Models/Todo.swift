@@ -8,30 +8,20 @@
 
 import Foundation
 
-class Todo {
+class Todo : Model {
     required init() {
     }
-    
-    internal var transaction: Transaction? = nil
     
     let id = IntProperty(column: "id")
     
     let title = StringProperty(column: "title")
     let completed = BoolProperty(column: "completed")
-}
-
-extension Todo : CustomStringConvertible {
-    var description: String {
-        return "<Todo: id=\(id); text=\(title); completed=\(completed);>"
-    }
-}
-
-extension Todo : Model {
-    static var table: String {
+    
+    class override var table: String {
         return "todos"
     }
     
-    static var columns: [String] {
+    class override var columns: [String] {
         return [
             "id",
             "title",
@@ -39,15 +29,21 @@ extension Todo : Model {
         ]
     }
     
-    static var primaryKey: String {
+    class override var primaryKey: String {
         return "id"
     }
     
-    var properties: [BaseProperty] {
+    override var properties: [BaseProperty] {
         return [
             self.id,
             self.title,
             self.completed
         ]
+    }
+}
+
+extension Todo : CustomStringConvertible {
+    var description: String {
+        return "<Todo: id=\(id); text=\(title); completed=\(completed);>"
     }
 }

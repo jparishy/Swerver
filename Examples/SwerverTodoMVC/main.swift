@@ -9,20 +9,30 @@
 import Foundation
 
 #if os(Linux)
-import Glibc
+    import Glibc
 #endif
 
-class HelloProvider : RouteProvider {
-    func apply(request: Request) throws -> Response {
-        return  (.Ok, ["Content-Type":"text/html"], ResponseData("<html><body><h1>Hello World! This server is running Swift!</h1></body></html>"))
-    }
+Application.start {
+    app in
+    
+    let router = Router([
+        // General
+        PathRoute.root("/index.html"),
+        PublicFiles(directory: app.publicDirectory),
+        
+        // Resources
+        Resource(name: "todos", controller: TodosController(application: app), namespace: "api"),
+        Resource(name: "users", controller: UsersController(application: app)),
+        
+        // Using Application#resource allows for customizing the subroutes
+        app.resource("sessions") {
+            (c: SessionsController) -> [ResourceSubroute] in
+            return [
+                ResourceSubroute(method: "GET",  action: .Custom(path: "/sessions/sign_in",  handler: c.index)),
+                ResourceSubroute(method: "GET",  action: .Custom(path: "/sessions/sign_out", handler: c.signOut))
+            ]
+        }
+    ])
+    
+    return (port: 8080, router: router)
 }
-
-let router = Router(routes: [
-    PathRoute(path: "/",            routeProvider: Redirect("/index.html")),
-    Resource(name:  "todos",           controller: TodosController(), namespace: "api"),
-    PublicFiles(publicDirectory: "./Public")
-])
-
-let server = HTTPServer<HTTP11>(port: 8080, router: router)
-server.start()

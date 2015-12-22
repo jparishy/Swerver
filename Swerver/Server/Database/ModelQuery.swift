@@ -113,7 +113,7 @@ class ModelQuery<T : Model> {
         
         let rows = try self.transaction.query("SELECT * FROM \(T.table) ORDER BY \(T.primaryKey)")
         for row in rows {
-        
+            
             let m = T()
             for (k,v) in row {
                 if let p = ModelsMap(m.properties)[k] {
