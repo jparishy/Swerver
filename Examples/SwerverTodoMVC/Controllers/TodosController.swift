@@ -50,7 +50,7 @@ class TodosController : Controller {
             return builtin(.Ok)
         } else {
             let query = ModelQuery<Todo>(transaction: t)
-            let toDelete = try query.findWhere(["completed":true])
+            let toDelete = try query.findWhere(["completed": JSONBool(bool: true)])
             
             for m in toDelete {
                 try query.delete(NSNumber(integer: Int(m.id)))
