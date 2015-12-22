@@ -19,7 +19,6 @@
 		E8017EAC1C23A01600C75801 /* SessionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8017EAA1C23A01600C75801 /* SessionsController.swift */; };
 		E8017EAE1C23A02800C75801 /* SessionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8017EAD1C23A02800C75801 /* SessionViews.swift */; };
 		E8017EAF1C23A02800C75801 /* SessionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8017EAD1C23A02800C75801 /* SessionViews.swift */; };
-		E8017EB11C23AA7B00C75801 /* Cookie.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8017EB01C23AA7B00C75801 /* Cookie.swift */; };
 		E8017EB21C23AA7B00C75801 /* Cookie.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8017EB01C23AA7B00C75801 /* Cookie.swift */; };
 		E8017EB41C23B97300C75801 /* UsersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8017EB31C23B97300C75801 /* UsersController.swift */; };
 		E8017EB51C23B97300C75801 /* UsersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8017EB31C23B97300C75801 /* UsersController.swift */; };
@@ -52,6 +51,58 @@
 		E89968631C1D02110019B5B8 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF91C1CA21400B6536A /* JSON.swift */; };
 		E89968641C1D0BE80019B5B8 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CE2EF71C1CA20400B6536A /* String.swift */; };
 		E89968671C1D0C4E0019B5B8 /* _JSONReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89968651C1D0C4E0019B5B8 /* _JSONReading.swift */; };
+		E8F326A51C29EDA000EADF52 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730A1C1B7E9C00D3157E /* HTTP.swift */; };
+		E8F326A61C29EDA000EADF52 /* HTTP11.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730B1C1B7E9C00D3157E /* HTTP11.swift */; };
+		E8F326A71C29EDA000EADF52 /* HTTPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730C1C1B7E9C00D3157E /* HTTPServer.swift */; };
+		E8F326A81C29EDA000EADF52 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886730D1C1B7E9C00D3157E /* Router.swift */; };
+		E8F326A91C29EDA000EADF52 /* Cookie.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8017EB01C23AA7B00C75801 /* Cookie.swift */; };
+		E8F326AA1C29EDA900EADF52 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731C1C1B800A00D3157E /* Controller.swift */; };
+		E8F326AB1C29EDA900EADF52 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886731E1C1B806C00D3157E /* Resource.swift */; };
+		E8F326AC1C29EDB100EADF52 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673281C1B94CF00D3157E /* Database.swift */; };
+		E8F326AD1C29EDB100EADF52 /* ModelQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732F1C1BA7C400D3157E /* ModelQuery.swift */; };
+		E8F326AE1C29EDD000EADF52 /* TCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88673061C1B7E9C00D3157E /* TCPServer.swift */; };
+		E8F326AF1C29EDDA00EADF52 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886732A1C1BA55C00D3157E /* Model.swift */; };
+		E8F326B01C29EE4F00EADF52 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E021C27CBAB002077EB /* AES.swift */; };
+		E8F326B11C29EE4F00EADF52 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E031C27CBAB002077EB /* Array+Extension.swift */; };
+		E8F326B21C29EE4F00EADF52 /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E041C27CBAB002077EB /* ArraySliceUInt8+Bytes.swift */; };
+		E8F326B31C29EE4F00EADF52 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E051C27CBAB002077EB /* Authenticator.swift */; };
+		E8F326B41C29EE4F00EADF52 /* BitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E061C27CBAB002077EB /* BitExtension.swift */; };
+		E8F326B51C29EE4F00EADF52 /* BytesSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E071C27CBAB002077EB /* BytesSequence.swift */; };
+		E8F326B61C29EE4F00EADF52 /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E081C27CBAB002077EB /* ChaCha20.swift */; };
+		E8F326B71C29EE4F00EADF52 /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E091C27CBAB002077EB /* Cipher.swift */; };
+		E8F326B81C29EE4F00EADF52 /* CipherBlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E0A1C27CBAB002077EB /* CipherBlockMode.swift */; };
+		E8F326B91C29EE4F00EADF52 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E0B1C27CBAB002077EB /* CRC.swift */; };
+		E8F326BA1C29EE4F00EADF52 /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E0C1C27CBAB002077EB /* CSArrayType+Extensions.swift */; };
+		E8F326BB1C29EE4F00EADF52 /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E0E1C27CBAB002077EB /* AES+Foundation.swift */; };
+		E8F326BC1C29EE4F00EADF52 /* ArrayUInt8+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E0F1C27CBAB002077EB /* ArrayUInt8+Foundation.swift */; };
+		E8F326BD1C29EE4F00EADF52 /* ChaCha20+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E101C27CBAB002077EB /* ChaCha20+Foundation.swift */; };
+		E8F326BE1C29EE4F00EADF52 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E111C27CBAB002077EB /* NSData+Extension.swift */; };
+		E8F326BF1C29EE4F00EADF52 /* Rabbit+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E121C27CBAB002077EB /* Rabbit+Foundation.swift */; };
+		E8F326C01C29EE4F00EADF52 /* String+FoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E131C27CBAB002077EB /* String+FoundationExtension.swift */; };
+		E8F326C11C29EE4F00EADF52 /* Utils+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E141C27CBAB002077EB /* Utils+Foundation.swift */; };
+		E8F326C21C29EE4F00EADF52 /* Generics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E151C27CBAB002077EB /* Generics.swift */; };
+		E8F326C31C29EE4F00EADF52 /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E161C27CBAB002077EB /* Hash.swift */; };
+		E8F326C41C29EE4F00EADF52 /* HashProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E171C27CBAB002077EB /* HashProtocol.swift */; };
+		E8F326C51C29EE4F00EADF52 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E181C27CBAB002077EB /* HMAC.swift */; };
+		E8F326C61C29EE4F00EADF52 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E1A1C27CBAB002077EB /* IntegerConvertible.swift */; };
+		E8F326C71C29EE4F00EADF52 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E1B1C27CBAB002077EB /* IntExtension.swift */; };
+		E8F326C81C29EE4F00EADF52 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E1C1C27CBAB002077EB /* MD5.swift */; };
+		E8F326C91C29EE4F00EADF52 /* Multiplatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E1D1C27CBAB002077EB /* Multiplatform.swift */; };
+		E8F326CA1C29EE4F00EADF52 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E1E1C27CBAB002077EB /* Operators.swift */; };
+		E8F326CB1C29EE4F00EADF52 /* Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E1F1C27CBAB002077EB /* Padding.swift */; };
+		E8F326CC1C29EE4F00EADF52 /* PKCS5.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E201C27CBAB002077EB /* PKCS5.swift */; };
+		E8F326CD1C29EE4F00EADF52 /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E211C27CBAB002077EB /* PKCS7.swift */; };
+		E8F326CE1C29EE4F00EADF52 /* Poly1305.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E221C27CBAB002077EB /* Poly1305.swift */; };
+		E8F326CF1C29EE4F00EADF52 /* Rabbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E231C27CBAB002077EB /* Rabbit.swift */; };
+		E8F326D01C29EE4F00EADF52 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E241C27CBAB002077EB /* SHA1.swift */; };
+		E8F326D11C29EE4F00EADF52 /* SHA2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E251C27CBAB002077EB /* SHA2.swift */; };
+		E8F326D21C29EE4F00EADF52 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E261C27CBAB002077EB /* String+Extension.swift */; };
+		E8F326D31C29EE4F00EADF52 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E271C27CBAB002077EB /* UInt32Extension.swift */; };
+		E8F326D41C29EE4F00EADF52 /* UInt64Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E281C27CBAB002077EB /* UInt64Extension.swift */; };
+		E8F326D51C29EE4F00EADF52 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E291C27CBAB002077EB /* UInt8Extension.swift */; };
+		E8F326D61C29EE4F00EADF52 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E2A1C27CBAB002077EB /* Utils.swift */; };
+		E8F326D71C29EF1500EADF52 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FD64261C2903DB0037DFA5 /* Layout.swift */; };
+		E8F326D81C29EF3D00EADF52 /* Bridge.c in Sources */ = {isa = PBXBuildFile; fileRef = E88673151C1B7FC100D3157E /* Bridge.c */; };
 		E8FA6E3B1C27CBBE002077EB /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E021C27CBAB002077EB /* AES.swift */; };
 		E8FA6E3C1C27CBBE002077EB /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E031C27CBAB002077EB /* Array+Extension.swift */; };
 		E8FA6E3D1C27CBBE002077EB /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E041C27CBAB002077EB /* ArraySliceUInt8+Bytes.swift */; };
@@ -133,7 +184,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E8017E9A1C23966200C75801 /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		E8017E9A1C23966200C75801 /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Application.swift; path = ../../../Examples/SwerverTodoMVC/Application.swift; sourceTree = "<group>"; };
 		E8017E9D1C239A9700C75801 /* Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
 		E8017EA01C239C2500C75801 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		E8017EA71C239CD000C75801 /* TodoViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TodoViews.swift; path = Views/TodoViews.swift; sourceTree = "<group>"; };
@@ -164,7 +215,7 @@
 		E88CFA3B1C1E8C0E003F671C /* Todo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		E88CFA3D1C1E8C0E003F671C /* 404.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 404.html; sourceTree = "<group>"; };
 		E88CFA3E1C1E8C0E003F671C /* 500.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 500.html; sourceTree = "<group>"; };
-		E88CFA491C1E8C22003F671C /* TodoMC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TodoMC; sourceTree = BUILT_PRODUCTS_DIR; };
+		E88CFA491C1E8C22003F671C /* SwerverOrg */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwerverOrg; sourceTree = BUILT_PRODUCTS_DIR; };
 		E89968561C1D01650019B5B8 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E89968581C1D01650019B5B8 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		E899685A1C1D01650019B5B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -232,7 +283,7 @@
 		E8FA6E291C27CBAB002077EB /* UInt8Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UInt8Extension.swift; sourceTree = "<group>"; };
 		E8FA6E2A1C27CBAB002077EB /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E8FA6E2B1C27CBAB002077EB /* CryptoSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CryptoSwift.h; sourceTree = "<group>"; };
-		E8FD64261C2903DB0037DFA5 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Layout.swift; path = Views/Layout.swift; sourceTree = "<group>"; };
+		E8FD64261C2903DB0037DFA5 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Layout.swift; path = ../../../../Examples/SwerverTodoMVC/Views/Layout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,7 +310,6 @@
 				E8017EA71C239CD000C75801 /* TodoViews.swift */,
 				E8017EAD1C23A02800C75801 /* SessionViews.swift */,
 				E8017EB61C23B98700C75801 /* UserViews.swift */,
-				E8FD64261C2903DB0037DFA5 /* Layout.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -279,7 +329,7 @@
 			isa = PBXGroup;
 			children = (
 				E89968561C1D01650019B5B8 /* Tests.xctest */,
-				E88CFA491C1E8C22003F671C /* TodoMC */,
+				E88CFA491C1E8C22003F671C /* SwerverOrg */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -356,6 +406,7 @@
 		E88673181C1B7FCC00D3157E /* App */ = {
 			isa = PBXGroup;
 			children = (
+				E8017E9A1C23966200C75801 /* Application.swift */,
 				E88673271C1B94BF00D3157E /* Database */,
 				E88673191C1B7FF300D3157E /* Controllers */,
 				E886731A1C1B7FF300D3157E /* Models */,
@@ -387,6 +438,7 @@
 		E886731B1C1B7FF300D3157E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E8FD64261C2903DB0037DFA5 /* Layout.swift */,
 				E8017E9D1C239A9700C75801 /* Template.swift */,
 				E8017EA01C239C2500C75801 /* View.swift */,
 			);
@@ -420,7 +472,6 @@
 				E88CFA371C1E8C0E003F671C /* Controllers */,
 				E88CFA391C1E8C0E003F671C /* main.swift */,
 				E88CFA3C1C1E8C0E003F671C /* Public */,
-				E8017E9A1C23966200C75801 /* Application.swift */,
 			);
 			path = SwerverTodoMVC;
 			sourceTree = "<group>";
@@ -611,9 +662,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E88CFA481C1E8C22003F671C /* TodoMC */ = {
+		E88CFA481C1E8C22003F671C /* SwerverOrg */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E88CFA4D1C1E8C22003F671C /* Build configuration list for PBXNativeTarget "TodoMC" */;
+			buildConfigurationList = E88CFA4D1C1E8C22003F671C /* Build configuration list for PBXNativeTarget "SwerverOrg" */;
 			buildPhases = (
 				E88CFA451C1E8C22003F671C /* Sources */,
 				E88CFA461C1E8C22003F671C /* Frameworks */,
@@ -622,9 +673,9 @@
 			);
 			dependencies = (
 			);
-			name = TodoMC;
+			name = SwerverOrg;
 			productName = TodoMC;
-			productReference = E88CFA491C1E8C22003F671C /* TodoMC */;
+			productReference = E88CFA491C1E8C22003F671C /* SwerverOrg */;
 			productType = "com.apple.product-type.tool";
 		};
 		E89968551C1D01650019B5B8 /* Tests */ = {
@@ -681,7 +732,7 @@
 			projectRoot = "";
 			targets = (
 				E89968551C1D01650019B5B8 /* Tests */,
-				E88CFA481C1E8C22003F671C /* TodoMC */,
+				E88CFA481C1E8C22003F671C /* SwerverOrg */,
 			);
 		};
 /* End PBXProject section */
@@ -815,22 +866,73 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8F326A61C29EDA000EADF52 /* HTTP11.swift in Sources */,
 				E8017E9B1C23966200C75801 /* Application.swift in Sources */,
 				E89968671C1D0C4E0019B5B8 /* _JSONReading.swift in Sources */,
+				E8F326C71C29EE4F00EADF52 /* IntExtension.swift in Sources */,
+				E8F326C31C29EE4F00EADF52 /* Hash.swift in Sources */,
+				E8F326D61C29EE4F00EADF52 /* Utils.swift in Sources */,
+				E8F326AB1C29EDA900EADF52 /* Resource.swift in Sources */,
 				E8017EA11C239C2500C75801 /* View.swift in Sources */,
+				E8F326B31C29EE4F00EADF52 /* Authenticator.swift in Sources */,
+				E8F326C81C29EE4F00EADF52 /* MD5.swift in Sources */,
+				E8F326B61C29EE4F00EADF52 /* ChaCha20.swift in Sources */,
 				E807FCD21C1E726F00CCA3D5 /* _JSONWriting.swift in Sources */,
+				E8F326CB1C29EE4F00EADF52 /* Padding.swift in Sources */,
+				E8F326C61C29EE4F00EADF52 /* IntegerConvertible.swift in Sources */,
+				E8F326BD1C29EE4F00EADF52 /* ChaCha20+Foundation.swift in Sources */,
+				E8F326B81C29EE4F00EADF52 /* CipherBlockMode.swift in Sources */,
 				E8017E9E1C239A9700C75801 /* Template.swift in Sources */,
-				E8017EB11C23AA7B00C75801 /* Cookie.swift in Sources */,
+				E8F326B01C29EE4F00EADF52 /* AES.swift in Sources */,
+				E8F326C21C29EE4F00EADF52 /* Generics.swift in Sources */,
+				E8F326C51C29EE4F00EADF52 /* HMAC.swift in Sources */,
+				E8F326C91C29EE4F00EADF52 /* Multiplatform.swift in Sources */,
+				E8F326AA1C29EDA900EADF52 /* Controller.swift in Sources */,
+				E8F326D41C29EE4F00EADF52 /* UInt64Extension.swift in Sources */,
+				E8F326BB1C29EE4F00EADF52 /* AES+Foundation.swift in Sources */,
+				E8F326CD1C29EE4F00EADF52 /* PKCS7.swift in Sources */,
+				E8F326A81C29EDA000EADF52 /* Router.swift in Sources */,
+				E8F326A51C29EDA000EADF52 /* HTTP.swift in Sources */,
+				E8F326B11C29EE4F00EADF52 /* Array+Extension.swift in Sources */,
+				E8F326CA1C29EE4F00EADF52 /* Operators.swift in Sources */,
+				E8F326D71C29EF1500EADF52 /* Layout.swift in Sources */,
+				E8F326CE1C29EE4F00EADF52 /* Poly1305.swift in Sources */,
+				E8F326D31C29EE4F00EADF52 /* UInt32Extension.swift in Sources */,
 				E8017EA81C239CD000C75801 /* TodoViews.swift in Sources */,
+				E8F326B51C29EE4F00EADF52 /* BytesSequence.swift in Sources */,
+				E8F326A71C29EDA000EADF52 /* HTTPServer.swift in Sources */,
 				E8017EB71C23B98700C75801 /* UserViews.swift in Sources */,
+				E8F326C41C29EE4F00EADF52 /* HashProtocol.swift in Sources */,
+				E8F326D21C29EE4F00EADF52 /* String+Extension.swift in Sources */,
+				E8F326D51C29EE4F00EADF52 /* UInt8Extension.swift in Sources */,
 				E8017EAE1C23A02800C75801 /* SessionViews.swift in Sources */,
 				E8017EAB1C23A01600C75801 /* SessionsController.swift in Sources */,
+				E8F326D11C29EE4F00EADF52 /* SHA2.swift in Sources */,
 				E89968631C1D02110019B5B8 /* JSON.swift in Sources */,
 				E89968591C1D01650019B5B8 /* Tests.swift in Sources */,
 				E8017EB41C23B97300C75801 /* UsersController.swift in Sources */,
+				E8F326BE1C29EE4F00EADF52 /* NSData+Extension.swift in Sources */,
+				E8F326D81C29EF3D00EADF52 /* Bridge.c in Sources */,
+				E8F326B21C29EE4F00EADF52 /* ArraySliceUInt8+Bytes.swift in Sources */,
+				E8F326B71C29EE4F00EADF52 /* Cipher.swift in Sources */,
+				E8F326BA1C29EE4F00EADF52 /* CSArrayType+Extensions.swift in Sources */,
+				E8F326AD1C29EDB100EADF52 /* ModelQuery.swift in Sources */,
+				E8F326AF1C29EDDA00EADF52 /* Model.swift in Sources */,
 				E89968641C1D0BE80019B5B8 /* String.swift in Sources */,
+				E8F326C01C29EE4F00EADF52 /* String+FoundationExtension.swift in Sources */,
+				E8F326BC1C29EE4F00EADF52 /* ArrayUInt8+Foundation.swift in Sources */,
+				E8F326D01C29EE4F00EADF52 /* SHA1.swift in Sources */,
+				E8F326A91C29EDA000EADF52 /* Cookie.swift in Sources */,
+				E8F326C11C29EE4F00EADF52 /* Utils+Foundation.swift in Sources */,
+				E8F326B41C29EE4F00EADF52 /* BitExtension.swift in Sources */,
+				E8F326CC1C29EE4F00EADF52 /* PKCS5.swift in Sources */,
+				E8F326BF1C29EE4F00EADF52 /* Rabbit+Foundation.swift in Sources */,
+				E8F326AE1C29EDD000EADF52 /* TCPServer.swift in Sources */,
+				E8F326B91C29EE4F00EADF52 /* CRC.swift in Sources */,
 				E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */,
+				E8F326CF1C29EE4F00EADF52 /* Rabbit.swift in Sources */,
 				E89968621C1D01C30019B5B8 /* JSONTests.swift in Sources */,
+				E8F326AC1C29EDB100EADF52 /* Database.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,10 +1071,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					./Swerver/Server/Base,
+					/usr/include,
+					/usr/local/include,
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/usr/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-lpq",
+					"-luv",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jparishy.Tests;
+				PRODUCT_MODULE_NAME = Swerver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = ./Swerver/Helpers/BridgingHeader.h;
 			};
 			name = Debug;
 		};
@@ -980,10 +1097,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					./Swerver/Server/Base,
+					/usr/include,
+					/usr/local/include,
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/usr/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-lpq",
+					"-luv",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jparishy.Tests;
+				PRODUCT_MODULE_NAME = Swerver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = ./Swerver/Helpers/BridgingHeader.h;
 			};
 			name = Release;
 		};
@@ -999,7 +1131,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E88CFA4D1C1E8C22003F671C /* Build configuration list for PBXNativeTarget "TodoMC" */ = {
+		E88CFA4D1C1E8C22003F671C /* Build configuration list for PBXNativeTarget "SwerverOrg" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E88CFA4E1C1E8C22003F671C /* Debug */,

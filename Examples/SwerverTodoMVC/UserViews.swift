@@ -23,3 +23,16 @@ class UserIndexView : View {
         }
     }
 }
+
+class UserShowView : View {
+    convenience init(userID: Int) {
+        self.init {
+            t in
+            BootstrapLayout.render(t, activeTab: .Home) { t in
+                t.div(cssClass: "jumbotron") { t in
+                    t.h2("User: \(userID)")
+                }
+            }
+        }
+    }
+}

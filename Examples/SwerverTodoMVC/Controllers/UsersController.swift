@@ -16,4 +16,12 @@ class UsersController : Controller {
     override func create(request: Request, parameters: Parameters, session: Session, transaction t: Transaction) throws -> ControllerResponse {
         return builtin(.Ok)
     }
+    
+    override func show(request: Request, parameters: Parameters, session: Session, transaction t: Transaction) throws -> ControllerResponse {
+        if let param = parameters["id"] as? String, userID = Int(param) {
+            return view(UserShowView(userID: userID))
+        } else {
+            return builtin(.NotFound)
+        }
+    }
 }
