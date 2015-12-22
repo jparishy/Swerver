@@ -8,39 +8,47 @@
 
 import Foundation
 
-typealias Parameters = [String:AnyObject]
+public typealias Parameters = [String:AnyObject]
 
-enum ResourceAction {
+public enum ResourceAction {
     case Index
+    case Show
+    case New
     case Create
     case Update
     case Delete
     case NamespaceIdentity
-    case Custom(path: String, handler: ControllerRequestHandler)
+    case Custom(handler: ControllerRequestHandler)
 }
 
-struct ResourceSubroute {
-    let method: String
+public struct ResourceSubroute {
+    let method: HTTPMethod
     let action: ResourceAction
+    let path: String?
     
-    private let pathComponents: [String]?
+    let namespace: String?
+    let resourceName: String
     
-    private init(method: String, action: ResourceAction, pathComponents: [String]?) {
-        self.method = method
-        self.action = action
-        self.pathComponents = pathComponents
+    init(method: HTTPMethod, action: ResourceAction) {
+        self.init(method: method, path: nil, action: action)
     }
     
-    init(method: String, action: ResourceAction) {
-        self.init(method: method, action: action, pathComponents: nil)
+    init(method: HTTPMethod, path: String?, action: ResourceAction, resourceName: String = "", namespace: String? = nil) {
+        self.method = method
+        self.action = action
+        self.path = path
+        self.resourceName = resourceName
+        self.namespace = namespace
     }
     
     static func CRUD(extras: [ResourceSubroute] = []) -> [ResourceSubroute] {
         var all = [
-            ResourceSubroute(method: "GET",    action: .Index),
-            ResourceSubroute(method: "POST",   action: .Create),
-            ResourceSubroute(method: "PUT",    action: .Update),
-            ResourceSubroute(method: "DELETE", action: .Delete),
+            ResourceSubroute(method: .GET,    path: nil,   action: .Index),
+            ResourceSubroute(method: .GET,    path: ":id", action: .Show),
+            ResourceSubroute(method: .GET,    path: "new", action: .New),
+            ResourceSubroute(method: .POST,   path: nil,   action: .Create),
+            ResourceSubroute(method: .PUT,    path: ":id", action: .Update),
+            ResourceSubroute(method: .DELETE, path: ":id", action: .Delete),
         ]
         
         all += extras
@@ -48,91 +56,77 @@ struct ResourceSubroute {
         return all
     }
     
-    internal func parameters() -> Parameters {
-        var parameters = Parameters()
-        
-        if let pathComponents = pathComponents {
-            let path: String
-            
-            if pathComponents.count == 0 {
-                path = ""
-            } else {
-                if let first = pathComponents.first {
-                    if first == "/" {
-                        path = ""
-                    } else {
-                        path = first
-                    }
-                } else {
-                    path = ""
-                }
+    private var fullPath: String {
+        if let path: NSString = self.path?.bridge() where path.hasPrefix("/") {
+            return path.bridge()
+        } else {
+            var fullPath = "/"
+            if let ns = namespace {
+                fullPath += "\(ns)/"
             }
             
-            switch action {
-            case .Update, .Delete:
-                if let id = Int(path) {
-                    parameters["id"] = NSNumber(integer: id)
-                }
-                
-            default:
-                break
+            fullPath += "\(resourceName)"
+            
+            if let path = path {
+                fullPath += "/\(path)"
             }
+            
+            return fullPath
         }
-        
-        return parameters
     }
     
-    private func matches(fullPath: String, pathComponents: [String], method: String) -> Bool {
-
+    private func matches(path inPath: String, method: HTTPMethod) -> Bool {
+        return matchForParameters(path: inPath, method: method).0
+    }
+    
+    public func parameters(request: Request) -> Parameters? {
+        return matchForParameters(path: request.path, method: request.method).1
+    }
+    
+    private func matchForParameters(path inPath: String, method: HTTPMethod) -> (Bool, Parameters?) {
+        
+        if method != self.method {
+            return (false, nil)
+        }
+        
         let path: String
-        
-        if pathComponents.count == 0 {
-            path = ""
+        if inPath.hasSuffix("/") {
+            path = inPath.substringWithRange(inPath.startIndex..<inPath.endIndex.advancedBy(-1))
         } else {
-            if let first = pathComponents.first {
-                if first == "/" {
-                    path = ""
-                } else {
-                    path = first
-                }
+            path = inPath
+        }
+        
+        let fullPath = self.fullPath
+        
+        let requestComponents = path.componentsSeparatedByString("/")
+        let selfComponents = fullPath.componentsSeparatedByString("/")
+        
+        if requestComponents.count != selfComponents.count {
+            return (false, nil)
+        }
+        
+        var parameters = Parameters()
+        
+        for (r, s) in zip(requestComponents, selfComponents) {
+            
+            if s.hasPrefix(":") {
+                
+                let key = s.substringFromIndex(s.startIndex.advancedBy(1))
+                let value = r
+                parameters[key] = value
+                
             } else {
-                path = ""
+                if r != s {
+                    return (false, nil)
+                }
             }
         }
         
-        switch action {
-        case .Index:
-            return (path == "") && (method == "GET")
-            
-        case .Create:
-            return (path == "") && (method == "POST")
-            
-        case .Update:
-            if let _ = Int(path) {
-                return (method == "PUT")
-            } else {
-                return false
-            }
-            
-        case .Delete:
-            if let _ = Int(path) {
-                return (method == "DELETE")
-            } else if path == "" {
-                return true
-            } else {
-                return false
-            }
-            
-        case .Custom(let customPath, _):
-            return (customPath == fullPath)
-            
-        default:
-            return false
-        }
+        return (true, parameters)
     }
 }
 
-class Resource : Route {
+public class Resource : Route {
     
     let name: String
     let namespace: String?
@@ -146,8 +140,13 @@ class Resource : Route {
     init(name: String, controller: Controller, subroutes: [ResourceSubroute], namespace: String? = nil) {
         self.name = name
         self.namespace = namespace
+        
         self.controller = controller
-        self.subroutes = subroutes
+        
+        self.subroutes = subroutes.map {
+            sr in
+            return ResourceSubroute(method: sr.method, path: sr.path, action: sr.action, resourceName: name, namespace: namespace)
+        }
         
         let matchFunction = {
             (route: Route, request: Request) -> Bool in
@@ -183,35 +182,19 @@ class Resource : Route {
                 return nil
             } else {
                 if namespace == URLString {
-                    return ResourceSubroute(method: request.method, action: .NamespaceIdentity)
+                    return ResourceSubroute(method: request.method, path: "/", action: .NamespaceIdentity)
                 } else {
                     URLString = URLString.substringFromIndex(namespace.length).bridge()
                 }
             }
         }
         
-        if let URL = NSURL(string: URLString.bridge()), allComponents = URL.pathComponents {
-            let components: [String]
-            if let first = allComponents.first where first == "/" {
-                components = [String](allComponents.dropFirst(1))
-                } else {
-                components = allComponents
-            }
-            
-            if components.count == 0 {
-                return nil
-            }
-            
-            if let name = components.first where name == self.name {
-                let rest = [String](components.dropFirst(1))
-                for subroute in subroutes {
-                    if subroute.matches(request.path, pathComponents: rest, method: request.method) {
-                        return ResourceSubroute(method: subroute.method, action: subroute.action, pathComponents: rest)
-                    }
-                }
+        for subroute in subroutes {
+            if subroute.matches(path: request.path, method: request.method) {
+                return subroute
             }
         }
-    
+        
         return nil
     }
 }

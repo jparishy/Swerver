@@ -68,7 +68,7 @@ enum UserError : ErrorType {
 
 //typealias Response = (statusCode: StatusCode, headers: Headers, responseData: ResponseData?)
 
-struct Session {
+public struct Session {
     static let CookieName = "_swerver_session"
     internal var dictionary: [String:AnyObject] = [:]
     
@@ -105,14 +105,14 @@ struct Session {
     }
 }
 
-struct Request {
-    let method: String
+public struct Request {
+    let method: HTTPMethod
     let path: String
     let headers: Headers
     let requestBody: NSData?
 }
 
-class Response {
+public class Response {
     let statusCode: StatusCode
     let headers: Headers
     let responseData: ResponseData?
@@ -125,7 +125,7 @@ class Response {
 }
 
 extension Request : CustomStringConvertible {
-    var description: String {
+    public var description: String {
         return "<Reqest: method=\(method); path=\(path); numberOfHeaders=\(headers.count); requestLength=\(requestBody?.length ?? 0)>"
     }
 }
@@ -325,7 +325,7 @@ func Redirect(to: String) -> RouteProvider {
     return RedirectRouteProvider(to: to)
 }
 
-class Route {
+public class Route {
     let routeProvider: RouteProvider
     
     typealias MatchFunction = ((Route, Request) -> (Bool))
