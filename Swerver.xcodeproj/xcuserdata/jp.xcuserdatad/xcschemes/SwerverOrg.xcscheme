@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E88CFA481C1E8C22003F671C"
-               BuildableName = "TodoMC"
-               BlueprintName = "TodoMC"
+               BuildableName = "SwerverOrg"
+               BlueprintName = "SwerverOrg"
                ReferencedContainer = "container:Swerver.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E88CFA481C1E8C22003F671C"
-            BuildableName = "TodoMC"
-            BlueprintName = "TodoMC"
+            BuildableName = "SwerverOrg"
+            BlueprintName = "SwerverOrg"
             ReferencedContainer = "container:Swerver.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -57,11 +57,18 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E88CFA481C1E8C22003F671C"
-            BuildableName = "TodoMC"
-            BlueprintName = "TodoMC"
+            BuildableName = "SwerverOrg"
+            BlueprintName = "SwerverOrg"
             ReferencedContainer = "container:Swerver.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "SWERVER_ORG_SECRET"
+            value = "WS92ATvTO5EemIbpoKaFvKWj3g+8J2o="
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -76,8 +83,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E88CFA481C1E8C22003F671C"
-            BuildableName = "TodoMC"
-            BlueprintName = "TodoMC"
+            BuildableName = "SwerverOrg"
+            BlueprintName = "SwerverOrg"
             ReferencedContainer = "container:Swerver.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

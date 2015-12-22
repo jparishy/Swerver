@@ -31,10 +31,10 @@ class HTTP11 : HTTPVersion {
         if let lines = dataString?.bridge().swerver_componentsSeparatedByString("\n") {
             if let first = lines.first {
                 let parts = first.bridge().swerver_componentsSeparatedByString(" ")
-                if parts.count == 3 {
+                if parts.count == 3, let method = HTTPMethod.fromString(parts[0]) {
                     let rest = Array(lines.dropFirst())
                     let (headers, requestBody) = parseHeadersAndBodyFromRestOfLines(rest)
-                    return Request(method: parts[0], path: parts[1], headers: headers, requestBody: requestBody)
+                    return Request(method: method, path: parts[1], headers: headers, requestBody: requestBody)
                 }
             }
         }

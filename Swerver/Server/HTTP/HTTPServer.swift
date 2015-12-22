@@ -11,6 +11,18 @@ import Foundation
 let SwerverName = "Swerver"
 let SwerverVersion = "1.0"
 
+enum HTTPMethod : String {
+    case GET    = "GET"
+    case POST   = "POST"
+    case PUT    = "PUT"
+    case DELETE = "DELETE"
+    case HEAD   = "HEAD"
+    
+    static func fromString(str: String) -> HTTPMethod? {
+        return HTTPMethod(rawValue: str.uppercaseString)
+    }
+}
+
 class HTTPServer<HTTP: HTTPVersion> : TCPServer {
     
     let port: Int
