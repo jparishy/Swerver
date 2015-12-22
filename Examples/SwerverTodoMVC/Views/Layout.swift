@@ -16,8 +16,8 @@ enum Tab {
     var href: String {
         switch self {
         case .Home: return "/"
-        case .About: return "/"
-        case .Contributing: return "/"
+        case .About: return "/about"
+        case .Contributing: return "/contributing"
         }
     }
     
@@ -61,6 +61,8 @@ class BootstrapLayout {
                     "integrity"   : "sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS",
                     "crossorigin" : "anonymous"
                 ])
+                
+                t.str("<style>body{padding-top:20px;padding-bottom:20xp;}.navbar{margin-bottom:20px;</style>")
             }
             
             t.body { t in

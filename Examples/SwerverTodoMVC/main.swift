@@ -19,14 +19,19 @@ Application.start(ApplicationSecret, databaseConfiguration: DatabaseConfiguratio
     app in
     
     let router = Router([
-        // General
-        PathRoute.root("/index.html"),
-        PublicFiles(directory: app.publicDirectory),
-        
         // Resources
         Resource(name: "users", controller: UsersController(application: app)),
         
         // Using Application#resource allows for customizing the subroutes
+        app.resource("pages") {
+            (c: PagesController) -> [ResourceSubroute] in
+            return [
+                ResourceSubroute(method: .GET, path: "/",  action: .Custom(handler: c.home)),
+                ResourceSubroute(method: .GET, path: "/about", action: .Custom(handler: c.about)),
+                ResourceSubroute(method: .GET, path: "/contributing", action: .Custom(handler: c.contributing))
+            ]
+        },
+        
         app.resource("sessions") {
             (c: SessionsController) -> [ResourceSubroute] in
             return [
@@ -40,7 +45,10 @@ Application.start(ApplicationSecret, databaseConfiguration: DatabaseConfiguratio
             return [
                 ResourceSubroute(method: .DELETE, action: .Custom(handler: c.delete)) // Angular app also expects `DELETE /api/todos` to work
             ]
-        }
+        },
+        
+        // General
+        PublicFiles(directory: app.publicDirectory),
     ])
     
     return (port: 8080, router: router)
