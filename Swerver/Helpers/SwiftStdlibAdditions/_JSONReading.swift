@@ -401,7 +401,7 @@ extension NSJSONSerialization {
                                 continue
                             }
                         
-                        } else if scanner.scanLocation != scanner.string.bridge().length - 1 {
+                        } else if scanner.atEnd == false {
                             throw JSONError.UnexpectedToken(message: "Unexpected end of context.", location: scanner.scanLocation)
                         }
                     } else {
@@ -466,6 +466,7 @@ private class JSONStringScanner {
     }
     
     var atEnd: Bool {
+        advance()
         return scanLocation >= string.bridge().length
     }
     
@@ -479,10 +480,10 @@ private class JSONStringScanner {
         
         var outScanLocation = self.scanLocation
         for i in (self.scanLocation..<sstring.length) {
-            if whitespace.characterIsMember(sstring.characterAtIndex(i)) {
+            if whitespace.characterIsMember(sstring.characterAtIndex(i)) || sstring.characterAtIndex(i) == 0 {
+                outScanLocation = i + 1
                 continue
             } else {
-                outScanLocation = i
                 break
             }
         }
@@ -551,7 +552,11 @@ private class JSONStringScanner {
             if result != nil {
                 result.memory = string.bridge()
             }
+            
             _scanLocation = scanLocation + inputLength
+            
+            advance()
+            
             return true
         }
         
@@ -585,6 +590,8 @@ private class JSONStringScanner {
             }
             
             _scanLocation = endOfInt
+            
+            advance()
             
             return true
         }
@@ -625,6 +632,8 @@ private class JSONStringScanner {
             }
             
             _scanLocation = endOfDouble
+            
+            advance()
             
             return true
         }
