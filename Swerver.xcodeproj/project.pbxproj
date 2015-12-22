@@ -103,6 +103,10 @@
 		E8F326D61C29EE4F00EADF52 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E2A1C27CBAB002077EB /* Utils.swift */; };
 		E8F326D71C29EF1500EADF52 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FD64261C2903DB0037DFA5 /* Layout.swift */; };
 		E8F326D81C29EF3D00EADF52 /* Bridge.c in Sources */ = {isa = PBXBuildFile; fileRef = E88673151C1B7FC100D3157E /* Bridge.c */; };
+		E8F326DC1C29F69700EADF52 /* PageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F326DB1C29F69700EADF52 /* PageViews.swift */; };
+		E8F326DD1C29F72B00EADF52 /* PagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F326D91C29F66300EADF52 /* PagesController.swift */; };
+		E8F326DE1C29F73C00EADF52 /* PageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F326DB1C29F69700EADF52 /* PageViews.swift */; };
+		E8F326DF1C29F73D00EADF52 /* PagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F326D91C29F66300EADF52 /* PagesController.swift */; };
 		E8FA6E3B1C27CBBE002077EB /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E021C27CBAB002077EB /* AES.swift */; };
 		E8FA6E3C1C27CBBE002077EB /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E031C27CBAB002077EB /* Array+Extension.swift */; };
 		E8FA6E3D1C27CBBE002077EB /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E041C27CBAB002077EB /* ArraySliceUInt8+Bytes.swift */; };
@@ -223,6 +227,8 @@
 		E89968651C1D0C4E0019B5B8 /* _JSONReading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _JSONReading.swift; sourceTree = "<group>"; };
 		E8CE2EF71C1CA20400B6536A /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		E8CE2EF91C1CA21400B6536A /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		E8F326D91C29F66300EADF52 /* PagesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagesController.swift; sourceTree = "<group>"; };
+		E8F326DB1C29F69700EADF52 /* PageViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PageViews.swift; path = Views/PageViews.swift; sourceTree = "<group>"; };
 		E8FA6DEA1C27CBAB002077EB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E8FA6DEB1C27CBAB002077EB /* build-frameworks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "build-frameworks.sh"; sourceTree = "<group>"; };
 		E8FA6DEC1C27CBAB002077EB /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
@@ -310,6 +316,7 @@
 				E8017EA71C239CD000C75801 /* TodoViews.swift */,
 				E8017EAD1C23A02800C75801 /* SessionViews.swift */,
 				E8017EB61C23B98700C75801 /* UserViews.swift */,
+				E8F326DB1C29F69700EADF52 /* PageViews.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -479,6 +486,7 @@
 		E88CFA371C1E8C0E003F671C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E8F326D91C29F66300EADF52 /* PagesController.swift */,
 				E88CFA381C1E8C0E003F671C /* TodosController.swift */,
 				E8017EAA1C23A01600C75801 /* SessionsController.swift */,
 				E8017EB31C23B97300C75801 /* UsersController.swift */,
@@ -816,6 +824,7 @@
 				E88CFA571C1E8C35003F671C /* Controller.swift in Sources */,
 				E8FA6E411C27CBBE002077EB /* ChaCha20.swift in Sources */,
 				E8017EA21C239C2500C75801 /* View.swift in Sources */,
+				E8F326DD1C29F72B00EADF52 /* PagesController.swift in Sources */,
 				E8FA6E551C27CBBE002077EB /* Operators.swift in Sources */,
 				E8FA6E541C27CBBE002077EB /* Multiplatform.swift in Sources */,
 				E8FA6E621C27CD49002077EB /* String+Extension.swift in Sources */,
@@ -839,6 +848,7 @@
 				E88CFA611C1E8C35003F671C /* JSON.swift in Sources */,
 				E8FA6E511C27CBBE002077EB /* IntegerConvertible.swift in Sources */,
 				E8FA6E641C27CD4E002077EB /* ArrayUInt8+Foundation.swift in Sources */,
+				E8F326DE1C29F73C00EADF52 /* PageViews.swift in Sources */,
 				E88CFA5D1C1E8C35003F671C /* HTTP11.swift in Sources */,
 				E8FA6E5E1C27CBBE002077EB /* UInt32Extension.swift in Sources */,
 				E88CFA511C1E8C35003F671C /* main.swift in Sources */,
@@ -910,9 +920,11 @@
 				E8F326D11C29EE4F00EADF52 /* SHA2.swift in Sources */,
 				E89968631C1D02110019B5B8 /* JSON.swift in Sources */,
 				E89968591C1D01650019B5B8 /* Tests.swift in Sources */,
+				E8F326DF1C29F73D00EADF52 /* PagesController.swift in Sources */,
 				E8017EB41C23B97300C75801 /* UsersController.swift in Sources */,
 				E8F326BE1C29EE4F00EADF52 /* NSData+Extension.swift in Sources */,
 				E8F326D81C29EF3D00EADF52 /* Bridge.c in Sources */,
+				E8F326DC1C29F69700EADF52 /* PageViews.swift in Sources */,
 				E8F326B21C29EE4F00EADF52 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				E8F326B71C29EE4F00EADF52 /* Cipher.swift in Sources */,
 				E8F326BA1C29EE4F00EADF52 /* CSArrayType+Extensions.swift in Sources */,

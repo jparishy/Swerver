@@ -90,7 +90,7 @@ public struct ResourceSubroute {
         }
         
         let path: String
-        if inPath.hasSuffix("/") {
+        if inPath.hasSuffix("/") && inPath != "/" {
             path = inPath.substringWithRange(inPath.startIndex..<inPath.endIndex.advancedBy(-1))
         } else {
             path = inPath

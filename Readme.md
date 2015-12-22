@@ -8,106 +8,43 @@ It is currently very much a work in progress, but it's coming along nicely so I 
 
 Swerver's TCP handling is based on libuv's C API. An HTTP Server is built upon that, and routing lives above there. I try to make the directory structure reflect what parts of the code are doing what.
 
-# Hello World
-This is what a hello world looks like in Swerver.
+# What it looks like
 
 ```
+//
+//  main.swift
+//  Swerver
+//
+//  Created by Julius Parishy on 12/4/15.
+//  Copyright © 2015 Julius Parishy. All rights reserved.
+//
+
 import Foundation
 
-class HelloProvider : RouteProvider {
-    func apply(request: Request) throws -> Response {
-        return  (.Ok, ["Content-Type":"text/html"], ResponseData("<html><body><h1>Hello World! This server is running Swift!</h1></body></html>"))
-    }
-}
+#if os(Linux)
+    import Glibc
+#endif
 
-let router = Router(routes: [
-    PathRoute(path: "/", routeProvider: HelloProvider()),
-])
+let ApplicationSecret: String = NSProcessInfo.processInfo().environment["SWERVER_ORG_SECRET"]!
+assert(ApplicationSecret.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 32, "Invalid Application Secret. You should set a 32-character secret in the Debug Scheme or in your shell environment with the name: SWERVER_ORG_SECRET")
 
-let server = HTTPServer<HTTP11>(port: 8080, router: router)
-server.start()
-
-```
-
-And a more complicated example the test app inside of the Swerver codebase.
-
-```
-import Foundation
-
-class NotesController : Controller {
-    override func index(request: Request) throws -> Response {
-        do {
-            let db = try connect()
-            return try db.transaction {
-                t in
-                
-                let query = ModelQuery<Note>(transaction: t)
-                let results = try query.all()
-                
-                t.commit()
-                
-                do {
-                    return try RespondTo(request) {
-                        (format: ResponseFormat) throws -> Response in
-                        switch format {
-                        case .HTML:
-                            return (.Ok, [:], nil)
-                        case .JSON:
-                            let dicts = try JSONDictionariesFromModels(results)
-                            let data = try NSJSONSerialization.swerver_dataWithJSONObject(dicts, options: NSJSONWritingOptions(rawValue: 0))
-                            return (.Ok, ["Content-Type":"application/json"], ResponseData.Data(data))
-                        }
-                    }
-                } catch {
-                    return (.InternalServerError, [:], nil)
-                }
-            }
-        } catch {
-            return (.InternalServerError, [:], nil)
-        }
-    }
+Application.start(ApplicationSecret, databaseConfiguration: DatabaseConfiguration(username: "jp", password: "password", databaseName: "notes")) {
+    app in
     
-    override func create(request: Request) throws -> Response {
-        if let JSON = try parse(request) as? NSDictionary {
-            do {
-                let db = try connect()
-                return try db.transaction {
-                    t in
-                    
-                    let query = ModelQuery<Note>(transaction: t)
-
-                    let model: Note = try ModelFromJSONDictionary(JSON)
-                    try query.insert(model)
-                    
-                    t.commit()
-                    
-                    return (.Ok, [:], nil)
-                }
-            } catch {
-                return (.InternalServerError, [:], nil)
-            }
-        } else {
-            return (.InvalidRequest, [:], nil)
-        }
-    }
+    let router = Router([
+        app.resource("todos", namespace: "api") {
+            (c: TodosController) -> [ResourceSubroute] in
+            return [
+                ResourceSubroute(method: .DELETE, action: .Custom(handler: c.delete)) // Angular app also expects `DELETE /api/todos` to work
+            ]
+        },
+        
+        // General
+        PublicFiles(directory: app.publicDirectory),
+    ])
+    
+    return (port: 8080, router: router)
 }
-
-class HelloProvider : RouteProvider {
-    func apply(request: Request) throws -> Response {
-        return  (.Ok, ["Content-Type":"text/html"], ResponseData("<html><body><h1>Hello World! This server is running Swift!</h1></body></html>"))
-    }
-}
-
-let router = Router(routes: [
-    PathRoute(path: "/",            routeProvider: Redirect("/hello_world")),
-    PathRoute(path: "/hello_world", routeProvider: HelloProvider()),
-    Resource(name:  "notes",           controller: NotesController()),
-    PublicFiles(prefix: "public")
-])
-
-let server = HTTPServer<HTTP11>(port: 8080, router: router)
-server.start()
-
 ```
 
 #### Goals:
