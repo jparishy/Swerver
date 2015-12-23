@@ -78,8 +78,7 @@ class TCPServer {
 #if os(Linux)
 
     private func handleAlloc(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t) -> uv_buf_t {
-        let memory: UnsafeMutablePointer<Int8> = unsafeBitCast(malloc(size), UnsafeMutablePointer<Int8>.self)
-        memset(memory, 0, Int(size))
+        let memory: UnsafeMutablePointer<Int8> = unsafeBitCast(calloc(size, 1), UnsafeMutablePointer<Int8>.self)
         return uv_buf_init(memory, UInt32(size))
     }
     
@@ -98,7 +97,7 @@ class TCPServer {
             
             let bytes = data.bytes
             let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(bytes)
-            outBuf.memory = uv_buf_init(memory, UInt32(data.length))
+            outBuf.initialize(uv_buf_init(memory, UInt32(data.length)))
             
             let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
             write.memory.data = unsafeBitCast(self, UnsafeMutablePointer<Void>.self)
@@ -113,41 +112,85 @@ class TCPServer {
 #else
 
     private func handleAlloc(handle: UnsafeMutablePointer<uv_handle_t>, size: size_t, buf: UnsafeMutablePointer<uv_buf_t>) {
-        let memory: UnsafeMutablePointer<Int8> = unsafeBitCast(malloc(size), UnsafeMutablePointer<Int8>.self)
-        memset(memory, 0, Int(size))
-        buf.memory = uv_buf_init(memory, UInt32(size))
+        let memory: UnsafeMutablePointer<Int8> = unsafeBitCast(calloc(size, 1), UnsafeMutablePointer<Int8>.self)
+        buf.initialize(uv_buf_init(memory, UInt32(size)))
+    }
+    
+    private struct RequestResponseStruct {
+        let tcpServer: TCPServer
+        let requestData: NSData
+        let stream: UnsafeMutablePointer<uv_stream_t>
+    }
+    
+    private struct WriteStruct {
+        let tcpServer: TCPServer
+        let buffer: UnsafeMutablePointer<uv_buf_t>
     }
     
     private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: UnsafePointer<uv_buf_t>) {
         if let string = String(CString: buf.memory.base, encoding: NSUTF8StringEncoding) {
             
             let cString = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
-            let bytes = UnsafePointer<Int8>(cString)
+            let bytes = UnsafeMutablePointer<Int8>(cString)
             let data = NSData(bytes: bytes, length: string.bridge().swerver_lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
             
-            let response = processRequest(data)
-            if let response = response {
+            let rr = UnsafeMutablePointer<RequestResponseStruct>.alloc(1)
+            rr.initialize(RequestResponseStruct(tcpServer: self, requestData: data, stream: stream))
             
-                let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
-                
-                let responseBytes = response.bytes
-                let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(responseBytes)
-                outBuf.memory = uv_buf_init(memory, UInt32(response.length))
-                
-                let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
-                write.memory.data = unsafeBitCast(self, UnsafeMutablePointer<Void>.self)
-                
-                uv_write(write, stream, outBuf, 1, _write_cb)
-            }
+            let work = UnsafeMutablePointer<uv_work_t>.alloc(1)
+            work.memory.data = unsafeBitCast(rr, UnsafeMutablePointer<Void>.self)
+            
+            uv_queue_work(self.loop, work, _work_cb, nil)
         }
         
-        uv_read_stop(stream)
         free(buf.memory.base)
+        uv_read_stop(stream)
     }
     
-#endif
+    func handleWork(work: UnsafeMutablePointer<uv_work_t>) {
+        let rr = unsafeBitCast(work.memory.data, UnsafeMutablePointer<TCPServer.RequestResponseStruct>.self)
+        let data = rr.memory.requestData
+        
+        let response = processRequest(data)
+        if let response = response {
+            
+            let outBuf = UnsafeMutablePointer<uv_buf_t>.alloc(1)
+            
+            let responseBytes = response.bytes
+            let memory: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(responseBytes)
+            outBuf.initialize(uv_buf_init(memory, UInt32(response.length)))
+            
+            let wd = UnsafeMutablePointer<WriteStruct>.alloc(1)
+            wd.initialize(WriteStruct(tcpServer: self, buffer: outBuf))
+            
+            let write = UnsafeMutablePointer<uv_write_t>.alloc(1)
+            write.memory.data = unsafeBitCast(wd, UnsafeMutablePointer<Void>.self)
+            
+            uv_write(write, rr.memory.stream, outBuf, 1, _write_cb)
+        }
+        
+        rr.destroy()
+        rr.dealloc(1)
+        
+        work.destroy()
+        work.dealloc(1)
+    }
+    
+    #endif
     
     private func handleWrite(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
+        
+        let wd = unsafeBitCast(write.memory.data, UnsafeMutablePointer<TCPServer.WriteStruct>.self)
+        let buf = wd.memory.buffer
+        
+        free(buf.memory.base)
+        
+        buf.destroy()
+        buf.dealloc(1)
+        
+        wd.destroy()
+        wd.dealloc(1)
+        
         let stream = write.memory.handle
         uv_close(cast_stream_to_handle(stream), nil)
     }
@@ -187,7 +230,8 @@ private func _read_cb(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, 
 }
 
 private func _write_cb(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
-    let tcpServer = unsafeBitCast(write.memory.data, TCPServer.self)
+    let wd = unsafeBitCast(write.memory.data, UnsafeMutablePointer<TCPServer.WriteStruct>.self)
+    let tcpServer = wd.memory.tcpServer
     tcpServer.handleWrite(write, status: status)
 }
 
@@ -204,11 +248,18 @@ private func _read_cb(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, 
 }
 
 private func _write_cb(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
-    let tcpServer = unsafeBitCast(write.memory.data, TCPServer.self)
+    let wd = unsafeBitCast(write.memory.data, UnsafeMutablePointer<TCPServer.WriteStruct>.self)
+    let tcpServer = wd.memory.tcpServer
     tcpServer.handleWrite(write, status: status)
 }
 
 #endif
+
+private func _work_cb(work: UnsafeMutablePointer<uv_work_t>) {
+    let rr = unsafeBitCast(work.memory.data, UnsafeMutablePointer<TCPServer.RequestResponseStruct>.self)
+    let tcpServer = rr.memory.tcpServer
+    tcpServer.handleWork(work)
+}
 
 private func _connection_cb(server: UnsafeMutablePointer<uv_stream_t>, status: Int32) {
     let tcpServer = unsafeBitCast(server.memory.loop.memory.data, TCPServer.self)
