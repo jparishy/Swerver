@@ -42,16 +42,16 @@ public struct ResourceSubroute {
     }
     
     static func CRUD(extras: [ResourceSubroute] = []) -> [ResourceSubroute] {
-        var all = [
-            ResourceSubroute(method: .GET,    path: nil,   action: .Index),
-            ResourceSubroute(method: .GET,    path: ":id", action: .Show),
+        var all = extras
+        
+        all += [
             ResourceSubroute(method: .GET,    path: "new", action: .New),
+            ResourceSubroute(method: .GET,    path: nil,   action: .Index),
             ResourceSubroute(method: .POST,   path: nil,   action: .Create),
+            ResourceSubroute(method: .GET,    path: ":id", action: .Show),
             ResourceSubroute(method: .PUT,    path: ":id", action: .Update),
             ResourceSubroute(method: .DELETE, path: ":id", action: .Delete),
         ]
-        
-        all += extras
         
         return all
     }
@@ -85,10 +85,6 @@ public struct ResourceSubroute {
     
     private func matchForParameters(path inPath: String, method: HTTPMethod) -> (Bool, Parameters?) {
         
-        if method != self.method {
-            return (false, nil)
-        }
-        
         let path: String
         if inPath.hasSuffix("/") && inPath != "/" {
             path = inPath.substringWithRange(inPath.startIndex..<inPath.endIndex.advancedBy(-1))
@@ -100,6 +96,10 @@ public struct ResourceSubroute {
         
         let requestComponents = path.componentsSeparatedByString("/")
         let selfComponents = fullPath.componentsSeparatedByString("/")
+        
+        if method != self.method {
+            return (false, nil)
+        }
         
         if requestComponents.count != selfComponents.count {
             return (false, nil)
@@ -171,23 +171,6 @@ public class Resource : Route {
     }
     
     internal func subrouteForRequest(request: Request) -> ResourceSubroute? {
-        
-        var URLString = request.path.bridge()
-        if URLString.length > 0 && Character(UnicodeScalar(URLString.characterAtIndex(0))) == Character("/") {
-            URLString = URLString.substringFromIndex(1).bridge()
-        }
-        
-        if let namespace: NSString = self.namespace?.bridge() {
-            if URLString.hasPrefix(namespace.bridge()) == false {
-                return nil
-            } else {
-                if namespace == URLString {
-                    return ResourceSubroute(method: request.method, path: "/", action: .NamespaceIdentity)
-                } else {
-                    URLString = URLString.substringFromIndex(namespace.length).bridge()
-                }
-            }
-        }
         
         for subroute in subroutes {
             if subroute.matches(path: request.path, method: request.method) {
