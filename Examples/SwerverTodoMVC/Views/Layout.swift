@@ -38,6 +38,9 @@ class BootstrapLayout {
     static func render(t: Template.Renderer, activeTab: Tab, inside: (Template.Renderer) -> ()) {
         t.html { t in
             t.head { t in
+                
+                t.tag("title", contents: activeTab.title)
+                
                 t.link(attrs: [
                     "rel"         : "stylesheet",
                     "href"        : "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css",

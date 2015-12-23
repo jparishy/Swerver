@@ -107,6 +107,7 @@
 		E8F326DD1C29F72B00EADF52 /* PagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F326D91C29F66300EADF52 /* PagesController.swift */; };
 		E8F326DE1C29F73C00EADF52 /* PageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F326DB1C29F69700EADF52 /* PageViews.swift */; };
 		E8F326DF1C29F73D00EADF52 /* PagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F326D91C29F66300EADF52 /* PagesController.swift */; };
+		E8F326E11C2A54A300EADF52 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F326E01C2A54A300EADF52 /* User.swift */; };
 		E8FA6E3B1C27CBBE002077EB /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E021C27CBAB002077EB /* AES.swift */; };
 		E8FA6E3C1C27CBBE002077EB /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E031C27CBAB002077EB /* Array+Extension.swift */; };
 		E8FA6E3D1C27CBBE002077EB /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA6E041C27CBAB002077EB /* ArraySliceUInt8+Bytes.swift */; };
@@ -229,6 +230,7 @@
 		E8CE2EF91C1CA21400B6536A /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		E8F326D91C29F66300EADF52 /* PagesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagesController.swift; sourceTree = "<group>"; };
 		E8F326DB1C29F69700EADF52 /* PageViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PageViews.swift; path = Views/PageViews.swift; sourceTree = "<group>"; };
+		E8F326E01C2A54A300EADF52 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E8FA6DEA1C27CBAB002077EB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E8FA6DEB1C27CBAB002077EB /* build-frameworks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "build-frameworks.sh"; sourceTree = "<group>"; };
 		E8FA6DEC1C27CBAB002077EB /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
@@ -498,6 +500,7 @@
 			isa = PBXGroup;
 			children = (
 				E88CFA3B1C1E8C0E003F671C /* Todo.swift */,
+				E8F326E01C2A54A300EADF52 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -848,6 +851,7 @@
 				E88CFA611C1E8C35003F671C /* JSON.swift in Sources */,
 				E8FA6E511C27CBBE002077EB /* IntegerConvertible.swift in Sources */,
 				E8FA6E641C27CD4E002077EB /* ArrayUInt8+Foundation.swift in Sources */,
+				E8F326E11C2A54A300EADF52 /* User.swift in Sources */,
 				E8F326DE1C29F73C00EADF52 /* PageViews.swift in Sources */,
 				E88CFA5D1C1E8C35003F671C /* HTTP11.swift in Sources */,
 				E8FA6E5E1C27CBBE002077EB /* UInt32Extension.swift in Sources */,

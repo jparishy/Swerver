@@ -9,7 +9,7 @@
 import Foundation
 
 class PageHomeView : View {
-    convenience init() {
+    convenience init(user: User?) {
         self.init {
             t in
             BootstrapLayout.render(t, activeTab: .Home) { t in
@@ -18,6 +18,10 @@ class PageHomeView : View {
                     t.h4("An MVC Framework for Web Apps & APIs in Swift")
                     
                     t.tag("hr")
+                    
+                    if let user = user {
+                        t.p("You are logged in as: \(user.email.value())")
+                    }
                 }
             }
         }

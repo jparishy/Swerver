@@ -9,19 +9,28 @@
 import Foundation
 
 class SessionIndexView : View {
-    convenience init(username: String?) {
+    convenience init(user: User?) {
         self.init {
             t in
             t.html { t in
                 t.body { t in
-                    if let username = username {
-                        t.h1("Signed in as \(username)!")
-                        t.a("/sessions/sign_out", contents: "Sign Out")
+                    if let user = user {
+                        t.h1("Signed in as \(user.email.value())!")
+                        t.a("/sign_out", contents: "Sign Out")
                     } else {
                         t.h1("Sign In", attrs: ["style":"font-size: 2.5em"])
+                        
+                        if t.flash.count > 0 {
+                            for (k,v) in t.flash {
+                                t.div(cssClass: "flash flash-\(k)") { t in
+                                    t.p(v)
+                                }
+                            }
+                        }
+                        
                         t.form("/sessions") { t in
-                            t.label("Username:")
-                            t.text_field("username")
+                            t.label("Email:")
+                            t.text_field("email")
                             t.label("Password:")
                             t.secure_text_field("password")
                             t.submit("Sign In")
