@@ -22,6 +22,12 @@ class Template {
             return _string
         }
         
+        let flash: [String:String]
+        
+        init(flash: [String:String] = [:]) {
+            self.flash = flash
+        }
+        
         func str(str: String) {
             _string += str;
         }
@@ -56,7 +62,7 @@ class Template {
             
             let innerString: String
             if let inner = inner {
-                let innerRenderer = Renderer()
+                let innerRenderer = Renderer(flash: flash)
                 inner(innerRenderer)
                 innerString = innerRenderer.result
             } else {
@@ -167,8 +173,8 @@ class Template {
         }
     }
     
-    static func render(renderFunc: (Renderer) -> ()) -> String {
-        let renderer = Renderer()
+    static func render(flash: [String:String] = [:], renderFunc: (Renderer) -> ()) -> String {
+        let renderer = Renderer(flash: flash)
         renderFunc(renderer)
     
         return renderer.result

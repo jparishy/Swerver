@@ -16,18 +16,18 @@ class View : Template {
         super.init()
     }
     
-    func render() -> String {
-        return Template.render(renderFunc)
+    func render(flash: [String:String] = [:]) -> String {
+        return Template.render(flash, renderFunc: renderFunc)
     }
     
-    static func response(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:]) -> Response {
+    static func response(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:], flash: [String:String] = [:]) -> Response {
         
         var allHeaders = headers
         if allHeaders["Content-Type"] == nil {
             allHeaders["Content-Type"] = "text/html"
         }
         
-        return Response(statusCode, headers: allHeaders, responseData: ResponseData(view.render()))
+        return Response(statusCode, headers: allHeaders, responseData: ResponseData(view.render(flash)))
     }
 }
 

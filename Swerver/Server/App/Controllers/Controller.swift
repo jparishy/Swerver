@@ -247,8 +247,8 @@ class Controller : RouteProvider {
         return ControllerResponse(response.statusCode, headers: response.headers, responseData: response.responseData)
     }
     
-    func view(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:]) -> ControllerResponse {
-        let response = View.response(view, statusCode: statusCode, headers: headers)
+    func view(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:], flash: [String:String] = [:]) -> ControllerResponse {
+        let response = View.response(view, statusCode: statusCode, headers: headers, flash: flash)
         return ControllerResponse(response.statusCode, headers: response.headers, responseData: response.responseData)
     }
     
