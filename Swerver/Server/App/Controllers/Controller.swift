@@ -242,9 +242,9 @@ class Controller : RouteProvider {
         return ControllerResponse(.MovedPermanently(to: to), headers: headers, session: session)
     }
     
-    func builtin(statusCode: StatusCode) -> ControllerResponse {
+    func builtin(statusCode: StatusCode, session: Session = Session()) -> ControllerResponse {
         let response = BuiltInResponse(statusCode, publicDirectory: self.application.publicDirectory)
-        return ControllerResponse(response.statusCode, headers: response.headers, responseData: response.responseData)
+        return ControllerResponse(response.statusCode, headers: response.headers, session: session, responseData: response.responseData)
     }
     
     func view(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:], flash: [String:String] = [:]) -> ControllerResponse {
