@@ -51,12 +51,22 @@ public struct ResourceSubroute {
             ResourceSubroute(method: .GET,    path: ":id", action: .Show),
             ResourceSubroute(method: .PUT,    path: ":id", action: .Update),
             ResourceSubroute(method: .DELETE, path: ":id", action: .Delete),
+            ResourceSubroute(method: .GET,    path: nil,   action: .NamespaceIdentity)
         ]
         
         return all
     }
     
     private var fullPath: String {
+        switch action {
+        case .NamespaceIdentity:
+            if let namespace = namespace {
+                return "/\(namespace)"
+            }
+        default:
+            break
+        }
+        
         if let path: NSString = self.path?.bridge() where path.hasPrefix("/") {
             return path.bridge()
         } else {
@@ -171,7 +181,7 @@ public class Resource : Route {
     }
     
     internal func subrouteForRequest(request: Request) -> ResourceSubroute? {
-        
+    
         for subroute in subroutes {
             if subroute.matches(path: request.path, method: request.method) {
                 return subroute
