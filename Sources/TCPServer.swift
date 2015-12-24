@@ -169,12 +169,9 @@ public class TCPServer {
             
             uv_write(write, rr.memory.stream, outBuf, 1, _write_cb)
         }
-        /*
+        
         rr.destroy()
         rr.dealloc(1)
-        
-        work.destroy()
-        work.dealloc(1) */
     }
     
     #endif
