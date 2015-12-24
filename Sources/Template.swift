@@ -22,7 +22,7 @@ public class Template {
             return _string
         }
         
-        let flash: [String:String]
+        public let flash: [String:String]
         
         init(flash: [String:String] = [:]) {
             self.flash = flash
