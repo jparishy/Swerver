@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Swerver.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>Tests.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -33,6 +38,31 @@
 			<true/>
 		</dict>
 		<key>E89968551C1D01650019B5B8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E8F4DD701C2B9B240056B30A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E8F4DDE51C2B9CD20056B30A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E8F4DDF21C2B9D090056B30A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E8F4DDFB1C2B9D260056B30A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E8F4DE081C2B9D310056B30A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
