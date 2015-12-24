@@ -12,14 +12,14 @@ import Foundation
 import Glibc
 #endif
 
-class ModelQuery<T : Model> {
-    let transaction: Transaction
+public class ModelQuery<T : Model> {
+    public let transaction: Transaction
     
-    init(transaction: Transaction) {
+    public init(transaction: Transaction) {
         self.transaction = transaction
     }
     
-    func insert(m: T) throws -> T {
+    public func insert(m: T) throws -> T {
         var query = "INSERT INTO \(T.table)("
         
         var index = 0
@@ -71,7 +71,7 @@ class ModelQuery<T : Model> {
         return m
     }
     
-    func update(m: T) throws -> T {
+    public func update(m: T) throws -> T {
         let primaryKey = m.dynamicType.primaryKey
         if let primaryKeyValue = try ModelsMap(m.properties)[primaryKey]?.databaseValueForWriting() {
             var query = "UPDATE \(m.dynamicType.table) SET "
@@ -99,19 +99,19 @@ class ModelQuery<T : Model> {
         return m
     }
     
-    func delete(primaryKeyValue: AnyObject) throws {
+    public func delete(primaryKeyValue: AnyObject) throws {
         if let pk = primaryKeyValue as? NSNumber {
             let query = "DELETE FROM \(T.table) WHERE \(T.primaryKey) = \(pk.integerValue);"
             try transaction.command(query)
         }
     }
     
-    func deleteAll() throws {
+    public func deleteAll() throws {
         let query = "DELETE FROM \(T.table);"
         try transaction.command(query)
     }
     
-    func all() throws -> [T] {
+    public func all() throws -> [T] {
         
         var results = [T]()
         
@@ -133,7 +133,7 @@ class ModelQuery<T : Model> {
         return results
     }
     
-    func findWhere(params: [String:AnyObject]) throws -> [T] {
+    public func findWhere(params: [String:AnyObject]) throws -> [T] {
         
         var query = "SELECT * FROM \(T.table)"
         
