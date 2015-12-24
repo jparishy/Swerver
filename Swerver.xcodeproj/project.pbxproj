@@ -13,6 +13,7 @@
 		E8F4DCA41C2B80700056B30A /* _JSONWriting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F4DC6D1C2B7DA90056B30A /* _JSONWriting.swift */; };
 		E8F4DCA51C2B80700056B30A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F4DC791C2B7DA90056B30A /* String.swift */; };
 		E8F4DCA61C2B807B0056B30A /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F4DC741C2B7DA90056B30A /* JSON.swift */; };
+		E8F4DCF51C2B89BE0056B30A /* Multiplatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F4DCF41C2B89BE0056B30A /* Multiplatform.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		E8F4DC7C1C2B7DA90056B30A /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		E8F4DC8E1C2B7E310056B30A /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		E8F4DC901C2B7FEA0056B30A /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		E8F4DCF41C2B89BE0056B30A /* Multiplatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Multiplatform.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				E8F4DC6D1C2B7DA90056B30A /* _JSONWriting.swift */,
 				E8F4DC741C2B7DA90056B30A /* JSON.swift */,
 				E8F4DC791C2B7DA90056B30A /* String.swift */,
+				E8F4DCF41C2B89BE0056B30A /* Multiplatform.swift */,
 			);
 			name = "Swift Stdlib Additions";
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 			files = (
 				E807FCD11C1E721100CCA3D5 /* StringTests.swift in Sources */,
 				E89968621C1D01C30019B5B8 /* JSONTests.swift in Sources */,
+				E8F4DCF51C2B89BE0056B30A /* Multiplatform.swift in Sources */,
 				E8F4DCA51C2B80700056B30A /* String.swift in Sources */,
 				E8F4DCA61C2B807B0056B30A /* JSON.swift in Sources */,
 				E8F4DCA41C2B80700056B30A /* _JSONWriting.swift in Sources */,
