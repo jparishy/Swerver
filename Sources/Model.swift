@@ -142,21 +142,21 @@ public class BoolProperty : Property<Bool> {
     }
 }
 
-extension Bool {
-    init(_ boolProperty: BoolProperty) {
+public extension Bool {
+    public init(_ boolProperty: BoolProperty) {
         self.init(boolProperty.value())
     }
 }
 
 public class Model {
     public required init() {}
-    class var table: String { get { return "" } }
-    class var columns: [String] { get { return [] } }
-    class var primaryKey: String { get { return "" } }
-    var properties: [BaseProperty] { get { return [] } }
+    public class var table: String { get { return "" } }
+    public class var columns: [String] { get { return [] } }
+    public class var primaryKey: String { get { return "" } }
+    public var properties: [BaseProperty] { get { return [] } }
     var transaction: Transaction? { get { return nil } }
     
-    func JSON() throws -> NSDictionary {
+    public func JSON() throws -> NSDictionary {
         return try JSONDictionaryFromModel(self)
     }
 }

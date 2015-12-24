@@ -10,14 +10,14 @@ import Foundation
 import CryptoSwift
 
 public class ControllerResponse : Response {
-    let session: Session
+    public let session: Session
     
-    init(_ response: Response) {
+    public init(_ response: Response) {
         session = Session()
         super.init(response.statusCode, headers: response.headers, responseData: response.responseData)
     }
     
-    init(_ statusCode: StatusCode, headers: Headers = [:], responseData: ResponseData? = nil, session: Session = Session()) {
+    public init(_ statusCode: StatusCode, headers: Headers = [:], responseData: ResponseData? = nil, session: Session = Session()) {
         self.session = session
         super.init(statusCode, headers: headers, responseData: responseData)
     }
