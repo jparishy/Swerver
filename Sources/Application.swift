@@ -9,9 +9,9 @@
 import Foundation
 
 public struct DatabaseConfiguration {
-    let username: String
-    let password: String
-    let databaseName: String
+    public let username: String
+    public let password: String
+    public let databaseName: String
 }
 
 public class Application {
