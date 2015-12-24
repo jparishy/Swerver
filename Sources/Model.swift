@@ -40,14 +40,14 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
         self.internalValue = initialValue
     }
     
-    func update(value: T) -> T {
+    public func update(value: T) -> T {
         internalValue = value
         _dirty = true
         
         return internalValue
     }
     
-    func value() -> T {
+    public func value() -> T {
         return internalValue
     }
     
@@ -77,7 +77,7 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
 }
 
 public class StringProperty : Property<String> {
-    init(column: String) {
+    public init(column: String) {
         super.init(column: column, initialValue: "")
     }
     
@@ -94,14 +94,14 @@ public class StringProperty : Property<String> {
     }
 }
 
-extension String {
-    init(_ stringProperty: StringProperty) {
+public extension String {
+    public init(_ stringProperty: StringProperty) {
         self.init(stringProperty.value())
     }
 }
 
 public class IntProperty : Property<Int> {
-    init(column: String) {
+    public init(column: String) {
         super.init(column: column, initialValue: 0)
     }
     
@@ -118,14 +118,14 @@ public class IntProperty : Property<Int> {
     }
 }
 
-extension Int {
-    init(_ intProperty: IntProperty) {
+public extension Int {
+    public init(_ intProperty: IntProperty) {
         self.init(intProperty.value())
     }
 }
 
 public class BoolProperty : Property<Bool> {
-    init(column: String) {
+    public init(column: String) {
         super.init(column: column, initialValue: false)
     }
     
@@ -162,7 +162,7 @@ public class Model {
 }
 
 public extension SequenceType where Generator.Element == Model {
-    func JSON() throws -> NSArray {
+    public func JSON() throws -> NSArray {
         let models = Array(self)
         return try JSONDictionariesFromModels(models)
     }
