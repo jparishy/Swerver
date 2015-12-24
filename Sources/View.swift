@@ -8,19 +8,19 @@
 
 import Foundation
 
-class View : Template {
-    let renderFunc: (Renderer) -> ()
+public class View : Template {
+    public let renderFunc: (Renderer) -> ()
     
-    init(renderFunc: (Renderer) -> ()) {
+    public init(renderFunc: (Renderer) -> ()) {
         self.renderFunc = renderFunc
         super.init()
     }
     
-    func render(flash: [String:String] = [:]) -> String {
+    public func render(flash: [String:String] = [:]) -> String {
         return Template.render(flash, renderFunc: renderFunc)
     }
     
-    static func response(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:], flash: [String:String] = [:]) -> Response {
+    public static func response(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:], flash: [String:String] = [:]) -> Response {
         
         var allHeaders = headers
         if allHeaders["Content-Type"] == nil {

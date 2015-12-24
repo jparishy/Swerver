@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Cookie {
+public struct Cookie {
     let name: String
     let value: String
     
@@ -45,7 +45,7 @@ struct Cookie {
 }
 
 extension Cookie : CustomStringConvertible {
-    var description: String {
+    public var description: String {
         return "<Cookie: name=\"\(name)\" value=\"\(value)\">"
     }
 }

@@ -12,10 +12,10 @@ import Foundation
 import Glibc
 #endif
 
-class HTTP11 : HTTPVersion {
+public class HTTP11 : HTTPVersion {
     let dataString: String?
     
-    required init(rawRequest: NSData) {
+    public required init(rawRequest: NSData) {
 #if os(Linux)
 	if let bytes = NSString(bytes: rawRequest.bytes, length: rawRequest.length, encoding: NSUTF8StringEncoding)?.swerver_cStringUsingEncoding(NSUTF8StringEncoding) {
 		dataString = String(bytes.map { b in Character(UnicodeScalar(b)) })
@@ -27,7 +27,7 @@ class HTTP11 : HTTPVersion {
 #endif
     }
     
-    func request() -> Request? {
+    public func request() -> Request? {
         if let lines = dataString?.bridge().swerver_componentsSeparatedByString("\n") {
             if let first = lines.first {
                 let parts = first.bridge().swerver_componentsSeparatedByString(" ")
@@ -77,7 +77,7 @@ class HTTP11 : HTTPVersion {
         return (headers, data)
     }
     
-    func response(statusCode: StatusCode, headers: Headers, data: NSData?) -> NSData {
+    public func response(statusCode: StatusCode, headers: Headers, data: NSData?) -> NSData {
     
         var output = ""
         output += "HTTP/1.1 \(statusCode.statusCodeString)\n"

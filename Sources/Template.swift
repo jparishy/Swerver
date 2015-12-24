@@ -8,15 +8,15 @@
 
 import Foundation
 
-class Template {
+public class Template {
     
     internal var parent: Template?
     
-    enum Error : ErrorType {
+    public enum Error : ErrorType {
         case NoParentContext
     }
     
-    class Renderer {
+    public class Renderer {
         private var _string: String = ""
         private var result: String {
             return _string
@@ -28,11 +28,11 @@ class Template {
             self.flash = flash
         }
         
-        func str(str: String) {
+        public func str(str: String) {
             _string += str;
         }
         
-        func tag(tag: String, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, shouldClose: Bool = true, inner: ((Renderer) -> ())? = nil) {
+        public func tag(tag: String, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, shouldClose: Bool = true, inner: ((Renderer) -> ())? = nil) {
             
             var allAttrs = attrs ?? [:]
             
@@ -75,61 +75,61 @@ class Template {
             str("<" + tag + attrsString + ">" + contentsString + innerString + close)
         }
         
-        func html(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func html(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("html", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func head(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func head(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("head", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func link(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func link(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("link", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner, shouldClose: false)
         }
         
-        func script(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func script(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("script", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func body(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func body(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("body", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func h1(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func h1(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("h1", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func h2(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func h2(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("h2", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func h3(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func h3(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("h3", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func h4(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func h4(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("h4", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func h5(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func h5(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("h5", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func p(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func p(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("p", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func div(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func div(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("div", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func a(href: String, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func a(href: String, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             var allAttrs = attrs ?? [:]
             allAttrs["href"] = href
             tag("a", contents: contents, cssClass: cssClass, attrs: allAttrs, inner: inner)
         }
         
-        func form(action: String, method: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func form(action: String, method: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             var allAttrs = attrs ?? [:]
             allAttrs["action"] = action
             allAttrs["method"] = method ?? "post"
@@ -137,11 +137,11 @@ class Template {
             tag("form", contents: contents, cssClass: cssClass, attrs: allAttrs, inner: inner)
         }
         
-        func label(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func label(contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             tag("label", contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func input(type: String, name: String?, value: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func input(type: String, name: String?, value: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             var allAttrs = attrs ?? [:]
             allAttrs["type"] = type
             
@@ -156,24 +156,20 @@ class Template {
             tag("input", contents: contents, cssClass: cssClass, attrs: allAttrs, inner: inner)
         }
         
-        func text_field(name: String, value: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func text_field(name: String, value: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             input("text", name: name, value: value, contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func secure_text_field(name: String, value: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func secure_text_field(name: String, value: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             input("password", name: name, value: value, contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
         }
         
-        func submit(value: String? = nil, name: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
+        public func submit(value: String? = nil, name: String? = nil, contents: String? = nil, cssClass: String? = nil, attrs: [String:String]? = nil, inner: ((Renderer) -> ())? = nil) {
             input("submit", name: name, value: value, contents: contents, cssClass: cssClass, attrs: attrs, inner: inner)
-        }
-        
-        func renderChild(view: View) {
-        
         }
     }
     
-    static func render(flash: [String:String] = [:], renderFunc: (Renderer) -> ()) -> String {
+    public static func render(flash: [String:String] = [:], renderFunc: (Renderer) -> ()) -> String {
         let renderer = Renderer(flash: flash)
         renderFunc(renderer)
     

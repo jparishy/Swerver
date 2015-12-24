@@ -25,19 +25,19 @@ public class ControllerResponse : Response {
 
 public typealias ControllerRequestHandler = (request: Request, parameters: Parameters, session: Session, transaction: Transaction) throws -> ControllerResponse
 
-class Controller : RouteProvider {
+public class Controller : RouteProvider {
     
     internal weak var resource: Resource! = nil
     internal weak var application: Application! = nil
     
-    required init() {
+    public required init() {
     }
     
-    init(application app: Application) {
+    public init(application app: Application) {
         application = app
     }
     
-    func apply(request: Request) throws /* UserError, InternalServerError */ -> Response {
+    public func apply(request: Request) throws /* UserError, InternalServerError */ -> Response {
         do {
             if let subroute = resource?.subrouteForRequest(request) {
                 
@@ -166,27 +166,27 @@ class Controller : RouteProvider {
         }
     }
     
-    func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    func show(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func show(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    func new(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func new(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    func create(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func create(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    func update(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func update(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    func delete(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func delete(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
@@ -239,26 +239,25 @@ class Controller : RouteProvider {
         return parameters
     }
     
-    func redirect(to to: String, headers: Headers = [:], session: Session = Session()) throws -> ControllerResponse {
+    public func redirect(to to: String, headers: Headers = [:], session: Session = Session()) throws -> ControllerResponse {
         return ControllerResponse(.MovedPermanently(to: to), headers: headers, session: session)
     }
     
-    func builtin(statusCode: StatusCode, session: Session = Session()) -> ControllerResponse {
+    public func builtin(statusCode: StatusCode, session: Session = Session()) -> ControllerResponse {
         let response = BuiltInResponse(statusCode, publicDirectory: self.application.publicDirectory)
         return ControllerResponse(response.statusCode, headers: response.headers, session: session, responseData: response.responseData)
     }
     
-    func view(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:], flash: [String:String] = [:]) -> ControllerResponse {
+    public func view(view: View, statusCode: StatusCode = .Ok, headers: Headers = [:], flash: [String:String] = [:]) -> ControllerResponse {
         let response = View.response(view, statusCode: statusCode, headers: headers, flash: flash)
         return ControllerResponse(response.statusCode, headers: response.headers, responseData: response.responseData)
     }
     
-    func respond(request: Request, _ allowedContentTypes: [ContentType] = [], work: (responseContentType: ContentType) throws -> Response?) throws -> ControllerResponse {
+    public func respond(request: Request, _ allowedContentTypes: [ContentType] = [], work: (responseContentType: ContentType) throws -> Response?) throws -> ControllerResponse {
         return ControllerResponse(try Respond(request, allowedContentTypes, work: work))
     }
     
-    
-    func connect() throws -> Database {
+    public func connect() throws -> Database {
         let db = self.application.databaseConfiguration
         return try Database(databaseName: db.databaseName, username: db.username, password: db.password)
     }

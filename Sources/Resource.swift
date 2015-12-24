@@ -22,18 +22,18 @@ public enum ResourceAction {
 }
 
 public struct ResourceSubroute {
-    let method: HTTPMethod
-    let action: ResourceAction
-    let path: String?
+    public let method: HTTPMethod
+    public let action: ResourceAction
+    public let path: String?
     
-    let namespace: String?
-    let resourceName: String
+    public let namespace: String?
+    public let resourceName: String
     
-    init(method: HTTPMethod, action: ResourceAction) {
+    public init(method: HTTPMethod, action: ResourceAction) {
         self.init(method: method, path: nil, action: action)
     }
     
-    init(method: HTTPMethod, path: String?, action: ResourceAction, resourceName: String = "", namespace: String? = nil) {
+    public init(method: HTTPMethod, path: String?, action: ResourceAction, resourceName: String = "", namespace: String? = nil) {
         self.method = method
         self.action = action
         self.path = path
@@ -41,7 +41,7 @@ public struct ResourceSubroute {
         self.namespace = namespace
     }
     
-    static func CRUD(extras: [ResourceSubroute] = []) -> [ResourceSubroute] {
+    public static func CRUD(extras: [ResourceSubroute] = []) -> [ResourceSubroute] {
         var all = extras
         
         all += [
@@ -133,11 +133,11 @@ public class Resource : Route {
     let controller: Controller
     let subroutes: [ResourceSubroute]
     
-    convenience init(name: String, controller: Controller, namespace: String? = nil) {
+    public convenience init(name: String, controller: Controller, namespace: String? = nil) {
         self.init(name: name, controller: controller, subroutes: ResourceSubroute.CRUD(), namespace: namespace)
     }
     
-    init(name: String, controller: Controller, subroutes: [ResourceSubroute], namespace: String? = nil) {
+    public init(name: String, controller: Controller, subroutes: [ResourceSubroute], namespace: String? = nil) {
         self.name = name
         self.namespace = namespace
         

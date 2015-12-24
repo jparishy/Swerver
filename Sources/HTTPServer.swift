@@ -8,10 +8,10 @@
 
 import Foundation
 
-let SwerverName = "Swerver"
-let SwerverVersion = "1.0"
+public let SwerverName = "Swerver"
+public let SwerverVersion = "1.0"
 
-enum HTTPMethod : String {
+public enum HTTPMethod : String {
     case GET    = "GET"
     case POST   = "POST"
     case PUT    = "PUT"
@@ -23,14 +23,14 @@ enum HTTPMethod : String {
     }
 }
 
-class HTTPServer<HTTP: HTTPVersion> : TCPServer {
+public class HTTPServer<HTTP: HTTPVersion> : TCPServer {
     
-    let port: Int
-    let router: Router
+    public let port: Int
+    public let router: Router
     
-    let publicDirectory: String = "./Public"
+    public let publicDirectory: String = "./Public"
     
-    init(port: Int, router: Router) {
+    public init(port: Int, router: Router) {
         self.port = port
         self.router = router
         

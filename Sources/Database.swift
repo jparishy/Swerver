@@ -9,7 +9,7 @@
 import Foundation
 import libpq
 
-class Database {
+public class Database {
     let connection: COpaquePointer
     
     deinit {
@@ -32,7 +32,7 @@ class Database {
         }
     }
     
-    func transaction<T>(work: (Transaction) throws -> (T)) throws -> T {
+    public func transaction<T>(work: (Transaction) throws -> (T)) throws -> T {
         let transaction = Transaction(connection: connection)
         try transaction.begin()
         let ret = try work(transaction)
@@ -44,7 +44,7 @@ class Database {
     }
 }
 
-enum DatabaseError : ErrorType {
+public enum DatabaseError : ErrorType {
     case OpenFailure(status: Int, message: String)
     case TransactionFailure(status: Int, message: String)
     case TransactionNotClosed

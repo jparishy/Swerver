@@ -20,7 +20,7 @@ public class Application {
     
     private var server: HTTPServer<HTTP11>?
     
-    let databaseConfiguration: DatabaseConfiguration
+    public let databaseConfiguration: DatabaseConfiguration
     
     private var _applicationSecret: String
     public var applicationSecret: String {
@@ -32,7 +32,7 @@ public class Application {
         return _publicDirectory
     }
     
-    init(applicationSecret secret: String, databaseConfiguration configuration: DatabaseConfiguration, publicDirectory dir: String) {
+    public init(applicationSecret secret: String, databaseConfiguration configuration: DatabaseConfiguration, publicDirectory dir: String) {
         _applicationSecret = secret
         _publicDirectory = dir
         
@@ -43,7 +43,7 @@ public class Application {
         server?.start()
     }
     
-    static func start(applicationSecret: String, databaseConfiguration: DatabaseConfiguration, publicDirectory: String = Application.DefaultPublicDirectory, configuration: (Application) -> (port: Int, router: Router)) {
+    public static func start(applicationSecret: String, databaseConfiguration: DatabaseConfiguration, publicDirectory: String = Application.DefaultPublicDirectory, configuration: (Application) -> (port: Int, router: Router)) {
         
         let app = Application(applicationSecret: applicationSecret, databaseConfiguration: databaseConfiguration, publicDirectory: publicDirectory)
         
@@ -53,7 +53,7 @@ public class Application {
         app.start(port, router: router)
     }
     
-    func resource<T : Controller>(name: String, namespace: String? = nil, additionRoutes: (T) -> ([ResourceSubroute])) -> Resource {
+    public func resource<T : Controller>(name: String, namespace: String? = nil, additionRoutes: (T) -> ([ResourceSubroute])) -> Resource {
         let controller = T()
         controller.application = self
         

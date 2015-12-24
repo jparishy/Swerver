@@ -20,25 +20,25 @@ import Glibc
  * This is shit code and I am aware; it will die soon anyway.
  */
 
-extension String {
+public extension String {
 
 #if os(OSX)
-    func bridge() -> NSString {
+    public func bridge() -> NSString {
         return self as NSString
     }
 #endif
 
     // I have no idea how this is really implemented so we'll fake it
-    func swerver_cStringUsingEncoding(encoding: NSStringEncoding) -> [UInt8] {
+    public func swerver_cStringUsingEncoding(encoding: NSStringEncoding) -> [UInt8] {
         return [UInt8](self.utf8)
     }
     
-    func swerver_lengthOfBytesUsingEncoding(encoding: NSStringEncoding) -> Int {
+    public func swerver_lengthOfBytesUsingEncoding(encoding: NSStringEncoding) -> Int {
         return swerver_cStringUsingEncoding(encoding).count
     }
     
     // This is a fake ass version that only supports one char, but that's OK for our use case
-    func swerver_componentsSeparatedByString(string: NSString) -> [String] {
+    public func swerver_componentsSeparatedByString(string: NSString) -> [String] {
         let separator = UInt8(string.characterAtIndex(0))
         
         var components: [String] = []
@@ -63,7 +63,7 @@ extension String {
     }
     
     // Another naive approach
-    func swerver_stringByTrimmingCharactersInSet(set: NSCharacterSet) -> String {
+    public func swerver_stringByTrimmingCharactersInSet(set: NSCharacterSet) -> String {
         let chars = swerver_cStringUsingEncoding(NSUTF8StringEncoding)
         let len = chars.count
         
@@ -106,35 +106,35 @@ extension String {
     }
 }
 
-extension NSString {
+public extension NSString {
 
 #if os(OSX)
-    func bridge() -> String {
+    public func bridge() -> String {
         return self as String
     }
 #endif
 
-    static func fromCString(CString: UnsafePointer<Int8>) -> NSString? {
+    public static func fromCString(CString: UnsafePointer<Int8>) -> NSString? {
         return NSString(bytes: CString, length: Int(strlen(CString)), encoding: NSUTF8StringEncoding)
     }
 
-    func swerver_cStringUsingEncoding(encoding: NSStringEncoding) -> [UInt8] {
+    public func swerver_cStringUsingEncoding(encoding: NSStringEncoding) -> [UInt8] {
         return self.bridge().swerver_cStringUsingEncoding(encoding)
     }
     
-    func swerver_lengthOfBytesUsingEncoding(encoding: NSStringEncoding) -> Int {
+    public func swerver_lengthOfBytesUsingEncoding(encoding: NSStringEncoding) -> Int {
         return self.bridge().swerver_lengthOfBytesUsingEncoding(encoding)
     }
     
-    func swerver_componentsSeparatedByString(string: NSString) -> [String] {
+    public func swerver_componentsSeparatedByString(string: NSString) -> [String] {
         return self.bridge().swerver_componentsSeparatedByString(string)
     }
     
-    func swerver_stringByTrimmingCharactersInSet(set: NSCharacterSet) -> String {
+    public func swerver_stringByTrimmingCharactersInSet(set: NSCharacterSet) -> String {
         return self.bridge().swerver_stringByTrimmingCharactersInSet(set)
     }
     
-    func swerver_stringByReplacingOccurrencesOfString(string: NSString, withString replacement: NSString) -> String {
+    public func swerver_stringByReplacingOccurrencesOfString(string: NSString, withString replacement: NSString) -> String {
         var output = ""
         
         var index = 0

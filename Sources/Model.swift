@@ -176,7 +176,7 @@ internal func ModelsMap(props: [BaseProperty]) -> [String:BaseProperty] {
     return map
 }
 
-func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
+public func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     let m = T()
     for (k,_) in ModelsMap(m.properties) {
         if let v = JSON[k.bridge()] {
@@ -201,7 +201,7 @@ func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     return m
 }
 
-func JSONDictionariesFromModels(models: [Model]) throws -> NSArray {
+public func JSONDictionariesFromModels(models: [Model]) throws -> NSArray {
     let array = NSMutableArray()
     for m in models {
         array.addObject(try JSONDictionaryFromModel(m))
@@ -209,7 +209,7 @@ func JSONDictionariesFromModels(models: [Model]) throws -> NSArray {
     return array
 }
 
-func JSONDictionaryFromModel(m: Model) throws -> NSDictionary {
+public func JSONDictionaryFromModel(m: Model) throws -> NSDictionary {
     
     let d = NSMutableDictionary()
     

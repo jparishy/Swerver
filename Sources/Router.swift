@@ -12,9 +12,9 @@ import Foundation
 import Glibc
 #endif
 
-typealias Headers = [String:String]
+public typealias Headers = [String:String]
 
-enum StatusCode {
+public enum StatusCode {
     case Ok
     case InvalidRequest
     case NotFound
@@ -58,11 +58,11 @@ enum StatusCode {
     }
 }
 
-enum InternalServerError : ErrorType {
+public enum InternalServerError : ErrorType {
     case Generic
 }
 
-enum UserError : ErrorType {
+public enum UserError : ErrorType {
     case Unimplemented
 }
 
@@ -130,8 +130,8 @@ extension Request : CustomStringConvertible {
     }
 }
 
-extension NSString {
-    static func fromData(data: [UInt8]) -> NSString? {
+public extension NSString {
+    public static func fromData(data: [UInt8]) -> NSString? {
         let cString = UnsafePointer<Int8>(data)
 #if os(Linux)
         let r = NSString(CString: cString, encoding: NSUTF8StringEncoding)
@@ -146,24 +146,24 @@ extension NSString {
     }
 }
 
-class ResponseData {
-    let data: NSData
+public class ResponseData {
+    public let data: NSData
     
-    init(_ string: String) {
+    public init(_ string: String) {
         let bytes = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
         data = NSData(bytes: bytes, length: bytes.count)
     }
     
-    init(_ data: NSData) {
+    public init(_ data: NSData) {
         self.data = data
     }
     
-    var stringView: String? {
+    public var stringView: String? {
         let bytes = data.bytes
         return NSString(bytes: bytes, length: data.length, encoding: NSUTF8StringEncoding)?.bridge()
     }
     
-    var description: String {
+    public var description: String {
         if let stringView = stringView {
             return "<Data: \"\(stringView)\">"
         } else {
@@ -171,7 +171,7 @@ class ResponseData {
         }
     }
     
-    static func Data(data: NSData) -> ResponseData? {
+    public static func Data(data: NSData) -> ResponseData? {
         if let str = NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)?.bridge() {
             return ResponseData(str)
         } else {
@@ -179,12 +179,12 @@ class ResponseData {
         }
     }
     
-    static func PublicFileExists(filename: String, publicDirectory dir: String) -> Bool {
+    public static func PublicFileExists(filename: String, publicDirectory dir: String) -> Bool {
         let filename = "\(dir)/\(filename)"
         return (access(filename, F_OK) >= 0)
     }
     
-    class func PublicFile(filename: String, publicDirectory dir: String) throws -> (ResponseData?, Headers) {
+    public class func PublicFile(filename: String, publicDirectory dir: String) throws -> (ResponseData?, Headers) {
         let data = try NSData(contentsOfFile: "\(dir)/\(filename)", options: NSDataReadingOptions(rawValue: 0))
         
         var headers: Headers = [:]
@@ -217,7 +217,7 @@ class ResponseData {
     }
 }
 
-func BuiltInResponse(code: StatusCode, publicDirectory dir: String) -> Response {
+public func BuiltInResponse(code: StatusCode, publicDirectory dir: String) -> Response {
     switch code {
         case .NotFound:
             do {
@@ -242,36 +242,36 @@ func BuiltInResponse(code: StatusCode, publicDirectory dir: String) -> Response 
     }
 }
 
-struct Ok {
-    static func JSON(model: Model) throws -> Response {
+public struct Ok {
+    public static func JSON(model: Model) throws -> Response {
         let data = try NSJSONSerialization.swerver_dataWithJSONObject(try model.JSON(), options: NSJSONWritingOptions(rawValue: 0))
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
     
-    static func JSON(models: [Model]) throws -> Response {
+    public static func JSON(models: [Model]) throws -> Response {
         let data = try NSJSONSerialization.swerver_dataWithJSONObject(try models.JSON(), options: NSJSONWritingOptions(rawValue: 0))
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
     
-    static func JSON(dictionary: NSDictionary) throws -> Response {
+    public static func JSON(dictionary: NSDictionary) throws -> Response {
         let data = try NSJSONSerialization.swerver_dataWithJSONObject(dictionary, options: NSJSONWritingOptions(rawValue: 0))
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
     
-    static func JSON(array: NSArray) throws -> Response {
+    public static func JSON(array: NSArray) throws -> Response {
         let data = try NSJSONSerialization.swerver_dataWithJSONObject(array, options: NSJSONWritingOptions(rawValue: 0))
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
 }
 
-enum ContentType {
+public enum ContentType {
     case Unspecified
     case JSON
     case URLEncoded
     case HTML
 }
 
-func RespondToFormat(request: Request, work: (ContentType) throws -> Response) throws -> Response? {
+public func RespondToFormat(request: Request, work: (ContentType) throws -> Response) throws -> Response? {
     if let format = request.headers["Accept"] where format == "text/html" {
         return try work(.HTML)
     } else {
@@ -279,7 +279,7 @@ func RespondToFormat(request: Request, work: (ContentType) throws -> Response) t
     }
 }
 
-func Respond(request: Request, _ allowedContentTypes: [ContentType] = [], work: (responseContentType: ContentType) throws -> Response?) throws -> Response {
+public func Respond(request: Request, _ allowedContentTypes: [ContentType] = [], work: (responseContentType: ContentType) throws -> Response?) throws -> Response {
     
     let requestType: ContentType
     if let format = request.headers["Content-Type"] where format.bridge().rangeOfString("application/json").location != NSNotFound {
@@ -306,7 +306,7 @@ func Respond(request: Request, _ allowedContentTypes: [ContentType] = [], work: 
     }
 }
 
-protocol RouteProvider {
+public protocol RouteProvider {
     func apply(request: Request) throws -> Response
 }
 
@@ -321,30 +321,30 @@ private class RedirectRouteProvider : RouteProvider {
     }
 }
 
-func Redirect(to: String) -> RouteProvider {
+public func Redirect(to: String) -> RouteProvider {
     return RedirectRouteProvider(to: to)
 }
 
 public class Route {
-    let routeProvider: RouteProvider
+    public let routeProvider: RouteProvider
     
-    typealias MatchFunction = ((Route, Request) -> (Bool))
-    let matchFunction: MatchFunction?
+    public typealias MatchFunction = ((Route, Request) -> (Bool))
+    public let matchFunction: MatchFunction?
     
-    init(routeProvider: RouteProvider, matchFunction: MatchFunction) {
+    public init(routeProvider: RouteProvider, matchFunction: MatchFunction) {
         self.routeProvider = routeProvider
         self.matchFunction = matchFunction
     }
 
-    func matches(request: Request) -> Bool {
+    public func matches(request: Request) -> Bool {
         return matchFunction?(self, request) ?? false
     }
 }
 
-class PathRoute : Route {
-    let path: String
+public class PathRoute : Route {
+    public let path: String
     
-    init(path: String, routeProvider: RouteProvider) {
+    public init(path: String, routeProvider: RouteProvider) {
         self.path = path
         
         let matchFunction = {
@@ -359,15 +359,15 @@ class PathRoute : Route {
         super.init(routeProvider: routeProvider, matchFunction: matchFunction)
     }
     
-    class func root(to: String) -> Route {
+    public class func root(to: String) -> Route {
         return PathRoute(path: "/", routeProvider: Redirect(to))
     }
 }
 
-class PublicFiles : Route {
+public class PublicFiles : Route {
     
-    let prefix: String
-    let publicDirectory: String
+    public let prefix: String
+    public let publicDirectory: String
     
     class Provider : RouteProvider {
         let prefix: String
@@ -400,7 +400,7 @@ class PublicFiles : Route {
         }
     }
     
-    init(directory dir: String, prefix: String = "" /* Root Level of URL */) {
+    public init(directory dir: String, prefix: String = "" /* Root Level of URL */) {
     
         self.publicDirectory = dir
         self.prefix = prefix
@@ -435,14 +435,14 @@ class PublicFiles : Route {
     }
 }
 
-struct Router {
-    let routes: [Route]
+public struct Router {
+    public let routes: [Route]
     
-    init(_ routes: [Route]) {
+    public init(_ routes: [Route]) {
         self.routes = routes
     }
     
-    func route(request: Request) -> Route? {
+    public func route(request: Request) -> Route? {
         let route = routes.filter { $0.matches(request) }.first
         if let route = route {
             return route

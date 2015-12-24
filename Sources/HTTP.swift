@@ -8,11 +8,11 @@
 
 import Foundation
 
-func GetHTTP(rawRequest: NSData) -> HTTPVersion {
+public func GetHTTP(rawRequest: NSData) -> HTTPVersion {
     return HTTP11(rawRequest: rawRequest)
 }
 
-protocol HTTPVersion {
+public protocol HTTPVersion {
     init(rawRequest: NSData)
     func request() -> Request?
     func response(statusCode: StatusCode, headers: Headers, data: NSData?) -> NSData

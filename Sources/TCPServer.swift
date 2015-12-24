@@ -13,7 +13,7 @@ import libuv
 import Glibc
 #endif
 
-class TCPServer {
+public class TCPServer {
     private var loop: UnsafeMutablePointer<uv_loop_t>
     private var tcp: UnsafeMutablePointer<uv_tcp_t>
     private var addr: UnsafeMutablePointer<sockaddr_in>
