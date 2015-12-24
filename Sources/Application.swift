@@ -12,6 +12,12 @@ public struct DatabaseConfiguration {
     public let username: String
     public let password: String
     public let databaseName: String
+    
+    public init(username: String, password: String, databaseName: String) {
+        self.username = username
+        self.password = password
+        self.databaseName = databaseName
+    }
 }
 
 public class Application {
