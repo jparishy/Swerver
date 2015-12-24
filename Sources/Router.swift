@@ -84,9 +84,9 @@ public struct Session {
         }
     }
     
-    init() { }
+    public init() { }
     
-    mutating func update(key: String, _ value: AnyObject?) {
+    public mutating func update(key: String, _ value: AnyObject?) {
         dictionary[key] = value ?? NSNull()
     }
     
@@ -100,7 +100,7 @@ public struct Session {
         }
     }
     
-    subscript(key: String) -> AnyObject? {
+    public subscript(key: String) -> AnyObject? {
         return dictionary[key]
     }
 }

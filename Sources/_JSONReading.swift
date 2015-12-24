@@ -9,16 +9,16 @@
 import Foundation
 
 public class JSONBool : CustomStringConvertible {
-    let value: Bool
-    init(bool value: Bool) {
+    public let value: Bool
+    public init(bool value: Bool) {
         self.value = value
     }
     
-    convenience init(string value: String) {
+    public convenience init(string value: String) {
         self.init(bool: value == "true")
     }
     
-    var stringValue: String {
+    public var stringValue: String {
         return value ? "true" : "false"
     }
     
