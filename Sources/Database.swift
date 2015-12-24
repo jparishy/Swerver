@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import libpq
 
 class Database {
     let connection: COpaquePointer

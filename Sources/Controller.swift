@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CryptoSwift
 
 public class ControllerResponse : Response {
     let session: Session

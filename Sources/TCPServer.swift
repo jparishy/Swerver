@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import libuv
 
 #if os(Linux)
 import Glibc

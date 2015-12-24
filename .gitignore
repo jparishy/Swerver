@@ -1,2 +1,2 @@
-.build
-./*.o
+Packages/
+.build/
