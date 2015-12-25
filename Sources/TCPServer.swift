@@ -39,7 +39,7 @@ public class TCPServer {
         if result != 0 {
             print("uv_ip4_addr failed.")
         }
-       	
+        
 #if os(Linux)
         result = uv_tcp_bind(tcp, addr.memory)
 #else
@@ -95,8 +95,8 @@ public class TCPServer {
     }
     
     private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: uv_buf_t) {
-	    let inBytes: [Int8] = Array(UnsafeBufferPointer(start: buf.base, count: buf.len))
-	    let string = String(inBytes.map { b in Character(UnicodeScalar(UInt8(b))) } )
+        let inBytes: [Int8] = Array(UnsafeBufferPointer(start: buf.base, count: buf.len))
+        let string = String(inBytes.map { b in Character(UnicodeScalar(UInt8(b))) } )
     
         let cString = string.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
         let bytes = UnsafePointer<Int8>(cString)
@@ -171,23 +171,9 @@ public class TCPServer {
             
             uv_write(write, rr.memory.stream, outBuf, 1, _write_cb)
         }
-        
-        rr.destroy()
-        rr.dealloc(1)
     }
     
     private func handleWrite(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
-        
-        let wd = unsafeBitCast(write.memory.data, UnsafeMutablePointer<TCPServer.WriteStruct>.self)
-        let buf = wd.memory.buffer
-        
-        free(buf.memory.base)
-        
-        buf.destroy()
-        buf.dealloc(1)
-        
-        wd.destroy()
-        wd.dealloc(1)
         
         let handle = unsafeBitCast(write.memory.handle, UnsafeMutablePointer<uv_handle_t>.self)
         uv_close(handle, nil)
