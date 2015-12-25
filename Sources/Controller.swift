@@ -124,7 +124,7 @@ public class Controller : RouteProvider {
                 
                 var sessionCookie: String? = nil
                 do {
-                    let data = try NSJSONSerialization.swerver_dataWithJSONObject(session.dictionary, options: NSJSONWritingOptions(rawValue: 0))
+                    let data = try NSJSONSerialization.swerver_dataWithJSONObject(session.dictionary.bridge(), options: NSJSONWritingOptions(rawValue: 0))
                     let str = NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)
                     sessionCookie = str?.bridge()
                 } catch {
@@ -159,9 +159,11 @@ public class Controller : RouteProvider {
             return builtin(.InternalServerError)
         } catch {
             print("*** [ERROR] Unknown Internal Service Error")
+#if os(OSX)
             for line in NSThread.callStackSymbols() {
                 print(line)
             }
+#endif
             return builtin(.InternalServerError)
         }
     }
@@ -199,7 +201,7 @@ public class Controller : RouteProvider {
                         return JSON
                     } else if contentType.rangeOfString("x-www-form-urlencoded").location != NSNotFound {
                         if let string = NSString(bytes: body.bytes, length: body.length, encoding: NSUTF8StringEncoding)?.swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) {
-                            return parametersFromURLEncodedString(string)
+                            return parametersFromURLEncodedString(string).bridge()
                         } else {
                             return nil
                         }
@@ -227,11 +229,11 @@ public class Controller : RouteProvider {
             if kvParts.count == 2 {
                 let cleaned = {
                     (i: String) -> String? in
-                    return i.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
+                    return i.bridge().swerver_stringByReplacingOccurrencesOfString("+", withString: " ").bridge().stringByRemovingPercentEncoding
                 }
                 
                 if let k = cleaned(kvParts[0]), v = cleaned(kvParts[1]) {
-                    parameters[k] = v
+                    parameters[k] = v as? AnyObject
                 }
             }
         }

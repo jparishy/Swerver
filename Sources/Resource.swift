@@ -97,15 +97,15 @@ public struct ResourceSubroute {
         
         let path: String
         if inPath.hasSuffix("/") && inPath != "/" {
-            path = inPath.substringWithRange(inPath.startIndex..<inPath.endIndex.advancedBy(-1))
+            path = inPath[inPath.startIndex..<inPath.endIndex.advancedBy(-1)]
         } else {
             path = inPath
         }
         
         let fullPath = self.fullPath
         
-        let requestComponents = path.componentsSeparatedByString("/")
-        let selfComponents = fullPath.componentsSeparatedByString("/")
+        let requestComponents = path.swerver_componentsSeparatedByString("/")
+        let selfComponents = fullPath.swerver_componentsSeparatedByString("/")
         
         if method != self.method {
             return (false, nil)
@@ -121,9 +121,9 @@ public struct ResourceSubroute {
             
             if s.hasPrefix(":") {
                 
-                let key = s.substringFromIndex(s.startIndex.advancedBy(1))
+                let key = s[s.startIndex.advancedBy(1)..<s.endIndex]
                 let value = r
-                parameters[key] = value
+                parameters[key] = value.bridge()
                 
             } else {
                 if r != s {

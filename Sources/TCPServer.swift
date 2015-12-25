@@ -72,6 +72,17 @@ public class TCPServer {
     
     // pragma mark - Internal Callbacks
     
+    private struct RequestResponseStruct {
+        let tcpServer: TCPServer
+        let requestData: NSData
+        let stream: UnsafeMutablePointer<uv_stream_t>
+    }
+    
+    private struct WriteStruct {
+        let tcpServer: TCPServer
+        let buffer: UnsafeMutablePointer<uv_buf_t>
+    }
+    
     /*
      * The libuv Interface is different on Linux, so we need to change the method
      * signatures per platform. Annoying but necessary.
@@ -116,18 +127,7 @@ public class TCPServer {
         let memory: UnsafeMutablePointer<Int8> = unsafeBitCast(calloc(size, 1), UnsafeMutablePointer<Int8>.self)
         buf.initialize(uv_buf_init(memory, UInt32(size)))
     }
-    
-    private struct RequestResponseStruct {
-        let tcpServer: TCPServer
-        let requestData: NSData
-        let stream: UnsafeMutablePointer<uv_stream_t>
-    }
-    
-    private struct WriteStruct {
-        let tcpServer: TCPServer
-        let buffer: UnsafeMutablePointer<uv_buf_t>
-    }
-    
+
     private func handleRead(stream: UnsafeMutablePointer<uv_stream_t>, size: ssize_t, buf: UnsafePointer<uv_buf_t>) {
         if let string = String(CString: buf.memory.base, encoding: NSUTF8StringEncoding) {
             
@@ -147,6 +147,8 @@ public class TCPServer {
         free(buf.memory.base)
         uv_read_stop(stream)
     }
+    
+    #endif
     
     func handleWork(work: UnsafeMutablePointer<uv_work_t>) {
         let rr = unsafeBitCast(work.memory.data, UnsafeMutablePointer<TCPServer.RequestResponseStruct>.self)
@@ -173,8 +175,6 @@ public class TCPServer {
         rr.destroy()
         rr.dealloc(1)
     }
-    
-    #endif
     
     private func handleWrite(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
         
