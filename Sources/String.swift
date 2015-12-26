@@ -104,6 +104,11 @@ public extension String {
             return bridge().substringWithRange(NSMakeRange(startLoc, endLoc - startLoc))
         }
     }
+
+
+    public func swerver_stringByReplacingOccurrencesOfString(string: String, withString replacement: String) -> String {
+        return bridge().swerver_stringByReplacingOccurrencesOfString(string.bridge(), withString: replacement.bridge())
+    }
 }
 
 public extension NSString {

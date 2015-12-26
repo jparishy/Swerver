@@ -20,39 +20,31 @@ public enum JSONError : ErrorType {
 
 public extension NSJSONSerialization {
 
-    public class func swerver_isValidJSONObject(rootObject: AnyObject) -> Bool {
-        var isValid: ((AnyObject, Bool) -> Bool)! = nil
+    public class func swerver_isValidJSONObject(rootObject: Any) -> Bool {
+
+        var isValid: ((Any, Bool) -> Bool)! = nil
         isValid = {
-            (obj: AnyObject, rootObject: Bool) -> Bool in
-            if let array = obj as? NSArray {
+            (obj: Any, rootObject: Bool) -> Bool in
+            if let array = obj as? [Any] {
                 for i in 0..<array.count {
-                    let obj = array.objectAtIndex(i)
+                    let obj = array[i]
                     if !isValid(obj, false) {
                         return false
                     }
                 }
-            } else if let dict = obj as? NSDictionary {
-                for keyAny in dict.keyEnumerator() {
-                    if let key = keyAny as? NSObject {
-                        if !(key is NSString) {
-                            return false
-                        }
-                        
-                        if let obj = dict.objectForKey(key) {
-                            if !isValid(obj, false) {
-                                return false
-                            }
-                        } else {
-                            return false
-                        }
-                    } else {
+            } else if let dict = obj as? [String:Any] {
+                for (_,v) in dict {
+                    if !isValid(v, false) {
                         return false
                     }
                 }
             } else {
-                if (obj is NSString) || (obj is NSNumber) || (obj is JSONBool) {
+                if (obj is Int) || (obj is Double) || (obj is Float) {
+                    return !rootObject
+                } else if (obj is String) || (obj is NSNumber) || (obj is JSONBool) {
                     return !rootObject
                 } else {
+                    print("invalid type: \(obj) \(obj.dynamicType)")
                     return false
                 }
             }

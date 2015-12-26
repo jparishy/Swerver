@@ -7,33 +7,28 @@
 //
 
 import XCTest
+import Swerver
+import Foundation
 
 class JSONTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
     
     func test_swerver_isValidJSONObject() {
         XCTAssertFalse(NSJSONSerialization.swerver_isValidJSONObject("json fragment"))
         XCTAssertFalse(NSJSONSerialization.swerver_isValidJSONObject(3))
         
-        XCTAssertTrue(NSJSONSerialization.swerver_isValidJSONObject([]))
-        XCTAssertTrue(NSJSONSerialization.swerver_isValidJSONObject([:]))
+        let emptyArray: [Int] = []
+        XCTAssertTrue(NSJSONSerialization.swerver_isValidJSONObject(emptyArray))
+
+        let emptyDict: [String:Any] = [:]
+        XCTAssertTrue(NSJSONSerialization.swerver_isValidJSONObject(emptyDict))
         
         let expectTrue = {
-            (str: String, obj: AnyObject) -> Void in
+            (str: String, obj: Any) -> Void in
             XCTAssertTrue(NSJSONSerialization.swerver_isValidJSONObject(obj), "Expected: \(str)")
         }
         
         let expectFalse = {
-            (str: String, obj: AnyObject) -> Void in
+            (str: String, obj: Any) -> Void in
             XCTAssertFalse(NSJSONSerialization.swerver_isValidJSONObject(obj), "Expected: \(str)")
         }
         
@@ -93,16 +88,12 @@ class JSONTests: XCTestCase {
     func test_swerver_JSONObjectWithData() {
         let makeData = {
             (str: String) -> NSData? in
-            if let bytes = str.cStringUsingEncoding(NSUTF8StringEncoding) {
-                return NSData(bytes: bytes, length: bytes.count)
-            } else {
-                XCTFail("Bad String")
-                return nil
-            }
+            let bytes = str.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+            return NSData(bytes: bytes, length: bytes.count)
         }
         
         let expectTrue = {
-            (message: String, JSONString: String, expectedObject: AnyObject) in
+            (message: String, JSONString: String, expectedObject: Any) in
             if let data = makeData(JSONString) {
                 do {
                     let result = try NSJSONSerialization.swerver_JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0))
@@ -149,25 +140,31 @@ class JSONTests: XCTestCase {
             42, 43, 44
         ])
         
-        expectTrue("valid nested dict", "{\"key1\":\"value1\",\"nested\":{\"key2\":\"value2\",\"key3\":\"value3\"}}", [
+        let validNestedDict: [String:Any] = [
             "key1" : "value1",
             "nested" : [
                 "key2" : "value2",
                 "key3" : "value3"
             ]
-        ])
+        ]
+
+        expectTrue("valid nested dict", "{\"key1\":\"value1\",\"nested\":{\"key2\":\"value2\",\"key3\":\"value3\"}}", validNestedDict)
         
-        expectTrue("valid array of dicts", "[{\"key1\":\"value1\"},{\"key2\":\"value2\"},{\"key3\":\"value3\"}]", [
+        let validArrayOfDicts: [Any] = [
             [ "key1" : "value1" ],
             [ "key2" : "value2" ],
             [ "key3" : "value3" ],
-        ])
+        ]
+
+        expectTrue("valid array of dicts", "[{\"key1\":\"value1\"},{\"key2\":\"value2\"},{\"key3\":\"value3\"}]", validArrayOfDicts)
         
-        expectTrue("valid array of dicts with first dict value being dict", "[{\"key1\": {\"value1\":[1,2,3]}},{\"key2\":\"value2\"},{\"key3\":\"value3\"}]", [
+        let validArrayOfDictsComplex: [Any] = [
             [ "key1" : [ "value1" : [ 1, 2, 3] ] ],
             [ "key2" : "value2" ],
             [ "key3" : "value3" ],
-        ])
+        ]
+
+        expectTrue("valid array of dicts with first dict value being dict", "[{\"key1\": {\"value1\":[1,2,3]}},{\"key2\":\"value2\"},{\"key3\":\"value3\"}]", validArrayOfDictsComplex)
         
         expectThrows("missing coma", "{\"key1\":\"value1\" \"key2\":\"value2\",\"key3\":\"value3\"}")
         expectThrows("missing closing curly brace", "{\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"")
@@ -183,4 +180,13 @@ class JSONTests: XCTestCase {
             "key" : "this is a \"quoted string\""
         ])
     }
+}
+
+extension JSONTests {
+	var allTests: [(String, () -> Void)] {
+		return [
+			("test_swerver_isValidJSONObject", test_swerver_isValidJSONObject),
+			("test_swerver_JSONObjectWithData", test_swerver_JSONObjectWithData)
+		]
+	}
 }
