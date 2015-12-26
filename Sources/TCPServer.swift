@@ -236,8 +236,8 @@ private func _write_cb(write: UnsafeMutablePointer<uv_write_t>, status: Int32) {
     let wd = unsafeBitCast(write.memory.data, UnsafeMutablePointer<TCPServer.WriteStruct>.self)
     let tcpServer = wd.memory.tcpServer
     tcpServer.handleWrite(write, status: status)
-}
 
+}
 #endif
 
 private func _work_cb(work: UnsafeMutablePointer<uv_work_t>) {
