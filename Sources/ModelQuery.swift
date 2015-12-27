@@ -142,18 +142,14 @@ public class ModelQuery<T : Model> {
         
             var index = 0
             for (k, v) in params {
-                if v is Bool && !(v is Int) {
-                    print("*** [ERROR] Use JSONBool in place of Bool for serialization and query purposes")
-                    exit(1)
-                }
                 
                 query += k
                 query += " = "
                 
                 if v is String {
                     query += "'\(v)'"
-                } else if let v = v as? JSONBool {
-                    query += (v.value ? "true" : "false")
+                } else if let v = v as? Bool {
+                    query += (v ? "true" : "false")
                 } else {
                     query += "\(v)"
                 }

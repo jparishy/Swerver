@@ -18,7 +18,7 @@ public protocol BaseProperty {
     var dirty: Bool { get }
     func databaseReadFromValue(value: String) throws
     func databaseValueForWriting() throws -> String
-    func rawValueForWriting() throws -> AnyObject
+    func rawValueForWriting() throws -> Any
 }
 
 public class Property<T> : BaseProperty, CustomStringConvertible {
@@ -63,7 +63,7 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
         throw ModelError.MustOverrideInSubclass
     }
     
-    public func rawValueForWriting() throws -> AnyObject {
+    public func rawValueForWriting() throws -> Any {
         throw ModelError.MustOverrideInSubclass
     }
     
@@ -89,7 +89,7 @@ public class StringProperty : Property<String> {
         return "'\(value())'"
     }
     
-    public override func rawValueForWriting() throws -> AnyObject {
+    public override func rawValueForWriting() throws -> Any {
         return NSString(string: value())
     }
 }
@@ -113,7 +113,7 @@ public class IntProperty : Property<Int> {
         return String(value())
     }
     
-    public override func rawValueForWriting() throws -> AnyObject {
+    public override func rawValueForWriting() throws -> Any {
         return NSNumber(integer: value())
     }
 }
@@ -137,8 +137,8 @@ public class BoolProperty : Property<Bool> {
         return value() ? "true" : "false"
     }
     
-    public override func rawValueForWriting() throws -> AnyObject {
-        return JSONBool(bool: value())
+    public override func rawValueForWriting() throws -> Any {
+        return value()
     }
 }
 
@@ -188,8 +188,8 @@ public func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
                 } else {
                     str = "\(num.doubleValue)".bridge()
                 }
-            } else if let b = obj as? JSONBool {
-                str = b.stringValue.bridge()
+            } else if let b = obj as? Bool {
+                str = (b ? "true" : "false").bridge()
             } else {
                 str = obj as! NSString
             }
@@ -211,12 +211,12 @@ public func JSONDictionariesFromModels(models: [Model]) throws -> NSArray {
 
 public func JSONDictionaryFromModel(m: Model) throws -> NSDictionary {
     
-    let d = NSMutableDictionary()
+    var d = Dictionary<String, Any>()
     
     for (k,v) in ModelsMap(m.properties) {
         let vv = try v.rawValueForWriting()
-        d.setObject(vv, forKey: k.bridge())
+        d[k] = vv
     }
     
-    return d
+    return d.bridge()
 }

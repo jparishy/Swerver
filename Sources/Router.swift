@@ -74,7 +74,7 @@ public struct Session {
     
     internal init?(JSONData: NSData) {
         do {
-            if let JSON = try NSJSONSerialization.swerver_JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
+            if let JSON = try NSJSONSerialization.JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
                 dictionary = JSON.mutableCopy() as! [String:AnyObject]
             } else {
                 return nil

@@ -5,7 +5,7 @@
 TEST_DIR = "Tests"
 DEBUG = true
 PRIMARY_TARGET_NAME = "Swerver"
-SKIP_DIRS = [ "Swift" ]
+SKIP_DIRS = [ ]
 VERBOSE = ARGV[0] == "-v"
 
 # Private
@@ -52,6 +52,13 @@ def run_tests_for_dir(dir)
 
 		puts `rm ./#{out_name}`
 	end
+end
+
+`swift build #{VERBOSE ? "-v" : ""}`
+
+if $?.exitstatus != 0
+	puts "Build failed. Bailing."
+	exit 1
 end
 
 Dir.glob("#{TEST_DIR}/*").each do |entry|
