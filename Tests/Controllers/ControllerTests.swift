@@ -103,12 +103,46 @@ class ControllerTests : XCTestCase, XCTestCaseProvider {
 				return ControllerResponse(.Ok, session: out)
 			}
 
-			let data = MakeHTTPRequest("GET", path: "/test", headers: [:], body: "")
-			if let request = HTTP11(rawRequest: data).request() {
+			let setData = MakeHTTPRequest("GET", path: "/test", headers: [:], body: "")
+			var cookie: String? = nil
+			if let request = HTTP11(rawRequest: setData).request() {
 				let response = try c.apply(request)
-				XCTAssertNotNil(response.headers["Set-Cookie"], "Should have a Set-Cookie header")
+
+				if let setCookie = response.headers["Set-Cookie"] {
+					if let part = setCookie.swerver_componentsSeparatedByString(";").first {
+						cookie = part
+					}
+				} else {
+					XCTFail("Should have Set-Cookie in response headers")
+				}
+
 			} else {
 				XCTFail("Could not make request from data")
+			}
+
+			if cookie == nil {
+				XCTFail("Cookie is nil")
+			}
+
+			c.handleIndex = {
+				(r: Request, p: Parameters, s: Session, t: Transaction) throws -> ControllerResponse in
+
+				if let value = s["key"] as? String {
+					XCTAssertEqual(value, "value", "session should have the same value set from the previous request")
+				} else {
+					XCTFail("Missing value for key in session")
+				}
+
+				return ControllerResponse(.Ok)
+			}
+
+			if let cookie = cookie {
+				let getData = MakeHTTPRequest("GET", path: "/test", headers: ["Cookie":cookie], body: "")
+				if let request = HTTP11(rawRequest: getData).request() {
+					try c.apply(request)
+				} else {
+					XCTFail("Could not make request from data")
+				}
 			}
 
 		} catch {
