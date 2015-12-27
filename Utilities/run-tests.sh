@@ -11,6 +11,8 @@ VERBOSE = ARGV[0] == "-v"
 
 # Private
 
+require 'open3'
+
 PWD = `pwd`.strip
 BUILD_DIR = "#{PWD}/.build/#{DEBUG ? "debug" : "release"}/"
 
@@ -37,22 +39,28 @@ def run_tests_for_dir(dir)
 		out_name = "./#{dir.split("/").last.downcase}"
 		imports = import_paths.map { |ip| "-I #{ip}" }.join(" ")
 		linked_libs = DEPENDENCIES.map { |d| "-l:#{d}.a" }.join(" ")
+
 		compile_str = "swiftc #{swift_files.join(" ")} -I /home/jparishy/code/swerver/.build/debug/ #{imports} -I #{BUILD_DIR} -L #{BUILD_DIR} -l:#{PRIMARY_TARGET_NAME}.a #{linked_libs} -lswiftGlibc -lFoundation -o #{out_name}"
+		
 		vputs "\t> #{compile_str}"
 		puts `#{compile_str}`
+
 		if $?.exitstatus != 0
 			puts "Failed to compile tests. Bailing."
 			exit 1
 		end
 		
-		puts `./#{out_name}`
-		
-		if $?.exitstatus != 0
-			puts "#{dir} failed."
-			exit 1
-		end		
+		stdout, stderr, status = Open3.capture3("#{out_name}")
 
-		puts `rm ./#{out_name}`
+		puts stdout if stdout.length > 0
+		puts stderr if stderr.length > 0
+
+		if status != 0
+			puts "#{dir} failed: #{status}. Leaving #{out_name} for reproducing purposes."
+			exit 1
+		else
+			puts `rm ./#{out_name}`
+		end
 	end
 end
 
