@@ -27,8 +27,8 @@ public typealias ControllerRequestHandler = (request: Request, parameters: Param
 
 public class Controller : RouteProvider {
     
-    internal weak var resource: Resource! = nil
-    internal weak var application: Application! = nil
+    internal var resource: Resource! = nil
+    internal var application: Application! = nil
     
     public required init() {
     }
@@ -51,11 +51,9 @@ public class Controller : RouteProvider {
                     }
                 }
                 
-                if let requestParameters = try parse(request) as? NSDictionary {
+                if let requestParameters = try parse(request) as? Parameters {
                     for (k,v) in requestParameters {
-                        if let k = k as? String {
-                            allParameters[k] = v
-                        }
+                        allParameters[k] = v
                     }
                 }
                 var session: Session
@@ -192,16 +190,17 @@ public class Controller : RouteProvider {
         throw UserError.Unimplemented
     }
     
-    func parse(request: Request) throws -> AnyObject? {
+    func parse(request: Request) throws -> Any? {
         if let body = request.requestBody {
             do {
                 if let contentType: NSString = request.headers["Content-Type"]?.bridge() {
                     if contentType.rangeOfString("application/json").location != NSNotFound {
                         let JSON = try NSJSONSerialization.JSONObjectWithData(body, options: NSJSONReadingOptions(rawValue: 0))
                         return JSON as? AnyObject
-                    } else if contentType.rangeOfString("x-www-form-urlencoded").location != NSNotFound {
+                    } else if contentType.rangeOfString("application/x-www-form-urlencoded").location != NSNotFound {
                         if let string = NSString(bytes: body.bytes, length: body.length, encoding: NSUTF8StringEncoding)?.swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) {
-                            return parametersFromURLEncodedString(string).bridge()
+                            let parameters =  parametersFromURLEncodedString(string)
+                            return parameters
                         } else {
                             return nil
                         }
@@ -221,7 +220,7 @@ public class Controller : RouteProvider {
     
     private func parametersFromURLEncodedString(str: String) -> Parameters {
         let parts = str.swerver_componentsSeparatedByString("&")
-        
+
         var parameters = Parameters()
         
         for part in parts {
@@ -233,11 +232,11 @@ public class Controller : RouteProvider {
                 }
                 
                 if let k = cleaned(kvParts[0]), v = cleaned(kvParts[1]) {
-                    parameters[k] = v as? AnyObject
+                    parameters[k] = v
                 }
             }
         }
-        
+
         return parameters
     }
     

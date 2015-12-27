@@ -8,7 +8,7 @@
 
 import Foundation
 
-public typealias Parameters = [String:AnyObject]
+public typealias Parameters = [String:Any]
 
 public enum ResourceAction {
     case Index

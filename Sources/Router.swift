@@ -110,6 +110,13 @@ public struct Request {
     let path: String
     let headers: Headers
     let requestBody: NSData?
+
+    public init(method: HTTPMethod, path: String, headers: Headers, requestBody: NSData?) {
+        self.method = method
+        self.path = path
+        self.headers = headers
+        self.requestBody = requestBody
+    }
 }
 
 public class Response {

@@ -5,6 +5,7 @@
 TEST_DIR = "Tests"
 DEBUG = true
 PRIMARY_TARGET_NAME = "Swerver"
+DEPENDENCIES = [ "CryptoSwift" ]
 SKIP_DIRS = [ ]
 VERBOSE = ARGV[0] == "-v"
 
@@ -35,7 +36,8 @@ def run_tests_for_dir(dir)
 		swift_files = Dir.glob("*.swift")
 		out_name = "./#{dir.split("/").last.downcase}"
 		imports = import_paths.map { |ip| "-I #{ip}" }.join(" ")
-		compile_str = "swiftc #{swift_files.join(" ")} -I /home/jparishy/code/swerver/.build/debug/ #{imports} -I #{BUILD_DIR} -L #{BUILD_DIR} -l:#{PRIMARY_TARGET_NAME}.a -lswiftGlibc -lFoundation -o #{out_name}"
+		linked_libs = DEPENDENCIES.map { |d| "-l:#{d}.a" }.join(" ")
+		compile_str = "swiftc #{swift_files.join(" ")} -I /home/jparishy/code/swerver/.build/debug/ #{imports} -I #{BUILD_DIR} -L #{BUILD_DIR} -l:#{PRIMARY_TARGET_NAME}.a #{linked_libs} -lswiftGlibc -lFoundation -o #{out_name}"
 		vputs "\t> #{compile_str}"
 		puts `#{compile_str}`
 		if $?.exitstatus != 0
