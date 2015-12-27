@@ -23,7 +23,7 @@ public class ControllerResponse : Response {
     }
 }
 
-public typealias ControllerRequestHandler = (request: Request, parameters: Parameters, session: Session, transaction: Transaction) throws -> ControllerResponse
+public typealias ControllerRequestHandler = (request: Request, parameters: Parameters, session: Session, transaction: Transaction?) throws -> ControllerResponse
 
 public class Controller : RouteProvider {
     
@@ -77,10 +77,22 @@ public class Controller : RouteProvider {
                 } else {
                     session = Session()
                 }
+
+                let work: (((Transaction?) throws -> ControllerResponse) throws -> ControllerResponse) = {
+                    f in
+                    if let db = db {
+                        return try db.transaction {
+                            t in
+                            return try f(t)
+                        }
+                    } else {
+                        return try f(nil)
+                    }
+                }
                 
-                let response: ControllerResponse = try db.transaction {
+                let response: ControllerResponse = try work {
                     t in
-                    
+
                     let response: ControllerResponse
                     switch subroute.action {
                     case .Index:
@@ -109,7 +121,7 @@ public class Controller : RouteProvider {
                         break
                     }
                     
-                    t.commit()
+                    t?.commit()
                     
                     return response
                 }
@@ -166,27 +178,27 @@ public class Controller : RouteProvider {
         }
     }
     
-    public func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func show(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func show(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func new(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func new(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func create(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func create(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func update(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func update(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func delete(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func delete(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
@@ -258,8 +270,11 @@ public class Controller : RouteProvider {
         return ControllerResponse(try Respond(request, allowedContentTypes, work: work))
     }
     
-    public func connect() throws -> Database {
-        let db = self.application.databaseConfiguration
-        return try Database(databaseName: db.databaseName, username: db.username, password: db.password)
+    public func connect() throws -> Database? {
+        if let db = self.application.databaseConfiguration {
+            return try Database(databaseName: db.databaseName, username: db.username, password: db.password)
+        } else {
+            return nil
+        }
     }
 }

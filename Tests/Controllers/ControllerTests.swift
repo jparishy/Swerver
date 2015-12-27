@@ -5,11 +5,9 @@ import libpq
 import CryptoSwift
 @testable import Swerver
 
-let BadSecret = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
 class TestController : Controller {
 	var handleIndex: ControllerRequestHandler? = nil
-	override func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+	override func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws -> ControllerResponse {
 	    if let index = handleIndex {
 	    	return try index(request: request, parameters: parameters, session: inSession, transaction: t)
 	    } else {
@@ -35,17 +33,16 @@ class ControllerTests : XCTestCase, XCTestCaseProvider {
 	func testParameters() {
 
 		do {
-			let db = DatabaseConfiguration(username: "jp", password: "password", databaseName: "notes")
-			let app = Application(applicationSecret: BadSecret, databaseConfiguration: db, publicDirectory: "")
+			let app = TestApplication()
 			
 			let c = TestController(application: app)
 			c.resource = Resource(name: "test", controller: c)
 
-			let test: (NSData, ((Request, Parameters, Session, Transaction) -> Void)) throws -> Void = {
-				(data: NSData, assertions: ((Request, Parameters, Session, Transaction) -> Void)) throws -> Void in
+			let test: (NSData, ((Request, Parameters, Session, Transaction?) -> Void)) throws -> Void = {
+				(data: NSData, assertions: ((Request, Parameters, Session, Transaction?) -> Void)) throws -> Void in
 
 				c.handleIndex = {
-					(r: Request, p: Parameters, s: Session, t: Transaction) throws -> ControllerResponse in
+					(r: Request, p: Parameters, s: Session, t: Transaction?) throws -> ControllerResponse in
 					
 					assertions(r, p, s, t)
 
@@ -88,14 +85,13 @@ class ControllerTests : XCTestCase, XCTestCaseProvider {
 
 	func testCookies() {
 		do {
-			let db = DatabaseConfiguration(username: "jp", password: "password", databaseName: "notes")
-			let app = Application(applicationSecret: BadSecret, databaseConfiguration: db, publicDirectory: "")
-			
+			let app = TestApplication()
+
 			let c = TestController(application: app)
 			c.resource = Resource(name: "test", controller: c)
 
 			c.handleIndex = {
-				(r: Request, p: Parameters, s: Session, t: Transaction) throws -> ControllerResponse in
+				(r: Request, p: Parameters, s: Session, t: Transaction?) throws -> ControllerResponse in
 
 				var out = Session()
 				out.update("key", "value")
@@ -125,7 +121,7 @@ class ControllerTests : XCTestCase, XCTestCaseProvider {
 			}
 
 			c.handleIndex = {
-				(r: Request, p: Parameters, s: Session, t: Transaction) throws -> ControllerResponse in
+				(r: Request, p: Parameters, s: Session, t: Transaction?) throws -> ControllerResponse in
 
 				if let value = s["key"] as? String {
 					XCTAssertEqual(value, "value", "session should have the same value set from the previous request")
