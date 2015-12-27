@@ -133,7 +133,7 @@ public class ModelQuery<T : Model> {
         return results
     }
     
-    public func findWhere(params: [String:AnyObject]) throws -> [T] {
+    public func findWhere(params: [String:Any]) throws -> [T] {
         
         var query = "SELECT * FROM \(T.table)"
         
