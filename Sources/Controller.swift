@@ -65,7 +65,7 @@ public class Controller : RouteProvider {
                         let aes = try AES(key: [UInt8](self.application.applicationSecret.utf8), blockMode: .CTR)
                         let decrypted = try aes.decrypt(sessionData.arrayOfBytes(), padding: nil)
                         let decryptedData = NSData.withBytes(decrypted)
-                        
+
                         if let sessionFromJSON = Session(JSONData: decryptedData) {
                             session = sessionFromJSON
                         } else {

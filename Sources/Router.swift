@@ -74,11 +74,8 @@ public struct Session {
     
     internal init?(JSONData: NSData) {
         do {
-            if let JSON = try NSJSONSerialization.JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
-                dictionary = JSON.mutableCopy() as! [String:Any]
-            } else {
-                return nil
-            }
+            let JSON = try NSJSONSerialization.JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0))
+            dictionary = JSON as! [String : Any]
         } catch {
             return nil
         }
@@ -106,10 +103,10 @@ public struct Session {
 }
 
 public struct Request {
-    let method: HTTPMethod
-    let path: String
-    let headers: Headers
-    let requestBody: NSData?
+    public let method: HTTPMethod
+    public let path: String
+    public let headers: Headers
+    public let requestBody: NSData?
 
     public init(method: HTTPMethod, path: String, headers: Headers, requestBody: NSData?) {
         self.method = method
