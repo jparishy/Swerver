@@ -5,6 +5,8 @@ import libpq
 import CryptoSwift
 @testable import Swerver
 
+let BadSecret = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
 class TestController : Controller {
 	var handleIndex: ControllerRequestHandler? = nil
 	override func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
@@ -34,7 +36,7 @@ class ControllerTests : XCTestCase, XCTestCaseProvider {
 
 		do {
 			let db = DatabaseConfiguration(username: "jp", password: "password", databaseName: "notes")
-			let app = Application(applicationSecret: "blah", databaseConfiguration: db, publicDirectory: "")
+			let app = Application(applicationSecret: BadSecret, databaseConfiguration: db, publicDirectory: "")
 			
 			let c = TestController(application: app)
 			c.resource = Resource(name: "test", controller: c)
@@ -83,12 +85,43 @@ class ControllerTests : XCTestCase, XCTestCaseProvider {
 			XCTFail("Should not throw")
 		}
 	}
+
+	func testCookies() {
+		do {
+			let db = DatabaseConfiguration(username: "jp", password: "password", databaseName: "notes")
+			let app = Application(applicationSecret: BadSecret, databaseConfiguration: db, publicDirectory: "")
+			
+			let c = TestController(application: app)
+			c.resource = Resource(name: "test", controller: c)
+
+			c.handleIndex = {
+				(r: Request, p: Parameters, s: Session, t: Transaction) throws -> ControllerResponse in
+
+				var out = Session()
+				out.update("key", "value")
+
+				return ControllerResponse(.Ok, session: out)
+			}
+
+			let data = MakeHTTPRequest("GET", path: "/test", headers: [:], body: "")
+			if let request = HTTP11(rawRequest: data).request() {
+				let response = try c.apply(request)
+				XCTAssertNotNil(response.headers["Set-Cookie"], "Should have a Set-Cookie header")
+			} else {
+				XCTFail("Could not make request from data")
+			}
+
+		} catch {
+			XCTFail("Should not throw")
+		}
+	}
 }
 
 extension ControllerTests {
 	var allTests : [(String, () -> Void)] {
 		return [
-			("testParameters", testParameters)
+			("testParameters", testParameters),
+			("testCookies", testCookies)
 		]
 	}
 }

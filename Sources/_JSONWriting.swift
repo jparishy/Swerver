@@ -9,10 +9,23 @@
 import Foundation
 
 extension NSJSONSerialization {
-    public class func _impl_swerver_dataWithJSONObject(obj: AnyObject, options opt: NSJSONWritingOptions) throws -> NSData {
+    public class func _impl_swerver_dataWithJSONObject(obj: Any, options opt: NSJSONWritingOptions) throws -> NSData {
+
+        /*
+         * Lots of f'd up stuff going on here.
+         * 1. Foundation doesn't have JSON serialization yet, just deserialization
+         * 2. Foundation's isValidJSONObject() does not work with NSDictionary or NSArray
+         * 3. We have to use NSDictionary and NSArray because OS Swift doesn't support casting Swift.Dictionary &
+         *    Swift.Array to verions with Any, ex. Dictionary<String, Int> is not castable to Dictionary<String, Any>
+         *    even though it should be. This is to be fixed in the future.
+         * 4. This is probably why they don't have JSON serialization yet, but this is a web framework
+         *    so _we_ need it. So we hack around and just don't validate.
+         */
+        /*
         if !isValidJSONObject(obj) {
             throw JSONError.InvalidInput
         }
+        */
         
         if let obj = obj as? NSObject {
             let prettyPrinted = ((opt.rawValue | NSJSONWritingOptions.PrettyPrinted.rawValue) == 0)

@@ -70,12 +70,12 @@ public enum UserError : ErrorType {
 
 public struct Session {
     static let CookieName = "_swerver_session"
-    internal var dictionary: [String:AnyObject] = [:]
+    internal var dictionary: [String:Any] = [:]
     
     internal init?(JSONData: NSData) {
         do {
             if let JSON = try NSJSONSerialization.JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
-                dictionary = JSON.mutableCopy() as! [String:AnyObject]
+                dictionary = JSON.mutableCopy() as! [String:Any]
             } else {
                 return nil
             }
@@ -86,7 +86,7 @@ public struct Session {
     
     public init() { }
     
-    public mutating func update(key: String, _ value: AnyObject?) {
+    public mutating func update(key: String, _ value: Any?) {
         dictionary[key] = value ?? NSNull()
     }
     
@@ -100,7 +100,7 @@ public struct Session {
         }
     }
     
-    public subscript(key: String) -> AnyObject? {
+    public subscript(key: String) -> Any? {
         return dictionary[key]
     }
 }

@@ -20,15 +20,7 @@ public enum JSONError : ErrorType {
 
 public extension NSJSONSerialization {
     
-    public class func swerver_dataWithJSONObject(obj: AnyObject, options opt: NSJSONWritingOptions) throws -> NSData {
+    public class func swerver_dataWithJSONObject(obj: Any, options opt: NSJSONWritingOptions) throws -> NSData {
         return try _impl_swerver_dataWithJSONObject(obj, options: opt)
-    }
-    
-    public class func swerver_writeJSONObject(obj: AnyObject, toStream stream: NSOutputStream, options opt: NSJSONWritingOptions, error: NSErrorPointer) -> Int {
-        return 0
-    }
-    
-    public class func swerver_JSONObjectWithStream(stream: NSInputStream, options opt: NSJSONReadingOptions) throws -> AnyObject {
-        throw JSONError.Unimplemented
     }
 }
