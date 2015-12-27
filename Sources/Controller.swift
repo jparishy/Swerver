@@ -196,7 +196,7 @@ public class Controller : RouteProvider {
                 if let contentType: NSString = request.headers["Content-Type"]?.bridge() {
                     if contentType.rangeOfString("application/json").location != NSNotFound {
                         let JSON = try NSJSONSerialization.JSONObjectWithData(body, options: NSJSONReadingOptions(rawValue: 0))
-                        return JSON as? AnyObject
+                        return JSON
                     } else if contentType.rangeOfString("application/x-www-form-urlencoded").location != NSNotFound {
                         if let string = NSString(bytes: body.bytes, length: body.length, encoding: NSUTF8StringEncoding)?.swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) {
                             let parameters =  parametersFromURLEncodedString(string)

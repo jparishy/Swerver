@@ -39,24 +39,44 @@ class ControllerTests : XCTestCase, XCTestCaseProvider {
 			let c = TestController(application: app)
 			c.resource = Resource(name: "test", controller: c)
 
-			c.handleIndex = {
-				(r: Request, p: Parameters, s: Session, t: Transaction) throws -> ControllerResponse in
-				 
+			let test: (NSData, ((Request, Parameters, Session, Transaction) -> Void)) throws -> Void = {
+				(data: NSData, assertions: ((Request, Parameters, Session, Transaction) -> Void)) throws -> Void in
+
+				c.handleIndex = {
+					(r: Request, p: Parameters, s: Session, t: Transaction) throws -> ControllerResponse in
+					
+					assertions(r, p, s, t)
+
+					return ControllerResponse(.Ok)
+				}
+
+				if let request = HTTP11(rawRequest: data).request() {
+					try c.apply(request)
+				} else {
+					XCTFail("Could not make request from data")
+				}
+			}
+
+			try test(MakeHTTPRequest("GET", path: "/test", headers: ["Content-Type":"application/x-www-form-urlencoded"], body: "test=working")) {
+				r, p, s, t in
+
+				XCTAssertNil(p["some_invalid_key"], "should be nil")
+
 				if let t = p["test"] as? String {
 					XCTAssertEqual(t, "working", "Should have the parameter passed in the request")
 				} else {
 					XCTFail("Missing parameter")
 				}
-
-				return ControllerResponse(.Ok)
 			}
 
-			let data = MakeHTTPRequest("GET", path: "/test", headers: ["Content-Type":"application/x-www-form-urlencoded"], body: "test=working")
-			let rawRequest = HTTP11(rawRequest: data)
-			if let request = rawRequest.request() {
-				try c.apply(request)
-			} else {
-				XCTFail("Coult not make request.")
+			try test(MakeHTTPRequest("GET", path: "/test", headers: ["Content-Type":"application/json"], body: "{\"test\":\"valid json\"}")) {
+				r, p, s, t in
+
+				if let t = p["test"] as? String {
+					XCTAssertEqual(t, "valid json", "Should have the parameter passed in the request")
+				} else {
+					XCTFail("Missing parameter")
+				}
 			}
 		}
 		catch {
