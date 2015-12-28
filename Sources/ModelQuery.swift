@@ -12,11 +12,20 @@ import Foundation
 import Glibc
 #endif
 
+public enum ModelQueryError: ErrorType {
+    case TransactionRequired
+}
+
 public class ModelQuery<T : Model> {
+
     public let transaction: Transaction
     
-    public init(transaction: Transaction) {
-        self.transaction = transaction
+    public init(transaction: Transaction?) throws {
+        if let transaction = transaction {
+            self.transaction = transaction
+        } else {
+            throw ModelQueryError.TransactionRequired
+        }
     }
     
     public func insert(m: T) throws -> T {
