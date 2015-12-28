@@ -15,12 +15,8 @@ import Glibc
 public class ModelQuery<T : Model> {
     public let transaction: Transaction
     
-    public init?(transaction: Transaction?) {
-        if let transaction = transaction {
-            self.transaction = transaction
-        } else {
-            return nil
-        }
+    public init(transaction: Transaction) {
+        self.transaction = transaction
     }
     
     public func insert(m: T) throws -> T {
