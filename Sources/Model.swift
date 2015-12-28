@@ -156,13 +156,13 @@ public class Model {
     public var properties: [BaseProperty] { get { return [] } }
     var transaction: Transaction? { get { return nil } }
     
-    public func JSON() throws -> NSDictionary {
+    public func JSON() throws -> [String:Any] {
         return try JSONDictionaryFromModel(self)
     }
 }
 
 public extension SequenceType where Generator.Element == Model {
-    public func JSON() throws -> NSArray {
+    public func JSON() throws -> [Any] {
         let models = Array(self)
         return try JSONDictionariesFromModels(models)
     }
@@ -201,15 +201,15 @@ public func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     return m
 }
 
-public func JSONDictionariesFromModels(models: [Model]) throws -> NSArray {
-    let array = NSMutableArray()
+public func JSONDictionariesFromModels(models: [Model]) throws -> [Any] {
+    var array: [Any] = []
     for m in models {
-        array.addObject(try JSONDictionaryFromModel(m))
+        array.append(try JSONDictionaryFromModel(m))
     }
     return array
 }
 
-public func JSONDictionaryFromModel(m: Model) throws -> NSDictionary {
+public func JSONDictionaryFromModel(m: Model) throws -> [String:Any] {
     
     var d = Dictionary<String, Any>()
     
@@ -218,5 +218,5 @@ public func JSONDictionaryFromModel(m: Model) throws -> NSDictionary {
         d[k] = vv
     }
     
-    return d.bridge()
+    return d
 }
