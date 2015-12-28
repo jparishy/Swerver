@@ -12,6 +12,8 @@ public protocol Application {
     var applicationSecret: String { get }
     var publicDirectory: String   { get }
     var databaseConfiguration: DatabaseConfiguration? { get }
+
+    func resource<T : Controller>(name: String, namespace: String?, additionRoutes: (T) -> ([ResourceSubroute])) -> Resource
 }
 
 public struct DatabaseConfiguration {
