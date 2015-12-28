@@ -61,7 +61,13 @@ extension JSONEncodable {
             return try s.JSONString(prettyPrinted)
         } else if let s = self as? Int {
             return try s.JSONString(prettyPrinted)
+        } else if let s = self as? Double {
+            return try s.JSONString(prettyPrinted)
+        } else if let s = self as? Float {
+            return try s.JSONString(prettyPrinted)
         } else if let s = self as? Bool {
+            return try s.JSONString(prettyPrinted)
+        } else if let s = self as? NSNull {
             return try s.JSONString(prettyPrinted)
         } else if let s = self as? Dictionary<String, JSONEncodable> {
             return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
@@ -75,7 +81,7 @@ extension JSONEncodable {
             return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
         } else if let s = self as? Dictionary<String, String> {
             return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
-        } else if let s = self as? Array<JSONEncodable> {
+        } else if let s = self as? Dictionary<String, NSNull> {
             return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
         } else if let s = self as? Array<Int> {
             return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
@@ -86,6 +92,10 @@ extension JSONEncodable {
         } else if let s = self as? Array<Bool> {
             return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
         } else if let s = self as? Array<String> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Array<NSNull> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Array<JSONEncodable> {
             return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
         } else {
             throw JSONError.InvalidInput
@@ -173,10 +183,8 @@ extension Array {
         var index = 0
         for v in self {
             
-            if let v = v as? String {
-                output += try v.JSONString(prettyPrinted)
-            } else if let v = v as? Bool {
-                output += try v.JSONString(prettyPrinted)
+            if let v = v as? JSONEncodable {
+                output += try v.JSONString(prettyPrinted, indentationLevel: indentationLevel)
             } else {
                 throw JSONError.InvalidInput
             }
@@ -213,9 +221,26 @@ extension Int {
     }
 }
 
+extension Double {
+    private func JSONString(prettyPrinted: Bool) throws -> String {
+        return "\(self)"
+    }
+}
+
+extension Float {
+    private func JSONString(prettyPrinted: Bool) throws -> String {
+        return "\(self)"
+    }
+}
+
 extension Bool {
     private func JSONString(prettyPrinted: Bool) throws -> String {
         return self ? "true" : "false"
     }
 }
 
+extension NSNull {
+    private func JSONString(prettyPrinted: Bool) throws -> String {
+        return "null"
+    }
+}

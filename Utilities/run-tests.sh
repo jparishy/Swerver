@@ -36,11 +36,11 @@ def run_tests_for_dir(dir)
 
 	Dir.chdir(dir) do
 		swift_files = Dir.glob("*.swift")
-		out_name = "./#{dir.split("/").last.downcase}"
+		out_name = "#{dir.split("/").last.downcase}"
 		imports = import_paths.map { |ip| "-I #{ip}" }.join(" ")
 		linked_libs = DEPENDENCIES.map { |d| "-l:#{d}.a" }.join(" ")
 
-		compile_str = "swiftc #{swift_files.join(" ")} -I /home/jparishy/code/swerver/.build/debug/ #{imports} -I #{BUILD_DIR} -L #{BUILD_DIR} -l:#{PRIMARY_TARGET_NAME}.a #{linked_libs} -lswiftGlibc -lFoundation -o #{out_name}"
+		compile_str = "swiftc #{swift_files.join(" ")} -I /home/jparishy/code/swerver/.build/debug/ #{imports} -I #{BUILD_DIR} -L #{BUILD_DIR} -l:#{PRIMARY_TARGET_NAME}.a #{linked_libs} -lswiftGlibc -lFoundation -o ./#{out_name}"
 		
 		vputs "\t> #{compile_str}"
 		puts `#{compile_str}`
@@ -50,13 +50,13 @@ def run_tests_for_dir(dir)
 			exit 1
 		end
 		
-		stdout, stderr, status = Open3.capture3("#{out_name}")
+		stdout, stderr, status = Open3.capture3("./#{out_name}")
 
 		puts stdout if stdout.length > 0
 		puts stderr if stderr.length > 0
 
 		if status != 0
-			puts "#{dir} failed: #{status}. Leaving #{out_name} for reproducing purposes."
+			puts "#{dir} failed: #{status}. Leaving test executable `./#{dir}/#{out_name}` for reproducing purposes."
 			exit 1
 		else
 			puts `rm ./#{out_name}`

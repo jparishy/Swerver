@@ -59,6 +59,35 @@ class JSONTests: XCTestCase, XCTestCaseProvider {
 			let nestedDictStr = try str(nestedDict)
 			XCTAssertEqual(nestedDictStr, "{\"outer\":{\"inner\":3}}")
 
+			// 
+
+			let arrayOfDicts: [[String:JSONEncodable]] = [
+				["test" : "ok"],
+				["sup"  : 42]
+			]
+
+			let arrayOfDictsStr = try str(arrayOfDicts)
+			XCTAssertEqual(arrayOfDictsStr, "[{\"test\":\"ok\"},{\"sup\":42}]")
+
+			// 
+
+			let dictOfDicts: [String:[String:JSONEncodable]] = [
+				"a" : ["test" : "ok"],
+				"b" : ["sup"  : 42]
+			]
+
+			let dictOfDictsStr = try str(dictOfDicts)
+			XCTAssertEqual(dictOfDictsStr, "{\"a\":{\"test\":\"ok\"},\"b\":{\"sup\":42}}")
+
+			//
+
+			let dictWithNull: [String:JSONEncodable] = [
+				"key" : NSNull()
+			]
+
+			let dictWithNullStr = try str(dictWithNull)
+			XCTAssertEqual(dictWithNullStr, "{\"key\":null}")
+
 		} catch {
 			XCTFail("None of these should throw")
 		}
