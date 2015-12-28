@@ -67,7 +67,7 @@ class ModelQueryTests : XCTestCase, XCTestCaseProvider {
 
 		let mq = try! ModelQuery<TestModel>(transaction: TestTransaction())
 		let query = try! mq.updateQuery(m)
-		
+
 		XCTAssertEqual(query, "UPDATE tests SET id = 7, an_int = 42, a_string = 'jp', a_bool = true WHERE id = 7;")
 	}
 }
@@ -75,6 +75,7 @@ class ModelQueryTests : XCTestCase, XCTestCaseProvider {
 extension ModelQueryTests {
 	var allTests : [(String, () -> Void)] {
 		return [
+			("testInsertQuery", testInsertQuery),
 			("testUpdateQuery", testUpdateQuery),
 		]
 	}
