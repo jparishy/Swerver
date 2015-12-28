@@ -18,7 +18,7 @@ public protocol BaseProperty {
     var dirty: Bool { get }
     func databaseReadFromValue(value: String) throws
     func databaseValueForWriting() throws -> String
-    func rawValueForWriting() throws -> Any
+    func rawValueForWriting() throws -> JSONEncodable
 }
 
 public class Property<T> : BaseProperty, CustomStringConvertible {
@@ -63,7 +63,7 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
         throw ModelError.MustOverrideInSubclass
     }
     
-    public func rawValueForWriting() throws -> Any {
+    public func rawValueForWriting() throws -> JSONEncodable {
         throw ModelError.MustOverrideInSubclass
     }
     
@@ -89,8 +89,8 @@ public class StringProperty : Property<String> {
         return "'\(value())'"
     }
     
-    public override func rawValueForWriting() throws -> Any {
-        return NSString(string: value())
+    public override func rawValueForWriting() throws -> JSONEncodable {
+        return value()
     }
 }
 
@@ -113,8 +113,8 @@ public class IntProperty : Property<Int> {
         return String(value())
     }
     
-    public override func rawValueForWriting() throws -> Any {
-        return NSNumber(integer: value())
+    public override func rawValueForWriting() throws -> JSONEncodable {
+        return value()
     }
 }
 
@@ -137,7 +137,7 @@ public class BoolProperty : Property<Bool> {
         return value() ? "true" : "false"
     }
     
-    public override func rawValueForWriting() throws -> Any {
+    public override func rawValueForWriting() throws -> JSONEncodable {
         return value()
     }
 }
@@ -156,13 +156,13 @@ public class Model {
     public var properties: [BaseProperty] { get { return [] } }
     var transaction: Transaction? { get { return nil } }
     
-    public func JSON() throws -> [String:Any] {
+    public func JSON() throws -> [String:JSONEncodable] {
         return try JSONDictionaryFromModel(self)
     }
 }
 
 public extension SequenceType where Generator.Element == Model {
-    public func JSON() throws -> [Any] {
+    public func JSON() throws -> [JSONEncodable] {
         let models = Array(self)
         return try JSONDictionariesFromModels(models)
     }
@@ -201,17 +201,17 @@ public func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     return m
 }
 
-public func JSONDictionariesFromModels(models: [Model]) throws -> [Any] {
-    var array: [Any] = []
+public func JSONDictionariesFromModels(models: [Model]) throws -> [JSONEncodable] {
+    var array: [JSONEncodable] = []
     for m in models {
         array.append(try JSONDictionaryFromModel(m))
     }
     return array
 }
 
-public func JSONDictionaryFromModel(m: Model) throws -> [String:Any] {
+public func JSONDictionaryFromModel(m: Model) throws -> [String:JSONEncodable] {
     
-    var d = Dictionary<String, Any>()
+    var d = Dictionary<String, JSONEncodable>()
     
     for (k,v) in ModelsMap(m.properties) {
         let vv = try v.rawValueForWriting()

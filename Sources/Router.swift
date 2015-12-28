@@ -66,16 +66,26 @@ public enum UserError : ErrorType {
     case Unimplemented
 }
 
-//typealias Response = (statusCode: StatusCode, headers: Headers, responseData: ResponseData?)
-
 public struct Session {
     static let CookieName = "_swerver_session"
-    internal var dictionary: [String:Any] = [:]
+    internal var dictionary: [String:JSONEncodable] = [:]
     
     internal init?(JSONData: NSData) {
         do {
-            let JSON = try NSJSONSerialization.JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0))
-            dictionary = JSON as! [String : Any]
+            if let JSON = try NSJSONSerialization.JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0)) as? Dictionary<String, Any> {
+                var converted: [String:JSONEncodable] = [:]
+                for (k,v) in JSON {
+                    if let v = v as? JSONEncodable {
+                        converted[k] = v as JSONEncodable
+                    } else {
+                        return nil
+                    }
+                }
+
+                dictionary = converted
+            } else {
+                return nil
+            }
         } catch {
             return nil
         }
@@ -83,7 +93,7 @@ public struct Session {
     
     public init() { }
     
-    public mutating func update(key: String, _ value: Any?) {
+    public mutating func update(key: String, _ value: JSONEncodable?) {
         dictionary[key] = value ?? NSNull()
     }
     
@@ -257,12 +267,12 @@ public struct Ok {
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
     
-    public static func JSON(dictionary: NSDictionary) throws -> Response {
+    public static func JSON(dictionary: [String:JSONEncodable]) throws -> Response {
         let data = try NSJSONSerialization.swerver_dataWithJSONObject(dictionary, options: NSJSONWritingOptions(rawValue: 0))
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
     
-    public static func JSON(array: NSArray) throws -> Response {
+    public static func JSON(array: [JSONEncodable]) throws -> Response {
         let data = try NSJSONSerialization.swerver_dataWithJSONObject(array, options: NSJSONWritingOptions(rawValue: 0))
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }

@@ -56,6 +56,7 @@ public class Controller : RouteProvider {
                         allParameters[k] = v
                     }
                 }
+
                 var session: Session
                 if let cookiesString = request.headers["Cookie"] {
                     let cookies: [Cookie] = Cookie.parse(cookiesString)
@@ -134,7 +135,7 @@ public class Controller : RouteProvider {
                 
                 var sessionCookie: String? = nil
                 do {
-                    let data = try NSJSONSerialization.swerver_dataWithJSONObject(session.dictionary.bridge(), options: NSJSONWritingOptions(rawValue: 0))
+                    let data = try NSJSONSerialization.swerver_dataWithJSONObject(session.dictionary, options: NSJSONWritingOptions(rawValue: 0))
                     let str = NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)
                     sessionCookie = str?.bridge()
                 } catch {

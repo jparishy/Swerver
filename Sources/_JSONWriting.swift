@@ -9,64 +9,91 @@
 import Foundation
 
 extension NSJSONSerialization {
-    public class func _impl_swerver_dataWithJSONObject(obj: Any, options opt: NSJSONWritingOptions) throws -> NSData {
-
-        /*
-         * Lots of f'd up stuff going on here.
-         * 1. Foundation doesn't have JSON serialization yet, just deserialization
-         * 2. Foundation's isValidJSONObject() does not work with NSDictionary or NSArray
-         * 3. We have to use NSDictionary and NSArray because OS Swift doesn't support casting Swift.Dictionary &
-         *    Swift.Array to verions with Any, ex. Dictionary<String, Int> is not castable to Dictionary<String, Any>
-         *    even though it should be. This is to be fixed in the future.
-         * 4. This is probably why they don't have JSON serialization yet, but this is a web framework
-         *    so _we_ need it. So we hack around and just don't validate.
-         */
-        /*
-        if !isValidJSONObject(obj) {
-            throw JSONError.InvalidInput
-        }
-        */
-        
-        if let obj = obj as? NSObject {
-            let prettyPrinted = ((opt.rawValue | NSJSONWritingOptions.PrettyPrinted.rawValue) == 0)
-            let output = try obj.JSONObjectString(prettyPrinted)
-            let bytes = output.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding)
-            return NSData(bytes: bytes, length: bytes.count)
-        } else {
-            throw JSONError.InvalidInput
-        }
+    public class func _impl_swerver_dataWithJSONObject(obj: [JSONEncodable], options opt: NSJSONWritingOptions) throws -> NSData {
+        let prettyPrinted = ((opt.rawValue | NSJSONWritingOptions.PrettyPrinted.rawValue) == 0)
+        let output = try obj.JSONString(prettyPrinted, indentationLevel: 0)
+        let bytes = output.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+        return NSData(bytes: bytes, length: bytes.count)
     }
+
+    public class func _impl_swerver_dataWithJSONObject(obj: [String:JSONEncodable], options opt: NSJSONWritingOptions) throws -> NSData {
+        let prettyPrinted = ((opt.rawValue | NSJSONWritingOptions.PrettyPrinted.rawValue) == 0)
+        let output = try obj.JSONString(prettyPrinted, indentationLevel: 0)
+        let bytes = output.bridge().swerver_cStringUsingEncoding(NSUTF8StringEncoding)
+        return NSData(bytes: bytes, length: bytes.count)
+    }
+
+    public class func _impl_swerver_dataWithJSONObject<T : JSONEncodable>(obj: [T], options opt: NSJSONWritingOptions) throws -> NSData {
+        let validObj = obj.map {
+            v in
+            return v as JSONEncodable
+        }
+
+        return try _impl_swerver_dataWithJSONObject(validObj, options: opt)
+    }
+
+    public class func _impl_swerver_dataWithJSONObject<T : JSONEncodable>(obj: [String:T], options opt: NSJSONWritingOptions) throws -> NSData {
+        let validObj = mapDict(obj) {
+            (k: String, v: T) -> (String, JSONEncodable) in
+            return (k, v as JSONEncodable)
+        }
+
+        return try _impl_swerver_dataWithJSONObject(validObj, options: opt)
+    }
+}
+
+private func mapDict<K : Hashable, V, OK : Hashable, OV>(dict: Dictionary<K,V>, f: ((K,V) -> (OK,OV))) -> Dictionary<OK, OV> {
+    var out = Dictionary<OK, OV>()
+    for (k,v) in dict {
+        let (ok,ov) = f(k, v)
+        out[ok] = ov
+    }
+    return out
 }
 
 private func Indentation(level: Int) -> String {
     return String(count: level, repeatedValue: Character("\t"))
 }
 
-extension NSObject {
-    private func JSONObjectString(prettyPrinted: Bool, indentationLevel: Int? = nil) throws -> String {
-        
-        let level: Int
-        if let il = indentationLevel {
-            level = il
-        } else {
-            level = 0
-        }
-        
-        if let dictionary = self as? NSDictionary {
-            return try dictionary.JSONString(prettyPrinted, indentationLevel: level)
-        } else if let array = self as? NSArray {
-            return try array.JSONString(prettyPrinted, indentationLevel: level)
-        } else if let string = self as? NSString {
-            return try string.JSONString(prettyPrinted)
-        } else if let number = self as? NSNumber {
-            return try number.JSONString(prettyPrinted)
+extension JSONEncodable {
+    private func JSONString(prettyPrinted: Bool, indentationLevel: Int) throws -> String {
+        if let s = self as? String {
+            return try s.JSONString(prettyPrinted)
+        } else if let s = self as? Int {
+            return try s.JSONString(prettyPrinted)
+        } else if let s = self as? Bool {
+            return try s.JSONString(prettyPrinted)
+        } else if let s = self as? Dictionary<String, JSONEncodable> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Dictionary<String, Int> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Dictionary<String, Double> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Dictionary<String, Float> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Dictionary<String, Bool> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Dictionary<String, String> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Array<JSONEncodable> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Array<Int> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Array<Double> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Array<Float> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Array<Bool> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
+        } else if let s = self as? Array<String> {
+            return try s.JSONString(prettyPrinted, indentationLevel: indentationLevel)
         } else {
             throw JSONError.InvalidInput
         }
     }
 }
 
-extension NSDictionary {
+extension Dictionary {
     private func JSONString(prettyPrinted: Bool, indentationLevel: Int) throws -> String {
         var output = ""
         
@@ -80,23 +107,31 @@ extension NSDictionary {
         }
         
         var index = 0
-        for (k,v) in self {
-            
-            if let k = k as? NSString {
+
+        let keys: [Key] = Array(self.keys).sort { (k1: Key, k2: Key) -> Bool in
+            if let s1 = k1 as? String, s2 = k2 as? String {
+                return s1 < s2
+            } else {
+                return false
+            }
+        }
+
+        for k in keys {
+            let v = self[k]
+
+            if let k = k as? String, v = v as? JSONEncodable {
                 if prettyPrinted {
                     output += Indentation(indentationLevel + 1)
                 }
                 
                 output += try k.JSONString(prettyPrinted)
+
                 output += ":"
                 if prettyPrinted {
                     output += " "
                 }
-                if let v = v as? NSObject {
-                    output += try v.JSONObjectString(prettyPrinted)
-                } else if let v = v as? Bool {
-                    output += try v.JSONString(prettyPrinted)
-                }
+                
+                output += try v.JSONString(prettyPrinted, indentationLevel: indentationLevel)
             } else {
                 throw JSONError.InvalidInput
             }
@@ -121,7 +156,7 @@ extension NSDictionary {
     }
 }
 
-extension NSArray {
+extension Array {
     private func JSONString(prettyPrinted: Bool, indentationLevel: Int) throws -> String {
         var output = ""
         
@@ -138,8 +173,8 @@ extension NSArray {
         var index = 0
         for v in self {
             
-            if let v = v as? NSObject {
-                output += try v.JSONObjectString(prettyPrinted, indentationLevel: indentationLevel + 1)
+            if let v = v as? String {
+                output += try v.JSONString(prettyPrinted)
             } else if let v = v as? Bool {
                 output += try v.JSONString(prettyPrinted)
             } else {
@@ -166,19 +201,15 @@ extension NSArray {
     }
 }
 
-extension NSString {
+extension String {
     private func JSONString(prettyPrinted: Bool) throws -> String {
-        return "\"\(self.bridge())\""
+        return "\"\(self)\""
     }
 }
 
-extension NSNumber {
+extension Int {
     private func JSONString(prettyPrinted: Bool) throws -> String {
-        if doubleValue % 1 == 0 {
-            return "\(doubleValue)"
-        } else {
-            return "\(integerValue)"
-        }
+        return "\(self)"
     }
 }
 

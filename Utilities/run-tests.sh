@@ -71,22 +71,34 @@ if $?.exitstatus != 0
 	exit 1
 end
 
-Dir.glob("#{TEST_DIR}/*").each do |entry|
-
-	full_path = File.join(PWD, entry)
-	if !File.directory?(full_path) then
-		next
+if ARGV[0] != nil && ARGV[0] != "-v" && ARGV[0].length > 0
+	single_test = "#{TEST_DIR}/#{ARGV[0]}"
+	if File.directory?(File.join(PWD, single_test)) == false
+		puts "Single test directory #{single_test} does not exist."
+		exit 1
 	end
 
-	if SKIP_DIRS.include?(entry.split("/").last) then
-		puts "Skipping #{entry}\n\n"
-		next
-	end
-	
-	puts "Running tests in #{entry}"
-	
-	run_tests_for_dir(entry)
+	puts "Running single tests in directory: #{single_test}"
+	run_tests_for_dir(single_test)
 	print "\n"
+else 
+	Dir.glob("#{TEST_DIR}/*").each do |entry|
+
+		full_path = File.join(PWD, entry)
+		if !File.directory?(full_path) then
+			next
+		end
+
+		if SKIP_DIRS.include?(entry.split("/").last) then
+			puts "Skipping #{entry}\n\n"
+			next
+		end
+		
+		puts "Running tests in #{entry}"
+		
+		run_tests_for_dir(entry)
+		print "\n"
+	end
 end
 
 puts "Finished."
