@@ -151,11 +151,11 @@ public extension Bool {
 
 public class Model {
     public required init() {}
-    public class var table: String { get { return "" } }
-    public class var columns: [String] { get { return [] } }
-    public class var primaryKey: String { get { return "" } }
-    public var properties: [BaseProperty] { get { return [] } }
-    var transaction: Transaction? { get { return nil } }
+    public class var table: String { get { assert(false, "Must implement Model#table for \(self.dynamicType)"); return "" } }
+    public class var columns: [String] { get { assert(false, "Must implement Model#columns for \(self.dynamicType)"); return [] } }
+    public class var primaryKey: String { get { assert(false, "Must implement Model#primaryKey for \(self.dynamicType)"); return "" } }
+    public var properties: [BaseProperty] { get { assert(false, "Must implement Model#properties for \(self.dynamicType)"); return [] } }
+    var transaction: Transaction? { get { assert(false, "Must implement Model#transaction for \(self.dynamicType)"); return nil } }
     
     public func JSON() throws -> [String:JSONEncodable] {
         return try JSONDictionaryFromModel(self)

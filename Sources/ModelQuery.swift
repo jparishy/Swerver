@@ -14,6 +14,7 @@ import Glibc
 
 public enum ModelQueryError: ErrorType {
     case TransactionRequired
+    case PrimaryKeyRequired
 }
 
 public class ModelQuery<T : Model> {
@@ -28,13 +29,13 @@ public class ModelQuery<T : Model> {
         }
     }
     
-    public func insert(m: T) throws -> T {
+    internal func insertQuery(m: T) throws -> String {
         var query = "INSERT INTO \(T.table)("
         
         var index = 0
         for (k,_) in ModelsMap(m.properties) {
             if k == T.primaryKey {
-                index++
+                index += 1
                 continue
             }
             
@@ -46,7 +47,7 @@ public class ModelQuery<T : Model> {
                 query += ")"
             }
             
-            index++
+            index += 1
         }
         
         query += " VALUES ("
@@ -54,7 +55,7 @@ public class ModelQuery<T : Model> {
         index = 0
         for (k,v) in ModelsMap(m.properties) {
             if k == T.primaryKey {
-                index++
+                index += 1
                 continue
             }
             
@@ -67,12 +68,18 @@ public class ModelQuery<T : Model> {
                 query += ")"
             }
             
-            index++
+            index += 1
         }
         
         query += " RETURNING \(T.primaryKey)"
-        
+
+        return query
+    }
+
+    public func insert(m: T) throws -> T {
+        let query = try insertQuery(m)
         let queryResults = try transaction.command(query)
+
         if let first = queryResults?.first, id = first[T.primaryKey] {
             try ModelsMap(m.properties)[T.primaryKey]?.databaseReadFromValue(id)
         }
@@ -80,7 +87,7 @@ public class ModelQuery<T : Model> {
         return m
     }
     
-    public func update(m: T) throws -> T {
+    internal func updateQuery(m: T) throws -> String {
         let primaryKey = m.dynamicType.primaryKey
         if let primaryKeyValue = try ModelsMap(m.properties)[primaryKey]?.databaseValueForWriting() {
             var query = "UPDATE \(m.dynamicType.table) SET "
@@ -96,15 +103,20 @@ public class ModelQuery<T : Model> {
                     query += " "
                 }
                 
-                index++
+                index += 1
             }
             
             query += "WHERE \(m.dynamicType.primaryKey) = \(primaryKeyValue);"
-            try transaction.command(query)
+            return query
         } else {
-            print("WARNING: \(m) is dirty but does not have a valid primary key and cannot be updated.")
+            throw ModelQueryError.PrimaryKeyRequired
         }
-        
+    }
+
+    public func update(m: T) throws -> T {
+        let query = try updateQuery(m)
+        try transaction.command(query)
+
         return m
     }
     
