@@ -11,6 +11,7 @@ import CoreFoundation
 
 enum ModelError : ErrorType {
     case MustOverrideInSubclass
+    case InvalidKey
 }
 
 public protocol BaseProperty {
@@ -178,23 +179,39 @@ internal func ModelsMap(props: [BaseProperty]) -> [String:BaseProperty] {
 
 public func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     let m = T()
-    for (k,_) in ModelsMap(m.properties) {
+    for (k,mv) in ModelsMap(m.properties) {
         if let v = JSON[k.bridge()] {
             let obj = v
-            let str: NSString
-            if let num = obj as? NSNumber {
-                if num.doubleValue % 1 == 0 {
-                    str = "\(num.integerValue)".bridge()
+            let str: String
+            if let b = obj as? Bool {
+                str = b ? "true" : "false"
+            } else if let num = obj as? Int {
+                str = "\(num)"
+            } else if let num = obj as? Double {
+                str = "\(num)"
+            } else if let num = obj as? Float {
+                str = "\(num)"
+            } else if let num = obj as? NSNumber {
+                if mv is BoolProperty {
+                    str = (num.integerValue == 0 ? "false" : "true")
                 } else {
-                    str = "\(num.doubleValue)".bridge()
+                    if num.doubleValue % 1 != 0 {
+                        str = "\(num.doubleValue)"
+                    } else {
+                        str = "\(num.integerValue)"
+                    }
                 }
-            } else if let b = obj as? Bool {
-                str = (b ? "true" : "false").bridge()
+            } else if obj is NSNull {
+                str = "null"
+            } else if let obj = obj as? String {
+                str = obj
+            } else if let obj = obj as? NSString {
+                str = obj.bridge()
             } else {
-                str = obj as! NSString
+                throw ModelError.InvalidKey
             }
             
-            try ModelsMap(m.properties)[k]?.databaseReadFromValue(str.bridge())
+            try ModelsMap(m.properties)[k]?.databaseReadFromValue(str)
         }
     }
     
