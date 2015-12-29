@@ -15,6 +15,7 @@ import Glibc
 public enum ModelQueryError: ErrorType {
     case TransactionRequired
     case PrimaryKeyRequired
+    case InvalidPrimaryKey
 }
 
 public class ModelQuery<T : Model> {
@@ -120,11 +121,13 @@ public class ModelQuery<T : Model> {
         return m
     }
     
-    public func delete(primaryKeyValue: AnyObject) throws {
-        if let pk = primaryKeyValue as? NSNumber {
-            let query = "DELETE FROM \(T.table) WHERE \(T.primaryKey) = \(pk.integerValue);"
-            try transaction.command(query)
-        }
+    internal func deleteQuery(primaryKeyValue: Int) throws -> String {
+        return "DELETE FROM \(T.table) WHERE \(T.primaryKey) = \(primaryKeyValue);"
+    }
+
+    public func delete(primaryKeyValue: Int) throws {
+        let query = try deleteQuery(primaryKeyValue)
+        try transaction.command(query)
     }
     
     public func deleteAll() throws {

@@ -70,6 +70,16 @@ class ModelQueryTests : XCTestCase, XCTestCaseProvider {
 
 		XCTAssertEqual(query, "UPDATE tests SET id = 7, an_int = 42, a_string = 'jp', a_bool = true WHERE id = 7;")
 	}
+
+	func testDeleteQuery() {
+		let m = TestModel()
+		m.id.update(7)
+
+		let mq = try! ModelQuery<TestModel>(transaction: TestTransaction())
+		let query = try! mq.deleteQuery(m.id.value())
+
+		XCTAssertEqual(query, "DELETE FROM tests WHERE id = 7;")
+	}
 }
 
 extension ModelQueryTests {
@@ -77,6 +87,7 @@ extension ModelQueryTests {
 		return [
 			("testInsertQuery", testInsertQuery),
 			("testUpdateQuery", testUpdateQuery),
+			("testDeleteQuery", testDeleteQuery)
 		]
 	}
 }
