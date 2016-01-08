@@ -11,6 +11,7 @@ import CoreFoundation
 
 enum ModelError : ErrorType {
     case MustOverrideInSubclass
+    case InvalidKey
 }
 
 public protocol BaseProperty {
@@ -18,7 +19,7 @@ public protocol BaseProperty {
     var dirty: Bool { get }
     func databaseReadFromValue(value: String) throws
     func databaseValueForWriting() throws -> String
-    func rawValueForWriting() throws -> AnyObject
+    func rawValueForWriting() throws -> JSONEncodable
 }
 
 public class Property<T> : BaseProperty, CustomStringConvertible {
@@ -63,7 +64,7 @@ public class Property<T> : BaseProperty, CustomStringConvertible {
         throw ModelError.MustOverrideInSubclass
     }
     
-    public func rawValueForWriting() throws -> AnyObject {
+    public func rawValueForWriting() throws -> JSONEncodable {
         throw ModelError.MustOverrideInSubclass
     }
     
@@ -89,8 +90,8 @@ public class StringProperty : Property<String> {
         return "'\(value())'"
     }
     
-    public override func rawValueForWriting() throws -> AnyObject {
-        return NSString(string: value())
+    public override func rawValueForWriting() throws -> JSONEncodable {
+        return value()
     }
 }
 
@@ -113,8 +114,8 @@ public class IntProperty : Property<Int> {
         return String(value())
     }
     
-    public override func rawValueForWriting() throws -> AnyObject {
-        return NSNumber(integer: value())
+    public override func rawValueForWriting() throws -> JSONEncodable {
+        return value()
     }
 }
 
@@ -137,8 +138,8 @@ public class BoolProperty : Property<Bool> {
         return value() ? "true" : "false"
     }
     
-    public override func rawValueForWriting() throws -> AnyObject {
-        return JSONBool(bool: value())
+    public override func rawValueForWriting() throws -> JSONEncodable {
+        return value()
     }
 }
 
@@ -150,19 +151,19 @@ public extension Bool {
 
 public class Model {
     public required init() {}
-    public class var table: String { get { return "" } }
-    public class var columns: [String] { get { return [] } }
-    public class var primaryKey: String { get { return "" } }
-    public var properties: [BaseProperty] { get { return [] } }
-    var transaction: Transaction? { get { return nil } }
+    public class var table: String { get { assert(false, "Must implement Model#table for \(self.dynamicType)"); return "" } }
+    public class var columns: [String] { get { assert(false, "Must implement Model#columns for \(self.dynamicType)"); return [] } }
+    public class var primaryKey: String { get { assert(false, "Must implement Model#primaryKey for \(self.dynamicType)"); return "" } }
+    public var properties: [BaseProperty] { get { assert(false, "Must implement Model#properties for \(self.dynamicType)"); return [] } }
+    var transaction: Transaction? { get { assert(false, "Must implement Model#transaction for \(self.dynamicType)"); return nil } }
     
-    public func JSON() throws -> NSDictionary {
+    public func JSON() throws -> [String:JSONEncodable] {
         return try JSONDictionaryFromModel(self)
     }
 }
 
 public extension SequenceType where Generator.Element == Model {
-    public func JSON() throws -> NSArray {
+    public func JSON() throws -> [JSONEncodable] {
         let models = Array(self)
         return try JSONDictionariesFromModels(models)
     }
@@ -178,44 +179,60 @@ internal func ModelsMap(props: [BaseProperty]) -> [String:BaseProperty] {
 
 public func ModelFromJSONDictionary<T : Model>(JSON: NSDictionary) throws -> T {
     let m = T()
-    for (k,_) in ModelsMap(m.properties) {
+    for (k,mv) in ModelsMap(m.properties) {
         if let v = JSON[k.bridge()] {
             let obj = v
-            let str: NSString
-            if let num = obj as? NSNumber {
-                if num.doubleValue % 1 == 0 {
-                    str = "\(num.integerValue)".bridge()
+            let str: String
+            if let b = obj as? Bool {
+                str = b ? "true" : "false"
+            } else if let num = obj as? Int {
+                str = "\(num)"
+            } else if let num = obj as? Double {
+                str = "\(num)"
+            } else if let num = obj as? Float {
+                str = "\(num)"
+            } else if let num = obj as? NSNumber {
+                if mv is BoolProperty {
+                    str = (num.integerValue == 0 ? "false" : "true")
                 } else {
-                    str = "\(num.doubleValue)".bridge()
+                    if num.doubleValue % 1 != 0 {
+                        str = "\(num.doubleValue)"
+                    } else {
+                        str = "\(num.integerValue)"
+                    }
                 }
-            } else if let b = obj as? JSONBool {
-                str = b.stringValue.bridge()
+            } else if obj is NSNull {
+                str = "null"
+            } else if let obj = obj as? String {
+                str = obj
+            } else if let obj = obj as? NSString {
+                str = obj.bridge()
             } else {
-                str = obj as! NSString
+                throw ModelError.InvalidKey
             }
             
-            try ModelsMap(m.properties)[k]?.databaseReadFromValue(str.bridge())
+            try ModelsMap(m.properties)[k]?.databaseReadFromValue(str)
         }
     }
     
     return m
 }
 
-public func JSONDictionariesFromModels(models: [Model]) throws -> NSArray {
-    let array = NSMutableArray()
+public func JSONDictionariesFromModels(models: [Model]) throws -> [JSONEncodable] {
+    var array: [JSONEncodable] = []
     for m in models {
-        array.addObject(try JSONDictionaryFromModel(m))
+        array.append(try JSONDictionaryFromModel(m))
     }
     return array
 }
 
-public func JSONDictionaryFromModel(m: Model) throws -> NSDictionary {
+public func JSONDictionaryFromModel(m: Model) throws -> [String:JSONEncodable] {
     
-    let d = NSMutableDictionary()
+    var d = Dictionary<String, JSONEncodable>()
     
     for (k,v) in ModelsMap(m.properties) {
         let vv = try v.rawValueForWriting()
-        d.setObject(vv, forKey: k.bridge())
+        d[k] = vv
     }
     
     return d

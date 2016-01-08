@@ -8,6 +8,14 @@
 
 import Foundation
 
+public protocol Application {
+    var applicationSecret: String { get }
+    var publicDirectory: String   { get }
+    var databaseConfiguration: DatabaseConfiguration? { get }
+
+    func resource<T : Controller>(name: String, namespace: String?, additionRoutes: (T) -> ([ResourceSubroute])) -> Resource
+}
+
 public struct DatabaseConfiguration {
     public let username: String
     public let password: String
@@ -20,13 +28,13 @@ public struct DatabaseConfiguration {
     }
 }
 
-public class Application {
+public class MainApplication : Application {
 
     static let DefaultPublicDirectory = "./Public/"
     
     private var server: HTTPServer<HTTP11>?
     
-    public let databaseConfiguration: DatabaseConfiguration
+    public let databaseConfiguration: DatabaseConfiguration?
     
     private var _applicationSecret: String
     public var applicationSecret: String {
@@ -38,7 +46,7 @@ public class Application {
         return _publicDirectory
     }
     
-    public init(applicationSecret secret: String, databaseConfiguration configuration: DatabaseConfiguration, publicDirectory dir: String) {
+    public init(applicationSecret secret: String, databaseConfiguration configuration: DatabaseConfiguration?, publicDirectory dir: String) {
         _applicationSecret = secret
         _publicDirectory = dir
         
@@ -49,9 +57,9 @@ public class Application {
         server?.start()
     }
     
-    public static func start(applicationSecret: String, databaseConfiguration: DatabaseConfiguration, publicDirectory: String = Application.DefaultPublicDirectory, configuration: (Application) -> (port: Int, router: Router)) {
+    public static func start(applicationSecret: String, databaseConfiguration: DatabaseConfiguration?, publicDirectory: String = MainApplication.DefaultPublicDirectory, configuration: (Application) -> (port: Int, router: Router)) {
         
-        let app = Application(applicationSecret: applicationSecret, databaseConfiguration: databaseConfiguration, publicDirectory: publicDirectory)
+        let app = MainApplication(applicationSecret: applicationSecret, databaseConfiguration: databaseConfiguration, publicDirectory: publicDirectory)
         
         let (port, router) = configuration(app)
         app.server = HTTPServer<HTTP11>(port: port, router: router)

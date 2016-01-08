@@ -12,20 +12,31 @@ import Foundation
 import Glibc
 #endif
 
+public enum ModelQueryError: ErrorType {
+    case TransactionRequired
+    case PrimaryKeyRequired
+    case InvalidPrimaryKey
+}
+
 public class ModelQuery<T : Model> {
+
     public let transaction: Transaction
     
-    public init(transaction: Transaction) {
-        self.transaction = transaction
+    public init(transaction: Transaction?) throws {
+        if let transaction = transaction {
+            self.transaction = transaction
+        } else {
+            throw ModelQueryError.TransactionRequired
+        }
     }
     
-    public func insert(m: T) throws -> T {
+    internal func insertQuery(m: T) throws -> String {
         var query = "INSERT INTO \(T.table)("
         
         var index = 0
         for (k,_) in ModelsMap(m.properties) {
             if k == T.primaryKey {
-                index++
+                index += 1
                 continue
             }
             
@@ -37,7 +48,7 @@ public class ModelQuery<T : Model> {
                 query += ")"
             }
             
-            index++
+            index += 1
         }
         
         query += " VALUES ("
@@ -45,7 +56,7 @@ public class ModelQuery<T : Model> {
         index = 0
         for (k,v) in ModelsMap(m.properties) {
             if k == T.primaryKey {
-                index++
+                index += 1
                 continue
             }
             
@@ -58,12 +69,18 @@ public class ModelQuery<T : Model> {
                 query += ")"
             }
             
-            index++
+            index += 1
         }
         
         query += " RETURNING \(T.primaryKey)"
-        
+
+        return query
+    }
+
+    public func insert(m: T) throws -> T {
+        let query = try insertQuery(m)
         let queryResults = try transaction.command(query)
+
         if let first = queryResults?.first, id = first[T.primaryKey] {
             try ModelsMap(m.properties)[T.primaryKey]?.databaseReadFromValue(id)
         }
@@ -71,7 +88,7 @@ public class ModelQuery<T : Model> {
         return m
     }
     
-    public func update(m: T) throws -> T {
+    internal func updateQuery(m: T) throws -> String {
         let primaryKey = m.dynamicType.primaryKey
         if let primaryKeyValue = try ModelsMap(m.properties)[primaryKey]?.databaseValueForWriting() {
             var query = "UPDATE \(m.dynamicType.table) SET "
@@ -87,23 +104,30 @@ public class ModelQuery<T : Model> {
                     query += " "
                 }
                 
-                index++
+                index += 1
             }
             
             query += "WHERE \(m.dynamicType.primaryKey) = \(primaryKeyValue);"
-            try transaction.command(query)
+            return query
         } else {
-            print("WARNING: \(m) is dirty but does not have a valid primary key and cannot be updated.")
+            throw ModelQueryError.PrimaryKeyRequired
         }
-        
+    }
+
+    public func update(m: T) throws -> T {
+        let query = try updateQuery(m)
+        try transaction.command(query)
+
         return m
     }
     
-    public func delete(primaryKeyValue: AnyObject) throws {
-        if let pk = primaryKeyValue as? NSNumber {
-            let query = "DELETE FROM \(T.table) WHERE \(T.primaryKey) = \(pk.integerValue);"
-            try transaction.command(query)
-        }
+    internal func deleteQuery(primaryKeyValue: Int) throws -> String {
+        return "DELETE FROM \(T.table) WHERE \(T.primaryKey) = \(primaryKeyValue);"
+    }
+
+    public func delete(primaryKeyValue: Int) throws {
+        let query = try deleteQuery(primaryKeyValue)
+        try transaction.command(query)
     }
     
     public func deleteAll() throws {
@@ -133,7 +157,7 @@ public class ModelQuery<T : Model> {
         return results
     }
     
-    public func findWhere(params: [String:AnyObject]) throws -> [T] {
+    public func findWhere(params: [String:Any]) throws -> [T] {
         
         var query = "SELECT * FROM \(T.table)"
         
@@ -142,18 +166,14 @@ public class ModelQuery<T : Model> {
         
             var index = 0
             for (k, v) in params {
-                if v is Bool && !(v is Int) {
-                    print("*** [ERROR] Use JSONBool in place of Bool for serialization and query purposes")
-                    exit(1)
-                }
                 
                 query += k
                 query += " = "
                 
                 if v is String {
                     query += "'\(v)'"
-                } else if let v = v as? JSONBool {
-                    query += (v.value ? "true" : "false")
+                } else if let v = v as? Bool {
+                    query += (v ? "true" : "false")
                 } else {
                     query += "\(v)"
                 }

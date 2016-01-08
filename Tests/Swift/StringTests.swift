@@ -10,7 +10,7 @@ import XCTest
 import Swerver
 import Foundation
 
-class StringTests: XCTestCase {
+class StringTests: XCTestCase, XCTestCaseProvider {
 
     func test_swerver_stringByReplacingOccurrencesOfStringWithString() {
         XCTAssertEqual("Hello".swerver_stringByReplacingOccurrencesOfString("ello", withString: "i"), "Hi")

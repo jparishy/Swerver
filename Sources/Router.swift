@@ -66,16 +66,23 @@ public enum UserError : ErrorType {
     case Unimplemented
 }
 
-//typealias Response = (statusCode: StatusCode, headers: Headers, responseData: ResponseData?)
-
 public struct Session {
     static let CookieName = "_swerver_session"
-    internal var dictionary: [String:AnyObject] = [:]
+    internal var dictionary: [String:JSONEncodable] = [:]
     
     internal init?(JSONData: NSData) {
         do {
-            if let JSON = try NSJSONSerialization.swerver_JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
-                dictionary = JSON.mutableCopy() as! [String:AnyObject]
+            if let JSON = try NSJSONSerialization.JSONObjectWithData(JSONData, options: NSJSONReadingOptions(rawValue: 0)) as? Dictionary<String, Any> {
+                var converted: [String:JSONEncodable] = [:]
+                for (k,v) in JSON {
+                    if let v = v as? JSONEncodable {
+                        converted[k] = v as JSONEncodable
+                    } else {
+                        return nil
+                    }
+                }
+
+                dictionary = converted
             } else {
                 return nil
             }
@@ -86,7 +93,7 @@ public struct Session {
     
     public init() { }
     
-    public mutating func update(key: String, _ value: AnyObject?) {
+    public mutating func update(key: String, _ value: JSONEncodable?) {
         dictionary[key] = value ?? NSNull()
     }
     
@@ -100,16 +107,23 @@ public struct Session {
         }
     }
     
-    public subscript(key: String) -> AnyObject? {
+    public subscript(key: String) -> Any? {
         return dictionary[key]
     }
 }
 
 public struct Request {
-    let method: HTTPMethod
-    let path: String
-    let headers: Headers
-    let requestBody: NSData?
+    public let method: HTTPMethod
+    public let path: String
+    public let headers: Headers
+    public let requestBody: NSData?
+
+    public init(method: HTTPMethod, path: String, headers: Headers, requestBody: NSData?) {
+        self.method = method
+        self.path = path
+        self.headers = headers
+        self.requestBody = requestBody
+    }
 }
 
 public class Response {
@@ -253,12 +267,12 @@ public struct Ok {
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
     
-    public static func JSON(dictionary: NSDictionary) throws -> Response {
+    public static func JSON(dictionary: [String:JSONEncodable]) throws -> Response {
         let data = try NSJSONSerialization.swerver_dataWithJSONObject(dictionary, options: NSJSONWritingOptions(rawValue: 0))
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }
     
-    public static func JSON(array: NSArray) throws -> Response {
+    public static func JSON(array: [JSONEncodable]) throws -> Response {
         let data = try NSJSONSerialization.swerver_dataWithJSONObject(array, options: NSJSONWritingOptions(rawValue: 0))
         return Response(.Ok, headers: ["Content-Type" : "application/json"], responseData: ResponseData(data))
     }

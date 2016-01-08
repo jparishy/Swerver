@@ -10,183 +10,117 @@ import XCTest
 import Swerver
 import Foundation
 
-class JSONTests: XCTestCase {
-    
-    func test_swerver_isValidJSONObject() {
-        XCTAssertFalse(NSJSONSerialization.swerver_isValidJSONObject("json fragment"))
-        XCTAssertFalse(NSJSONSerialization.swerver_isValidJSONObject(3))
-        
-        let emptyArray: [Int] = []
-        XCTAssertTrue(NSJSONSerialization.swerver_isValidJSONObject(emptyArray))
+class JSONTests: XCTestCase, XCTestCaseProvider {
+	func testJSONWriting() {
+		do {
+			//
 
-        let emptyDict: [String:Any] = [:]
-        XCTAssertTrue(NSJSONSerialization.swerver_isValidJSONObject(emptyDict))
-        
-        let expectTrue = {
-            (str: String, obj: Any) -> Void in
-            XCTAssertTrue(NSJSONSerialization.swerver_isValidJSONObject(obj), "Expected: \(str)")
-        }
-        
-        let expectFalse = {
-            (str: String, obj: Any) -> Void in
-            XCTAssertFalse(NSJSONSerialization.swerver_isValidJSONObject(obj), "Expected: \(str)")
-        }
-        
-        expectTrue("valid dict", [
-            "test" : 30
-        ])
-        
-        expectFalse("invalid dict key", [
-            42 : 30
-        ])
-        
-        expectTrue("valid embedded dict", [
-            "validKey" : [
-                "validEmbeddedKey" : "validObject"
-            ]
-        ])
-        
-        expectTrue("valid embedded array", [
-            "validKey" : [ "valid1", "valid2" ]
-        ])
-        
-        expectFalse("invalid embedded dict", [
-            "validKey" : [
-                3 : "invalidEmbeddedObject"
-            ]
-        ])
-        
-        expectFalse("invalid embedded dict due to invalid value for key", [
-            "validKey" : [
-                "validEmbddedKey" : NSDate()
-            ]
-        ])
-        
-        expectFalse("invalid embedded array ", [
-            "validKey" : [
-                "validEmbddedKey" : [ NSDate() ]
-            ]
-        ])
+			let emptyArray: [JSONEncodable] = []
+			let emptyArrayStr = try str(emptyArray)
+			XCTAssertEqual(emptyArrayStr, "[]", "Should output empty JSON array")
 
-        expectTrue("valid doubly nested dict ", [
-            "validKey" : [
-                "validEmbddedKey" : [
-                    "embedded2" : "hi",
-                ]
-            ]
-        ])
+			//
 
-        expectFalse("invalid doubly nested dict ", [
-            "validKey" : [
-                "validEmbddedKey" : [
-                    "embedded2" : NSDate(),
-                ]
-            ]
-        ])
-    }
-    
-    func test_swerver_JSONObjectWithData() {
-        let makeData = {
-            (str: String) -> NSData? in
-            let bytes = str.swerver_cStringUsingEncoding(NSUTF8StringEncoding)
-            return NSData(bytes: bytes, length: bytes.count)
-        }
-        
-        let expectTrue = {
-            (message: String, JSONString: String, expectedObject: Any) in
-            if let data = makeData(JSONString) {
-                do {
-                    let result = try NSJSONSerialization.swerver_JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0))
-                    XCTAssertEqual(result as? NSObject, expectedObject as? NSObject, message)
-                } catch JSONError.UnexpectedToken(let m, let loc) {
-                    XCTFail("\(m) — at loc \(loc)")
-                } catch let error as NSError {
-                    XCTFail("NSJSONSerialization threw: \(error.localizedDescription)")
-                }
-            } else {
-                XCTFail("Bad String")
-            }
-        }
-        
-        let expectThrows = {
-            (message: String, JSONString: String) in
-            if let data = makeData(JSONString) {
-                do {
-                    try NSJSONSerialization.swerver_JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0))
-                    XCTFail("\(message)\nExpected throw on:\n\(JSONString)")
-                } catch {
-                    XCTAssert(true)
-                }
-            } else {
-                XCTFail("Bad String")
-            }
-        }
-        
-        expectTrue("valid single entry dict", "{\"key\":\"value\"}", [
-            "key" : "value"
-        ])
+			let emptyArrayOfInts: [Int] = []
+			let emptyArrayOfIntsStr = try str(emptyArrayOfInts)
+			XCTAssertEqual(emptyArrayOfIntsStr, "[]", "Should output empty JSON array")
 
-        expectTrue("valid multi entry dict", "{\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"}", [
-            "key1" : "value1",
-            "key2" : "value2",
-            "key3" : "value3"
-        ])
-        
-        expectTrue("valid single element array", "[42]", [
-            42
-        ])
+			//
 
-        expectTrue("valid multi element array", "[42,43,44]", [
-            42, 43, 44
-        ])
-        
-        let validNestedDict: [String:Any] = [
-            "key1" : "value1",
-            "nested" : [
-                "key2" : "value2",
-                "key3" : "value3"
-            ]
-        ]
+			let emptyDict: [String:JSONEncodable] = [:]
+			let emptyDictStr = try str(emptyDict)
+			XCTAssertEqual(emptyDictStr, "{}", "Should output empty JSON dict")
 
-        expectTrue("valid nested dict", "{\"key1\":\"value1\",\"nested\":{\"key2\":\"value2\",\"key3\":\"value3\"}}", validNestedDict)
-        
-        let validArrayOfDicts: [Any] = [
-            [ "key1" : "value1" ],
-            [ "key2" : "value2" ],
-            [ "key3" : "value3" ],
-        ]
+			//
 
-        expectTrue("valid array of dicts", "[{\"key1\":\"value1\"},{\"key2\":\"value2\"},{\"key3\":\"value3\"}]", validArrayOfDicts)
-        
-        let validArrayOfDictsComplex: [Any] = [
-            [ "key1" : [ "value1" : [ 1, 2, 3] ] ],
-            [ "key2" : "value2" ],
-            [ "key3" : "value3" ],
-        ]
+			let emptyDictOfInts: [String:Int] = [:]
+			let emptyDictOfIntsStr = try str(emptyDictOfInts)
+			XCTAssertEqual(emptyDictOfIntsStr, "{}", "Should output empty JSON dict")
 
-        expectTrue("valid array of dicts with first dict value being dict", "[{\"key1\": {\"value1\":[1,2,3]}},{\"key2\":\"value2\"},{\"key3\":\"value3\"}]", validArrayOfDictsComplex)
-        
-        expectThrows("missing coma", "{\"key1\":\"value1\" \"key2\":\"value2\",\"key3\":\"value3\"}")
-        expectThrows("missing closing curly brace", "{\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"")
-        
-        expectThrows("unescaped quote in string key", "{\"ke\"y1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"")
-        expectThrows("unescaped quote in string value", "{\"key1\":\"val\"ue1\",\"key2\":\"value2\",\"key3\":\"value3\"")
-        
-        expectTrue("escaped quote in string key", "{\"k\\\"ey\":\"value\"}", [
-            "k\"ey" : "value"
-        ])
-    
-        expectTrue("escaped quote in string value", "{\"key\":\"this is a \\\"quoted string\\\"\"}", [
-            "key" : "this is a \"quoted string\""
-        ])
-    }
+			//
+
+			let mixedDict: [String:JSONEncodable] = [
+				"test" : "hi",
+				"ok" : 3,
+				"cool" : false
+			]
+
+			let mixedDictStr = try str(mixedDict)
+			XCTAssertEqual(mixedDictStr, "{\"cool\":false,\"ok\":3,\"test\":\"hi\"}", "Should have valid mixed json string")
+
+			//
+
+			let nestedDict = [
+				"outer" : [
+					"inner" : 3
+				]
+			]
+
+			let nestedDictStr = try str(nestedDict)
+			XCTAssertEqual(nestedDictStr, "{\"outer\":{\"inner\":3}}")
+
+			// 
+
+			let arrayOfDicts: [[String:JSONEncodable]] = [
+				["test" : "ok"],
+				["sup"  : 42]
+			]
+
+			let arrayOfDictsStr = try str(arrayOfDicts)
+			XCTAssertEqual(arrayOfDictsStr, "[{\"test\":\"ok\"},{\"sup\":42}]")
+
+			// 
+
+			let dictOfDicts: [String:[String:JSONEncodable]] = [
+				"a" : ["test" : "ok"],
+				"b" : ["sup"  : 42]
+			]
+
+			let dictOfDictsStr = try str(dictOfDicts)
+			XCTAssertEqual(dictOfDictsStr, "{\"a\":{\"test\":\"ok\"},\"b\":{\"sup\":42}}")
+
+			//
+
+			let dictWithNull: [String:JSONEncodable] = [
+				"key" : NSNull()
+			]
+
+			let dictWithNullStr = try str(dictWithNull)
+			XCTAssertEqual(dictWithNullStr, "{\"key\":null}")
+
+		} catch {
+			XCTFail("None of these should throw")
+		}
+	}
 }
 
 extension JSONTests {
 	var allTests: [(String, () -> Void)] {
 		return [
-			("test_swerver_isValidJSONObject", test_swerver_isValidJSONObject),
-			("test_swerver_JSONObjectWithData", test_swerver_JSONObjectWithData)
+			("testJSONWriting", testJSONWriting)
 		]
 	}
+}
+
+
+// MARK - Specialized convenience funcs
+
+func str(obj: [JSONEncodable]) throws -> String {
+	let data = try NSJSONSerialization.swerver_dataWithJSONObject(obj, options: NSJSONWritingOptions(rawValue: 0))
+	return NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)!.bridge()
+}
+
+func str<T: JSONEncodable>(obj: [T]) throws -> String {
+	let data = try NSJSONSerialization.swerver_dataWithJSONObject(obj, options: NSJSONWritingOptions(rawValue: 0))
+	return NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)!.bridge()
+}
+
+func str(obj: [String:JSONEncodable]) throws -> String {
+	let data = try NSJSONSerialization.swerver_dataWithJSONObject(obj, options: NSJSONWritingOptions(rawValue: 0))
+	return NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)!.bridge()
+}
+
+func str<T : JSONEncodable>(obj: [String:T]) throws -> String {
+	let data = try NSJSONSerialization.swerver_dataWithJSONObject(obj, options: NSJSONWritingOptions(rawValue: 0))
+	return NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)!.bridge()
 }

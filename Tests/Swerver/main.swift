@@ -1,6 +1,6 @@
 import XCTest
 
 XCTMain([
-    HTTPTestCase(),
+    ControllerTests(),
+    ModelQueryTests()
 ])
-

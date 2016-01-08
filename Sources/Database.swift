@@ -33,7 +33,7 @@ public class Database {
     }
     
     public func transaction<T>(work: (Transaction) throws -> (T)) throws -> T {
-        let transaction = Transaction(connection: connection)
+        let transaction = PostgresTransaction(connection: connection)
         try transaction.begin()
         let ret = try work(transaction)
         if transaction._closed != true && transaction._needsToBeClosed() {
@@ -50,7 +50,21 @@ public enum DatabaseError : ErrorType {
     case TransactionNotClosed
 }
 
-public class Transaction {
+public typealias QueryResult = [[String:String]]
+
+public protocol Transaction {
+
+    func command(command: String) throws -> QueryResult?
+    func query(command: String) throws -> QueryResult
+    func exec(command: String) throws -> COpaquePointer
+
+    func begin() throws
+    func commit()
+
+    func register(m: Model)
+}
+
+public class PostgresTransaction : Transaction {
     private let connection: COpaquePointer
     
     private var _closed = false
@@ -60,9 +74,7 @@ public class Transaction {
         self.connection = connection
     }
     
-    typealias QueryResult = [[String:String]]
-    
-    internal func command(command: String) throws -> QueryResult? {
+    public func command(command: String) throws -> QueryResult? {
         let result = try exec(command)
         
         let numberOfFields = PQnfields(result)
@@ -89,7 +101,7 @@ public class Transaction {
         }
     }
     
-    internal func query(command: String) throws -> QueryResult {
+    public func query(command: String) throws -> QueryResult {
         let result = try exec(command)
         
         let numberOfFields = PQnfields(result)
@@ -112,7 +124,7 @@ public class Transaction {
         return results
     }
     
-    private func exec(command: String) throws -> COpaquePointer {
+    public func exec(command: String) throws -> COpaquePointer {
         let result = PQexec(connection, command)
         
         let status = PQresultStatus(result)
@@ -131,7 +143,7 @@ public class Transaction {
         return result
     }
     
-    internal func register(model: Model) {
+    public func register(model: Model) {
         _models.append(model)
     }
     
@@ -145,7 +157,7 @@ public class Transaction {
                 var dirtyProps = 0
                 for (k,v) in ModelsMap(m.properties) {
                     if v.dirty == false || k == primaryKey {
-                        index++
+                        index += 1
                         continue
                     }
                     
@@ -158,8 +170,8 @@ public class Transaction {
                         query += " "
                     }
                     
-                    dirtyProps++
-                    index++
+                    dirtyProps += 1
+                    index += 1
                 }
                 
                 if dirtyProps == 0 {
@@ -174,7 +186,7 @@ public class Transaction {
         }
     }
     
-    private func begin() throws {
+    public func begin() throws {
         try command("BEGIN")
     }
     

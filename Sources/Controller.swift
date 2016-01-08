@@ -23,12 +23,12 @@ public class ControllerResponse : Response {
     }
 }
 
-public typealias ControllerRequestHandler = (request: Request, parameters: Parameters, session: Session, transaction: Transaction) throws -> ControllerResponse
+public typealias ControllerRequestHandler = (request: Request, parameters: Parameters, session: Session, transaction: Transaction?) throws -> ControllerResponse
 
 public class Controller : RouteProvider {
     
-    internal weak var resource: Resource! = nil
-    internal weak var application: Application! = nil
+    internal var resource: Resource! = nil
+    internal var application: Application! = nil
     
     public required init() {
     }
@@ -51,13 +51,12 @@ public class Controller : RouteProvider {
                     }
                 }
                 
-                if let requestParameters = try parse(request) as? NSDictionary {
+                if let requestParameters = try parse(request) as? Parameters {
                     for (k,v) in requestParameters {
-                        if let k = k as? String {
-                            allParameters[k] = v
-                        }
+                        allParameters[k] = v
                     }
                 }
+
                 var session: Session
                 if let cookiesString = request.headers["Cookie"] {
                     let cookies: [Cookie] = Cookie.parse(cookiesString)
@@ -67,7 +66,7 @@ public class Controller : RouteProvider {
                         let aes = try AES(key: [UInt8](self.application.applicationSecret.utf8), blockMode: .CTR)
                         let decrypted = try aes.decrypt(sessionData.arrayOfBytes(), padding: nil)
                         let decryptedData = NSData.withBytes(decrypted)
-                        
+
                         if let sessionFromJSON = Session(JSONData: decryptedData) {
                             session = sessionFromJSON
                         } else {
@@ -79,10 +78,22 @@ public class Controller : RouteProvider {
                 } else {
                     session = Session()
                 }
+
+                let work: (((Transaction?) throws -> ControllerResponse) throws -> ControllerResponse) = {
+                    f in
+                    if let db = db {
+                        return try db.transaction {
+                            t in
+                            return try f(t)
+                        }
+                    } else {
+                        return try f(nil)
+                    }
+                }
                 
-                let response: ControllerResponse = try db.transaction {
+                let response: ControllerResponse = try work {
                     t in
-                    
+
                     let response: ControllerResponse
                     switch subroute.action {
                     case .Index:
@@ -111,7 +122,7 @@ public class Controller : RouteProvider {
                         break
                     }
                     
-                    t.commit()
+                    t?.commit()
                     
                     return response
                 }
@@ -168,38 +179,38 @@ public class Controller : RouteProvider {
         }
     }
     
-    public func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func index(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func show(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func show(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func new(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func new(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func create(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func create(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func update(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func update(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    public func delete(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction) throws /* UserError, InternalServerError */ -> ControllerResponse {
+    public func delete(request: Request, parameters: Parameters, session inSession: Session, transaction t: Transaction?) throws /* UserError, InternalServerError */ -> ControllerResponse {
         throw UserError.Unimplemented
     }
     
-    func parse(request: Request) throws -> AnyObject? {
+    func parse(request: Request) throws -> Any? {
         if let body = request.requestBody {
             do {
                 if let contentType: NSString = request.headers["Content-Type"]?.bridge() {
                     if contentType.rangeOfString("application/json").location != NSNotFound {
-                        let JSON = try NSJSONSerialization.swerver_JSONObjectWithData(body, options: NSJSONReadingOptions(rawValue: 0))
+                        let JSON = try NSJSONSerialization.JSONObjectWithData(body, options: NSJSONReadingOptions(rawValue: 0))
                         return JSON
-                    } else if contentType.rangeOfString("x-www-form-urlencoded").location != NSNotFound {
+                    } else if contentType.rangeOfString("application/x-www-form-urlencoded").location != NSNotFound {
                         if let string = NSString(bytes: body.bytes, length: body.length, encoding: NSUTF8StringEncoding)?.swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) {
                             return parametersFromURLEncodedString(string)
                         } else {
@@ -221,7 +232,7 @@ public class Controller : RouteProvider {
     
     private func parametersFromURLEncodedString(str: String) -> Parameters {
         let parts = str.swerver_componentsSeparatedByString("&")
-        
+
         var parameters = Parameters()
         
         for part in parts {
@@ -237,7 +248,7 @@ public class Controller : RouteProvider {
                 }
             }
         }
-        
+
         return parameters
     }
     
@@ -259,8 +270,11 @@ public class Controller : RouteProvider {
         return ControllerResponse(try Respond(request, allowedContentTypes, work: work))
     }
     
-    public func connect() throws -> Database {
-        let db = self.application.databaseConfiguration
-        return try Database(databaseName: db.databaseName, username: db.username, password: db.password)
+    public func connect() throws -> Database? {
+        if let db = self.application.databaseConfiguration {
+            return try Database(databaseName: db.databaseName, username: db.username, password: db.password)
+        } else {
+            return nil
+        }
     }
 }
