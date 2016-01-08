@@ -15,6 +15,8 @@
     import Darwin
 #endif
 
+import Foundation
+
 public func swerver_arc4random_uniform(upperBound: UInt32) -> UInt32 {
     #if os(Linux)
         return _swift_stdlib_arc4random_uniform(upperBound)

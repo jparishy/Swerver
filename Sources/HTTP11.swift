@@ -56,7 +56,13 @@ public class HTTP11 : HTTPVersion {
             if stillParsingHeaders {
                 let scanner = NSScanner(string: line)
                 
-                if let key = scanner.scanUpToString(":") {
+#if os(OSX)
+                var key: NSString? = nil
+                scanner.scanUpToString(":", intoString: &key)
+#else
+                let key = scanner.scanUpToString(":").bridge()
+#endif
+                if let key = key?.bridge() {
                     let value = line.bridge().substringFromIndex(scanner.scanLocation + 1).swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                     headers[key] = value
                 }

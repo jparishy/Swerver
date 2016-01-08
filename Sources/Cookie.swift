@@ -15,7 +15,13 @@ public struct Cookie {
     init?(string: String) {
         let scanner = NSScanner(string: string)
         
-        if let name = scanner.scanUpToString("=") {
+#if os(OSX)
+        var name: NSString? = nil
+        scanner.scanUpToString("=", intoString: &name)
+#else
+        let name = scanner.scanUpToString("=").bridge()
+#endif
+        if let name = name?.bridge() {
             let value = string.bridge().substringFromIndex(scanner.scanLocation + 1).swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
             
             self.name = name

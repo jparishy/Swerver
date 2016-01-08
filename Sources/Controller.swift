@@ -124,7 +124,7 @@ public class Controller : RouteProvider {
                 
                 var sessionCookie: String? = nil
                 do {
-                    let data = try NSJSONSerialization.swerver_dataWithJSONObject(session.dictionary.bridge(), options: NSJSONWritingOptions(rawValue: 0))
+                    let data = try NSJSONSerialization.swerver_dataWithJSONObject(session.dictionary, options: NSJSONWritingOptions(rawValue: 0))
                     let str = NSString(bytes: data.bytes, length: data.length, encoding: NSUTF8StringEncoding)
                     sessionCookie = str?.bridge()
                 } catch {
@@ -201,7 +201,7 @@ public class Controller : RouteProvider {
                         return JSON
                     } else if contentType.rangeOfString("x-www-form-urlencoded").location != NSNotFound {
                         if let string = NSString(bytes: body.bytes, length: body.length, encoding: NSUTF8StringEncoding)?.swerver_stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) {
-                            return parametersFromURLEncodedString(string).bridge()
+                            return parametersFromURLEncodedString(string)
                         } else {
                             return nil
                         }
@@ -233,7 +233,7 @@ public class Controller : RouteProvider {
                 }
                 
                 if let k = cleaned(kvParts[0]), v = cleaned(kvParts[1]) {
-                    parameters[k] = v as? AnyObject
+                    parameters[k] = v
                 }
             }
         }
